@@ -1,0 +1,57 @@
+---
+import { routeList } from "../model/navbar";
+---
+
+<dialog id="dialogMenu" class="w-1/2 h-fit rounded-lg dark:bg-gray-800 pb-6">
+  <section
+    id="dialogMenuSection"
+    class="w-fit h-full mx-auto flex flex-col gap-3 text-center p-4 dark:bg-gray-800"
+  >
+    <div class="w-full flex flex-row justify-end p-2">
+      <button
+        class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
+        id="dialogClose"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          fill="none"
+          class="dark:text-white"
+          ><path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M12.854 2.854a.5.5 0 0 0-.708-.708L7.5 6.793 2.854 2.146a.5.5 0 1 0-.708.708L6.793 7.5l-4.647 4.646a.5.5 0 0 0 .708.708L7.5 8.207l4.646 4.647a.5.5 0 0 0 .708-.708L8.207 7.5l4.647-4.646Z"
+            clip-rule="evenodd"></path></svg
+        >
+      </button>
+    </div>
+    {
+      routeList.map(({ href, label }) => (
+        <div class="transition-transform duration-75 group">
+          <a
+            href={href}
+            class="font-medium text-sm rounded-md py-2 px-3 dark:text-white"
+          >
+            {label}
+          </a>
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500" />
+        </div>
+      ))
+    }
+  </section>
+</dialog>
+<script>
+  const dialogMenu = document.getElementById("dialogMenu") as HTMLDialogElement;
+  dialogMenu.addEventListener("click", () => {
+    dialogMenu.close();
+  });
+  const dialogMenuSection = document.getElementById("dialogMenuSection");
+  dialogMenuSection!.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+  const dialogClose = document.getElementById("dialogClose");
+  dialogClose!.addEventListener("click", () => {
+    dialogMenu.close();
+  });
+</script>

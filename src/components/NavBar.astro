@@ -1,47 +1,16 @@
 ---
+import { routeList } from "../model/navbar";
 import ThemeButton from "./ThemeButton.astro";
 
-interface RouteProps {
-  href: string;
-  label: string;
-}
-
-const routeList: RouteProps[] = [
-  {
-    href: "#Informacion",
-    label: "Información",
-  },
-  {
-    href: "#Galeria",
-    label: "Galeria",
-  },
-  {
-    href: "#Tarifas",
-    label: "Tarifas",
-  },
-  {
-    href: "#Caluladora",
-    label: "Calcula tu viaje",
-  },
-  {
-    href: "#Enlaces",
-    label: "Enlaces",
-  },
-  {
-    href: "#FiestasPeralta",
-    label: "Fiestas de Peralta",
-  },
-  {
-    href: "#Contacto",
-    label: "Contacto",
-  },
-];
 ---
 
 <nav
   class="sticky top-0 w-full p-3 flex flex-row justify-between place-items-center container"
 >
-  <p class="text-xl text-nowrap font-bold dark:text-white px-3">Taxi Peralta</p>
+  <div class="inline-flex place-items-center p-2">
+    <img src="../../public/logo.jpg" alt="logo de taxi peralta" class="h-10" />
+    <p class="text-xl text-nowrap font-bold dark:text-white px-3">Taxi Peralta</p>
+  </div>
   <div
     class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
   >
@@ -54,7 +23,7 @@ const routeList: RouteProps[] = [
           >
             {label}
           </a>
-          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-cyan-500"></span>
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500"></span>
         </div>
       ))
     }
@@ -62,7 +31,8 @@ const routeList: RouteProps[] = [
   <div>
     <ThemeButton />
     <button
-      class="lg:hidden hover:bg-gray-200/50 dark:hover:bg-gray-200/20 p-3 rounded-md"
+      class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
+      id="dialogTrigger"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -79,3 +49,10 @@ const routeList: RouteProps[] = [
     </button>
   </div>
 </nav>
+<script>
+  const dialogTrigger = document.getElementById("dialogTrigger");
+  const dialog = document.getElementById("dialogMenu") as HTMLDialogElement;
+  dialogTrigger!.addEventListener("click", () => {
+    dialog.showModal();
+  });
+</script>
