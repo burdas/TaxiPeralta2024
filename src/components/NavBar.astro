@@ -1,14 +1,15 @@
 ---
 import { routeList } from "../model/navbar";
 import ThemeButton from "./ThemeButton.astro";
-
+import { Image } from "astro:assets"
+import logoImage from "../assets/logo.jpg";
 ---
 
 <nav
   class="sticky top-0 w-full p-3 flex flex-row justify-between place-items-center container"
 >
   <div class="inline-flex place-items-center p-2">
-    <img src="../../public/logo.jpg" alt="logo de taxi peralta" class="h-10" />
+    <Image src={logoImage} alt="logo de taxi peralta" class="h-10 w-10" />
     <p class="text-xl text-nowrap font-bold dark:text-white px-3">Taxi Peralta</p>
   </div>
   <div
