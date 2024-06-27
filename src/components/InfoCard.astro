@@ -1,0 +1,36 @@
+---
+const { informacion, title } = Astro.props;
+---
+
+<article class="w-5/6 bg-sky-800/10 rounded-lg p-8 mb-8 md:mb-0">
+  <h4 class="text-xl font-semibold text-center dark:text-white">
+    {title.split(" ")[0]}
+    <span class="text-sky-500">
+      {title.split(" ")[1]}
+    </span>
+  </h4>
+  <ul class="mt-4">
+    {
+      informacion.map((i: string) => (
+        <li class="flex flex-row gap-3 px-3 mt-3">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-green-700 flex-none"
+          >
+            <path
+              d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <p class="text-lm dark:text-white flex-grow">{i}</p>
+        </li>
+      ))
+    }
+  </ul>
+</article>
