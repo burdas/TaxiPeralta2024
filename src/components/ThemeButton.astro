@@ -17,6 +17,9 @@
   >
 </button>
 <script>
-  const toggleTheme = () => document.documentElement.classList.toggle('dark');
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.theme = localStorage.theme === 'dark' ? 'light' : 'dark';
+  };
   document.querySelectorAll(".toggleBtn").forEach(e => e.addEventListener("click", toggleTheme));
 </script>
