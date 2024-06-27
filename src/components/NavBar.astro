@@ -1,16 +1,22 @@
 ---
 import { routeList } from "../model/navbar";
 import ThemeButton from "./ThemeButton.astro";
-import { Image } from "astro:assets"
+import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
 ---
 
 <nav
-  class="sticky top-0 w-full p-3 flex flex-row justify-between place-items-center container"
+  class="sticky z-50 top-0 w-full p-3 flex flex-row justify-between place-items-center container transition-color duration-700"
 >
   <div class="inline-flex place-items-center p-2">
-    <Image src={logoImage} alt="logo de taxi peralta" class="h-10 w-10 rounded-sm" />
-    <p class="text-xl text-nowrap font-bold dark:text-white px-3">Taxi Peralta</p>
+    <Image
+      src={logoImage}
+      alt="logo de taxi peralta"
+      class="h-10 w-10 rounded-sm"
+    />
+    <p class="text-xl text-nowrap font-bold dark:text-white px-3">
+      Taxi Peralta
+    </p>
   </div>
   <div
     class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
@@ -24,7 +30,7 @@ import logoImage from "../assets/logo.jpg";
           >
             {label}
           </a>
-          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500"></span>
+          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500" />
         </div>
       ))
     }
@@ -55,5 +61,16 @@ import logoImage from "../assets/logo.jpg";
   const dialog = document.getElementById("dialogMenu") as HTMLDialogElement;
   dialogTrigger!.addEventListener("click", () => {
     dialog.showModal();
+  });
+
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector("nav")!;
+    if (window.scrollY > 400) {
+      nav.classList.add("bg-white");
+      nav.classList.add("dark:bg-black");
+    } else {
+      nav.classList.remove("bg-white");
+      nav.classList.remove("dark:bg-black");
+    }
   });
 </script>
