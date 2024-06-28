@@ -1,8 +1,10 @@
 ---
+import Card from "./Card.astro";
+
 const { informacion, title } = Astro.props;
 ---
 
-<article class="w-5/6 bg-sky-800/10 rounded-lg p-8 mb-8 md:mb-0">
+<Card class="w-full lg:w-3/4">
   <h4 class="text-xl font-semibold text-center dark:text-white">
     {title.split(" ")[0]}
     <span class="text-sky-500">
@@ -28,9 +30,11 @@ const { informacion, title } = Astro.props;
               clip-rule="evenodd"
             />
           </svg>
-          <p class="text-md font-medium text-neutral-600 dark:text-neutral-200 flex-grow">{i}</p>
+          <p class="text-md font-medium text-neutral-700/70 dark:text-neutral-200/80 flex-grow">
+            {i}
+          </p>
         </li>
       ))
     }
   </ul>
-</article>
+</Card>
