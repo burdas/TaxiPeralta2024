@@ -5,57 +5,57 @@ import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
 ---
 
-<nav
-  class="sticky z-50 top-0 w-full p-3 flex flex-row justify-between place-items-center container transition-color duration-700"
->
-  <div class="inline-flex place-items-center p-2">
-    <Image
-      src={logoImage}
-      alt="logo de taxi peralta"
-      class="h-10 w-10 rounded-sm"
-    />
-    <p class="text-xl text-nowrap font-bold dark:text-white px-3">
-      Taxi Peralta
-    </p>
-  </div>
-  <div
-    class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
-  >
-    {
-      routeList.map(({ href, label }) => (
-        <div class="transition-transform duration-75 group">
-          <a
-            href={href}
-            class="font-medium text-sm rounded-md py-2 px-3 dark:text-white"
-          >
-            {label}
-          </a>
-          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500" />
-        </div>
-      ))
-    }
-  </div>
-  <div>
-    <ThemeButton />
-    <button
-      class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
-      id="dialogTrigger"
+<header class="sticky z-50 top-0 w-full p-3 transition-color duration-700 ease-out">
+  <nav class="flex flex-row justify-between place-items-center container">
+    <div class="inline-flex place-items-center p-2">
+      <Image
+        src={logoImage}
+        alt="logo de taxi peralta"
+        class="h-10 w-10 rounded-sm"
+      />
+      <p class="text-xl text-nowrap font-bold dark:text-white px-3">
+        Taxi Peralta
+      </p>
+    </div>
+    <div
+      class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="15"
-        height="15"
-        fill="none"
-        class="dark:text-white"
-        ><path
-          fill="currentColor"
-          fill-rule="evenodd"
-          d="M1.5 3a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1h-12ZM1 7.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Z"
-          clip-rule="evenodd"></path></svg
+      {
+        routeList.map(({ href, label }) => (
+          <div class="transition-transform duration-75 group">
+            <a
+              href={href}
+              class="font-medium text-sm rounded-md py-2 px-3 dark:text-white"
+            >
+              {label}
+            </a>
+            <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500" />
+          </div>
+        ))
+      }
+    </div>
+    <div>
+      <ThemeButton />
+      <button
+        class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
+        id="dialogTrigger"
       >
-    </button>
-  </div>
-</nav>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          fill="none"
+          class="dark:text-white"
+          ><path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M1.5 3a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1h-12ZM1 7.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Zm0 4a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 0 1h-12a.5.5 0 0 1-.5-.5Z"
+            clip-rule="evenodd"></path></svg
+        >
+      </button>
+    </div>
+  </nav>
+</header>
 <script>
   const dialogTrigger = document.getElementById("dialogTrigger");
   const dialog = document.getElementById("dialogMenu") as HTMLDialogElement;
@@ -64,7 +64,7 @@ import logoImage from "../assets/logo.jpg";
   });
 
   window.addEventListener("scroll", () => {
-    const nav = document.querySelector("nav")!;
+    const nav = document.querySelector("header")!;
     if (window.scrollY > 400) {
       nav.classList.add("bg-white");
       nav.classList.add("dark:bg-black");
