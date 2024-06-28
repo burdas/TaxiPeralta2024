@@ -9,12 +9,12 @@ export const routeList: RouteProps[] = [
     label: "Información",
   },
   {
-    href: "#Galeria",
-    label: "Galeria",
-  },
-  {
     href: "#Tarifas",
     label: "Tarifas",
+  },
+  {
+    href: "#Galeria",
+    label: "Galeria",
   },
   {
     href: "#Caluladora",
