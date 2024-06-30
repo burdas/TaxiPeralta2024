@@ -1,0 +1,132 @@
+---
+import AnimateBadge from "./AnimateBadge.astro";
+import Card from "./Card.astro";
+---
+<p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80 mt-16">El precio siguiente es <u>orientativo</u>, no se tienen en cuenta otros costes.</p>
+<Card class="max-w-[400px] mx-auto mt-3">
+  <form class="space-y-3 px-1 min-[374px]:px-4">
+    <AnimateBadge tipo="diurna">Diurna</AnimateBadge>
+    <div class="w-full flex flex-row justify-between items-center">
+      <label
+        for="#inputKmRecorridoDiurno"
+        class="text-sm font-medium text-black/80 dark:text-neutral-200/80 min-[374px]:ml-8"
+      >
+        Km Recorrido
+      </label>
+      <input
+        id="#inputKmRecorridoDiurno"
+        type="number"
+        class="w-[100px] text-right outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="0"
+      />
+    </div>
+    <div class="w-full flex flex-row justify-between items-center">
+      <label
+        for="#inputHoraEsperaDiurno"
+        class="text-sm font-medium text-black/80 dark:text-neutral-200/80 min-[374px]:ml-8"
+      >
+        Hora de espera
+      </label>
+      <input
+        id="#inputHoraEsperaDiurno"
+        type="number"
+        class="w-[100px] text-right outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="0"
+      />
+    </div>
+    <AnimateBadge tipo="nocturna">Nocturna</AnimateBadge>
+    <div class="w-full flex flex-row justify-between items-center">
+      <label
+        for="#inputKmRecorridoNocturno"
+        class="text-sm font-medium text-black/80 dark:text-neutral-200/80 min-[374px]:ml-8"
+      >
+        Km Recorrido
+      </label>
+      <input
+        id="#inputKmRecorridoNocturno"
+        type="number"
+        class="w-[100px] text-right outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="0"
+      />
+    </div>
+    <div class="w-full flex flex-row justify-between items-center">
+      <label
+        for="#inputHoraEsperaNocturno"
+        class="text-sm font-medium text-black/80 dark:text-neutral-200/80 min-[374px]:ml-8"
+      >
+        Hora de espera
+      </label>
+      <input
+        id="#inputHoraEsperaNocturno"
+        type="number"
+        class="w-[100px] text-right outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="0"
+      />
+    </div>
+  </form>
+  <hr class="w-full mt-3 border-black/30 dark:border-neutral-200/50" />
+  <div class="w-full flex flex-row justify-between items-center mt-3 px-1 min-[374px]:px-4">
+    <label
+      for="#inputTotalTarifas"
+      class="text-sm font-medium text-black/80 dark:text-neutral-200/80 min-[374px]:ml-8"
+    >
+      Total
+    </label>
+    <input
+      id="#inputTotalTarifas"
+      type="text"
+      disabled
+      class="w-[100px] text-right outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      value="0,00 €"
+    />
+  </div>
+</Card>
+<style>
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+</style>
+<script>
+  import { tarifa } from "../model/tarifas.ts";
+  import { numToEur } from "../utils/Format";
+  const inputKmRecorridoDiurno = document.getElementById(
+    "#inputKmRecorridoDiurno"
+  ) as HTMLInputElement;
+  const inputHoraEsperaDiurno = document.getElementById(
+    "#inputHoraEsperaDiurno"
+  ) as HTMLInputElement;
+  const inputKmRecorridoNocturno = document.getElementById(
+    "#inputKmRecorridoNocturno"
+  ) as HTMLInputElement;
+  const inputHoraEsperaNocturno = document.getElementById(
+    "#inputHoraEsperaNocturno"
+  ) as HTMLInputElement;
+
+  const inputTotalTarifas = document.getElementById(
+    "#inputTotalTarifas"
+  ) as HTMLInputElement;
+
+  const changeTotalTarifas = () => {
+    const kmRecorridoDiurno = Number(inputKmRecorridoDiurno.value ?? 0);
+    const horaEsperaDiurno = Number(inputHoraEsperaDiurno.value ?? 0);
+    const kmRecorridoNocturno = Number(inputKmRecorridoNocturno.value ?? 0);
+    const horaEsperaNocturno = Number(inputHoraEsperaNocturno.value ?? 0);
+    const totalTarifas =
+      kmRecorridoDiurno * tarifa.diurna.kmRecorrido +
+      kmRecorridoNocturno * tarifa.nocturna.kmRecorrido +
+      horaEsperaDiurno * tarifa.diurna.horaEspera +
+      horaEsperaNocturno * tarifa.nocturna.horaEspera;
+    inputTotalTarifas.value = numToEur(totalTarifas);
+  };
+  inputKmRecorridoDiurno.addEventListener("input", changeTotalTarifas);
+  inputHoraEsperaDiurno.addEventListener("input", changeTotalTarifas);
+  inputKmRecorridoNocturno.addEventListener("input", changeTotalTarifas);
+  inputHoraEsperaNocturno.addEventListener("input", changeTotalTarifas);
+</script>
