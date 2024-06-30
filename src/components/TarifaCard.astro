@@ -1,27 +1,36 @@
 ---
-
-import {numToEur} from '../utils/FormatEur.ts'
-import Card from './Card.astro';
+import { numToEur, capitalizeFirstLetter } from "../utils/Format.ts";
+import AnimateBadge from "./AnimateBadge.astro";
+import Card from "./Card.astro";
 
 interface props {
-    cantidad: number;
-    nombre: string;
-    tipo: 'nocturna' | 'diurna'
+  cantidad: number;
+  nombre: string;
+  tipo: "nocturna" | "diurna";
 }
 
 const { cantidad, nombre, tipo } = Astro.props;
 
 const dictNombreTitle: { [key: string]: string } = {
-    kmRecorrido: 'Km Recorrido',
-    horaEspera: 'Hora de espera',
-    minimoPercepcion: 'Mínimo de percepción'
-}
+  kmRecorrido: "Km Recorrido",
+  horaEspera: "Hora de espera",
+  minimoPercepcion: "Mínimo de percepción",
+};
+const title = dictNombreTitle[nombre] ?? "No esta el valor en el diccionario";
+const indiceUltimoEspacio = title.lastIndexOf(" ");
 ---
 
-<Card class="w-full">
-  <h4 class="text-xl font-semibold mb-2 text-white">
-
-    {dictNombreTitle[nombre] ?? 'No esta el valor en el diccionario'}
+<Card class="w-full space-y-1">
+  <AnimateBadge tipo={tipo}>
+    {capitalizeFirstLetter(tipo)}
+  </AnimateBadge>
+  <h4 class="text-xl font-semibold text-black dark:text-white">
+    {title.slice(0, indiceUltimoEspacio)}
+    <span class="text-sky-500">
+      {title.slice(indiceUltimoEspacio + 1)}
+    </span>
   </h4>
-  <p class="text-lg font-medium text-white">{numToEur(cantidad)}</p>
+  <p class="text-lg font-medium text-neutral-700/70 dark:text-neutral-200/80">
+    {numToEur(cantidad)}
+  </p>
 </Card>

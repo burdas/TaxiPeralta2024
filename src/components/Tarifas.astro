@@ -7,6 +7,7 @@ const nocturna = Object.entries(tarifa.nocturna);
 ---
 <section id="Tarifas" class="container min-h-[calc(70dvh)] my-8">
     <h3 class="text-4xl font-bold text-center dark:text-white">Tarifas</h3>
+    <p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80">Tarifas de transporte interurbano publicadas por el gobierno de Navarra.</p>
     <div class="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-8 mt-16 justify-items-center">
         {diurna.map(t => <TarifaCard nombre={t[0]} cantidad={t[1]} tipo="diurna" />)}
         {nocturna.map(t => <TarifaCard nombre={t[0]} cantidad={t[1]} tipo="nocturna" />)}
