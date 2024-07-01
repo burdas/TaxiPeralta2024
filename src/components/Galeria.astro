@@ -5,6 +5,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/galery/*.avif"
 );
 const importImages = Object.values(images);
+const srcImages = Object.keys(images);
 ---
 
 <section id="Galeria" class="container min-h-[calc(70dvh)] my-16 scroll-my-28">
@@ -14,9 +15,10 @@ const importImages = Object.values(images);
       importImages.map((e, i) => (
         <button
           class:list={[
-            "overflow-hidden rounded-xl",
+            "overflow-hidden rounded-xl imgButton",
             { "min-[374px]:col-span-2 ": i % 4 === 0 || i % 4 === 3 },
           ]}
+          data-src={srcImages[i]}
         >
           <Image
             src={e()}
@@ -27,4 +29,57 @@ const importImages = Object.values(images);
       ))
     }
   </div>
+  <dialog id="dialogImage" class="bg-transparent animate-modalf">
+    <div class="max-w-[1200px] h-ful" id="dialogDiv">
+      <img
+        id="imageExtendida"
+        alt="Imagen de la galeria extendida"
+        class="w-full h-full rounded-xl"
+      />
+      <button
+        id="imgDialogClose"
+        class="fixed top-8 right-8 border-2 border-sky-500 rounded-xl p-2 text-sky-500 hover:text-white dark:hover:text-black hover:bg-sky-500"
+        ><svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path
+            d="M17.139 3.805a0.667 0.667 0 0 0 -0.944 -0.944L10 9.057 3.805 2.861a0.667 0.667 0 1 0 -0.944 0.944L9.057 10l-6.196 6.195a0.667 0.667 0 0 0 0.944 0.944L10 10.943l6.195 6.196a0.667 0.667 0 0 0 0.944 -0.944L10.943 10z"
+            fill="currentColor"
+            fill-rule="evenodd"
+            clip-rule="evenodd"></path></svg
+        ></button
+      >
+    </div>
+  </dialog>
 </section>
+<script>
+  const dialogImage = document.getElementById(
+    "dialogImage"
+  ) as HTMLDialogElement;
+  const imageExtendida = document.getElementById(
+    "imageExtendida"
+  ) as HTMLImageElement;
+  const dialogDiv = document.getElementById("dialogDiv") as HTMLImageElement;
+  dialogImage.addEventListener("click", () => dialogImage.close());
+  dialogDiv.addEventListener("click", (e) => e.stopPropagation());
+  const showDialog = (src: string) => {
+    imageExtendida.src = src ?? "";
+    dialogImage.showModal();
+  };
+  const buttons = document.querySelectorAll(".imgButton");
+  buttons.forEach((e) => {
+    const src = e.getAttribute("data-src");
+    e.addEventListener("click", () => showDialog(src!));
+  });
+  document.getElementById("imgDialogClose")!.addEventListener("click", () => {
+    dialogImage.close();
+  });
+</script>
+<style>
+  dialog::backdrop {
+    backdrop-filter: blur(2px);
+  }
+</style>
