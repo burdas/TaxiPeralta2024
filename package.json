@@ -12,8 +12,10 @@
   "dependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/tailwind": "^5.1.0",
+    "@googlemaps/js-api-loader": "^1.16.6",
     "@types/google.maps": "^3.55.11",
     "astro": "^4.11.0",
+    "dotenv": "^16.4.5",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"
   }

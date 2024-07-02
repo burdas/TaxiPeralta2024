@@ -17,25 +17,25 @@
       </h4>
       <div class="w-full h-full flex flex-col justify-center space-y-4">
         <label
-          for="#origen"
+          for="origen"
           class="text-sm font-medium text-black/80 dark:text-neutral-200/80"
         >
           Origen
         </label>
         <input
-          id="#origen"
+          id="origen"
           type="text"
           class="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Peralta"
         />
         <label
-          for="#destino"
+          for="destino"
           class="text-sm font-medium text-black/80 dark:text-neutral-200/80"
         >
           Destino
         </label>
         <input
-          id="#destino"
+          id="destino"
           type="text"
           class="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Pamplona"
@@ -62,16 +62,17 @@
   </div>
 </section>
 <script>
-  function initMap() {
-    const map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-      mapTypeControl: false,
-      fullscreenControl: false,
-      center: { lat: 42.3389757, lng: -1.7990956999999526 },
-      zoom: 15,
+  import { createMap, getAutoComplete } from "../utils/map.ts";
+  // let map: google.maps.Map;
+  createMap("map")
+    .then((map) => {
+      console.log("Map has been initialized");
+      const origen = getAutoComplete("origen");
+      const destino = getAutoComplete("destino");
+      origen.bindTo("bounds", map);
+      destino.bindTo("bounds", map);
+    })
+    .catch((error) => {
+      console.error("Error initializing map:", error);
     });
-  }
 </script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=CLAVE&callback=initMap"
-  async
-  defer></script>
