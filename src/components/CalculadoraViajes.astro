@@ -1,0 +1,77 @@
+<section id="Calculadora" class="container my-16 scroll-my-28">
+  <h3 class="text-4xl font-bold text-center dark:text-white">
+    Calculadora de viajes
+  </h3>
+  <div class="w-full grid grid-cols-1 md:grid-cols-[3fr,2fr] gap-4 mt-16">
+    <article
+      id="map"
+      class="w-full min-h-[calc(70dvh)] bg-green-300 rounded-lg shadow-xl"
+    >
+    </article>
+    <form
+      class="w-full h-full bg-sky-100/50 dark:bg-sky-900/20 rounded-lg p-4 shadow-xl"
+    >
+      <h4 class="text-xl font-semibold text-center dark:text-white">
+        Introduce tus
+        <span class="text-sky-500"> datos </span>
+      </h4>
+      <div class="w-full h-full flex flex-col justify-center space-y-4">
+        <label
+          for="#origen"
+          class="text-sm font-medium text-black/80 dark:text-neutral-200/80"
+        >
+          Origen
+        </label>
+        <input
+          id="#origen"
+          type="text"
+          class="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Peralta"
+        />
+        <label
+          for="#destino"
+          class="text-sm font-medium text-black/80 dark:text-neutral-200/80"
+        >
+          Destino
+        </label>
+        <input
+          id="#destino"
+          type="text"
+          class="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Pamplona"
+        />
+        <div class="flex flex-row justify-between">
+          <label class="inline-flex items-center cursor-pointer">
+            <input type="checkbox" value="" class="sr-only peer" />
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-sky-300 dark:peer-focus:ring-sky-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-sky-600"
+            >
+            </div>
+            <span
+              class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Tarifa nocturna</span
+            >
+          </label>
+          <button
+            class="rounded-md w-28 p-2 text-sm bg-sky-500 text-white hover:scale-105 active:scale-95 transition-all duration-200"
+            >Calcular</button
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<script>
+  function initMap() {
+    const map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+      mapTypeControl: false,
+      fullscreenControl: false,
+      center: { lat: 42.3389757, lng: -1.7990956999999526 },
+      zoom: 15,
+    });
+  }
+</script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7PzZAlDh7eul8z2FrwqWeqeWTVd9y9fQ&callback=initMap"
+  async
+  defer></script>

@@ -17,7 +17,7 @@ export const routeList: RouteProps[] = [
     label: "Galeria",
   },
   {
-    href: "#Caluladora",
+    href: "#Calculadora",
     label: "Calcula tu viaje",
   },
   {
