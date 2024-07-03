@@ -4,6 +4,24 @@ import { showDangerToast } from "./Toast";
 let map: google.maps.Map;
 let loader: Loader;
 let bounds: google.maps.LatLngBounds;
+interface MyPosition {
+  position: google.maps.LatLng | undefined | null;
+  marker: google.maps.marker.AdvancedMarkerElement | null;
+}
+interface OrigenDestino {
+  origen: MyPosition;
+  destino: MyPosition;
+}
+const origenDestino: OrigenDestino = {
+  origen: {
+    position: null,
+    marker: null
+  },
+  destino: {
+    position: null,
+    marker: null
+  },
+};
 const HOME = { lat: 42.339044, lng: -1.806348 };
 const PERALTA = { lat: 42.3389757, lng: -1.7990956999999526 };
 const ROUTES_COLORS = [
@@ -41,6 +59,31 @@ export const getAutoComplete = (el: string) =>
     document.getElementById(el) as HTMLInputElement
   );
 
+async function createMarker(
+  position: google.maps.LatLng,
+  title: string
+): Promise<google.maps.marker.AdvancedMarkerElement> {
+  const { AdvancedMarkerElement } = await loader.importLibrary("marker");
+  const marker = new AdvancedMarkerElement({
+    map,
+    position: position,
+    title: title,
+  });
+  return marker;
+}
+
+function centerMap() {
+  if (!origenDestino.destino.position) {
+    map.setCenter(origenDestino.origen?.position!);
+    map.setZoom(15);
+  } else {
+    bounds = new google.maps.LatLngBounds();
+    bounds = bounds.extend(origenDestino.origen?.position!);
+    bounds = bounds.extend(origenDestino.destino.position!);
+    map.fitBounds(bounds);
+  }
+}
+
 export async function showOriginPoint(
   this: google.maps.places.Autocomplete
 ) {
@@ -51,21 +94,17 @@ export async function showOriginPoint(
     );
     return;
   }
-  bounds = new google.maps.LatLngBounds();
-  if (place.geometry.viewport) {
-    map.fitBounds(place.geometry.viewport);
-  } else {
-    map.setCenter(place.geometry.location!);
-    map.setZoom(15);
-  }
 
-  const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-  const marker = new AdvancedMarkerElement({
-    map,
-    position: place.geometry.location,
-    title: "Origen",
-  });
-  bounds.extend(marker.position!);
+  if (origenDestino.origen.marker) {origenDestino.origen.marker.map = null;}
+  origenDestino.origen.position = place.geometry.location;
+  createMarker(place.geometry.location!, "Origen").then(
+    (marker) => {
+      // console.log(origenDestino.origen);
+      // origenDestino.origen!.marker!.remove()
+      origenDestino.origen.marker = marker
+    }
+  ).catch(err => console.log(err));
+  centerMap();
 }
 
 export async function showDestinyPoint(
@@ -78,19 +117,12 @@ export async function showDestinyPoint(
     );
     return;
   }
-  if (place.geometry.viewport) {
-    map.fitBounds(place.geometry.viewport);
-  } else {
-    map.setCenter(place.geometry.location!);
-    map.setZoom(15);
-  }
-
-  const { AdvancedMarkerElement } = await loader.importLibrary("marker");
-  const marker = new AdvancedMarkerElement({
-    map,
-    position: place.geometry.location,
-    title: "Origen",
-  });
-  bounds.extend(marker.position!);
-  map.fitBounds(bounds);
+  if (origenDestino.destino.marker) {origenDestino.destino.marker.map = null;}
+  origenDestino.destino.position = place.geometry.location
+  createMarker(place.geometry.location!, "Destino").then(
+    (marker) => {
+      origenDestino.destino!.marker = marker
+    }
+  );
+  centerMap();
 }
