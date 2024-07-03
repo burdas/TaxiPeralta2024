@@ -63,7 +63,7 @@
   </div>
 </section>
 <script>
-  import { createMap, getAutoComplete, showMarkPoint } from "../utils/map.ts";
+  import { createMap, getAutoComplete, showOriginPoint, showDestinyPoint } from "../utils/map.ts";
   import { showDangerToast } from "../utils/Toast";
   // let map: google.maps.Map;
   createMap("map")
@@ -74,8 +74,8 @@
       const destino = getAutoComplete("destino");
       origen.bindTo("bounds", map);
       destino.bindTo("bounds", map);
-
-      document.getElementById('btnCalcular')!.addEventListener("click", () => showMarkPoint(map))
+      origen.addListener('place_changed', showOriginPoint);
+      destino.addListener('place_changed', showDestinyPoint)
     })
     .catch((error) => {
       console.error("Error initializing map:", error);
