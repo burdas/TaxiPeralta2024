@@ -4,7 +4,9 @@ import ThemeButton from "./ThemeButton.astro";
 import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
 ---
-
+<script>
+  
+</script>
 <header class="sticky z-50 top-0 w-full py-3 transition-color duration-700 ease-out">
   <nav class="flex flex-row justify-between place-items-center container">
     <div class="inline-flex place-items-center p-2">
@@ -62,8 +64,7 @@ import logoImage from "../assets/logo.jpg";
   dialogTrigger!.addEventListener("click", () => {
     dialog.showModal();
   });
-
-  window.addEventListener("scroll", () => {
+  const visibleOnScroll = () => {
     const nav = document.querySelector("header")!;
     if (window.scrollY > 200) {
       nav.classList.add("bg-white");
@@ -72,5 +73,7 @@ import logoImage from "../assets/logo.jpg";
       nav.classList.remove("bg-white");
       nav.classList.remove("dark:bg-black");
     }
-  });
+  }
+  visibleOnScroll(); // Cuando se recarga la pagina
+  window.addEventListener("scroll", visibleOnScroll); // Cuando se hace scroll
 </script>

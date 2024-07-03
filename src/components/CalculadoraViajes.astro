@@ -5,7 +5,7 @@
   <div class="w-full grid grid-cols-1 md:grid-cols-[3fr,2fr] gap-4 mt-16">
     <article
       id="map"
-      class="w-full min-h-[calc(70dvh)] bg-green-300 rounded-lg shadow-xl"
+      class="w-full min-h-[calc(70dvh)] bg-sky-100/50 dark:bg-sky-900/20 animate-pulse rounded-lg shadow-xl"
     >
     </article>
     <form
@@ -53,6 +53,7 @@
             >
           </label>
           <button
+            id="btnCalcular"
             class="rounded-md w-28 p-2 text-sm bg-sky-500 text-white hover:scale-105 active:scale-95 transition-all duration-200"
             >Calcular</button
           >
@@ -62,17 +63,60 @@
   </div>
 </section>
 <script>
-  import { createMap, getAutoComplete } from "../utils/map.ts";
+  import { createMap, getAutoComplete, showMarkPoint } from "../utils/map.ts";
+  import { showDangerToast } from "../utils/Toast";
   // let map: google.maps.Map;
   createMap("map")
     .then((map) => {
-      console.log("Map has been initialized");
+      document.getElementById("map")?.classList.remove("animate-pulse");
+      console.info("Map has been initialized");
       const origen = getAutoComplete("origen");
       const destino = getAutoComplete("destino");
       origen.bindTo("bounds", map);
       destino.bindTo("bounds", map);
+
+      document.getElementById('btnCalcular')!.addEventListener("click", () => showMarkPoint(map))
     })
     .catch((error) => {
       console.error("Error initializing map:", error);
+      showDangerToast("Error al inicializar el mapa.");
     });
 </script>
+<style is:global>
+  .dark .pac-container {
+    background-color: #082f49;
+    border-radius: 10px;
+  }
+
+  .pac-container {
+    border-radius: 10px;
+  }
+
+  .dark .pac-item-query, .dark .pac-item {
+    color: white;
+  }
+
+  .dark .pac-item-selected {
+    background-color: #0c4a6e !important;
+    color: white !important;
+  }
+
+  .dark .pac-item:hover {
+    /* box-shadow: 2px 0 0 0 2px #0c4a6e; */
+    background-color: #0c4a6e !important;
+    color: white !important;
+  }
+
+  .pac-container:after {
+    /* Remove 'Powered by GOOGLE' */
+    background-image: none !important;
+    height: 0px;
+  }
+
+  .pac-icon {
+    /* Remove 'Powered by GOOGLE' */
+    background-image: none !important;
+    height: 0px;
+    width: 0px;
+  }
+</style>
