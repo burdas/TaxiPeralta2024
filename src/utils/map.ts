@@ -4,23 +4,13 @@ import { showDangerToast } from "./Toast";
 let map: google.maps.Map;
 let loader: Loader;
 let bounds: google.maps.LatLngBounds;
-interface MyPosition {
-  position: google.maps.LatLng | undefined | null;
-  marker: google.maps.marker.AdvancedMarkerElement | null;
-}
 interface OrigenDestino {
-  origen: MyPosition;
-  destino: MyPosition;
+  origen: google.maps.marker.AdvancedMarkerElement | null;
+  destino: google.maps.marker.AdvancedMarkerElement | null;
 }
 const origenDestino: OrigenDestino = {
-  origen: {
-    position: null,
-    marker: null,
-  },
-  destino: {
-    position: null,
-    marker: null,
-  },
+  origen: null,
+  destino: null,
 };
 const HOME = { lat: 42.339044, lng: -1.806348 };
 const PERALTA = { lat: 42.3389757, lng: -1.7990956999999526 };
@@ -70,24 +60,24 @@ async function createMarker(
     title: title,
   });
   if(title === 'Origen'){
-    if (origenDestino.origen.marker) {origenDestino.origen.marker.map = null}
-    origenDestino.origen.marker = marker;
+    if (origenDestino.origen) {origenDestino.origen.map = null}
+    origenDestino.origen = marker;
   } else {
-    if (origenDestino.destino.marker) {origenDestino.destino.marker.map = null}
-    origenDestino.destino.marker = marker;
+    if (origenDestino.destino) {origenDestino.destino.map = null}
+    origenDestino.destino = marker;
   }
   centerMap();
   return marker;
 }
 
 function centerMap() {
-  if (!origenDestino.destino.marker?.position) {
-    map.setCenter(origenDestino.origen.marker?.position!);
+  if (!origenDestino.destino?.position) {
+    map.setCenter(origenDestino.origen?.position!);
     map.setZoom(15);
   } else {
     bounds = new google.maps.LatLngBounds();
-    bounds = bounds.extend(origenDestino.origen?.marker?.position!);
-    bounds = bounds.extend(origenDestino.destino.marker.position!);
+    bounds = bounds.extend(origenDestino.origen?.position!);
+    bounds = bounds.extend(origenDestino.destino.position!);
     map.fitBounds(bounds);
   }
 }
