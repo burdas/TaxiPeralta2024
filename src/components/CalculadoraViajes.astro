@@ -10,6 +10,7 @@
     </article>
     <form
       class="w-full h-full bg-sky-100/50 dark:bg-sky-900/20 rounded-lg p-4 shadow-xl"
+      onsubmit="() => false"
     >
       <h4 class="text-xl font-semibold text-center dark:text-white">
         Introduce tus
@@ -63,7 +64,7 @@
   </div>
 </section>
 <script>
-  import { createMap, getAutoComplete, showOriginPoint, showDestinyPoint } from "../utils/map.ts";
+  import { createMap, getAutoComplete, showOriginPoint, showDestinyPoint, calculateRoute } from "../utils/map.ts";
   import { showDangerToast } from "../utils/Toast";
   createMap("map")
     .then((map) => {
@@ -74,7 +75,8 @@
       origen.bindTo("bounds", map);
       destino.bindTo("bounds", map);
       origen.addListener('place_changed', showOriginPoint);
-      destino.addListener('place_changed', showDestinyPoint)
+      destino.addListener('place_changed', showDestinyPoint);
+      document.getElementById("btnCalcular")?.addEventListener("click", calculateRoute);
     })
     .catch((error) => {
       console.error("Error initializing map:", error);

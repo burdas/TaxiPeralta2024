@@ -23,6 +23,7 @@ const ROUTES_COLORS = [
   "#00FFFF",
 ];
 
+// Create a new Loader instance y create a new Map instance y devuelve la instancia map
 export async function createMap(
   elementId: string,
   center = PERALTA,
@@ -44,14 +45,18 @@ export async function createMap(
   return map;
 }
 
+// Genera el autocompletado del input con las direcciones
 export const getAutoComplete = (el: string) =>
   new google.maps.places.Autocomplete(
     document.getElementById(el) as HTMLInputElement
   );
 
+// Genera un marcador en el mapa con su ventana de detalles
 async function createMarker(
   position: google.maps.LatLng,
-  title: 'Origen' | 'Destino'
+  title: "Origen" | "Destino",
+  placeName: string | undefined,
+  address: string
 ): Promise<google.maps.marker.AdvancedMarkerElement> {
   const { AdvancedMarkerElement } = await loader.importLibrary("marker");
   const marker = new AdvancedMarkerElement({
@@ -59,17 +64,30 @@ async function createMarker(
     position: position,
     title: title,
   });
-  if(title === 'Origen'){
-    if (origenDestino.origen) {origenDestino.origen.map = null}
+
+  const infoWindow = new google.maps.InfoWindow();
+  infoWindow.setContent(
+    "<div><strong>" + placeName + "</strong><br>" + address
+  );
+  infoWindow.setHeaderDisabled(true);
+  infoWindow.open(map, marker);
+
+  if (title === "Origen") {
+    if (origenDestino.origen) {
+      origenDestino.origen.map = null;
+    }
     origenDestino.origen = marker;
   } else {
-    if (origenDestino.destino) {origenDestino.destino.map = null}
+    if (origenDestino.destino) {
+      origenDestino.destino.map = null;
+    }
     origenDestino.destino = marker;
   }
   centerMap();
   return marker;
 }
 
+// Centra el mapa dependiendo de si es un único marcador o son dos
 function centerMap() {
   if (!origenDestino.destino?.position) {
     map.setCenter(origenDestino.origen?.position!);
@@ -81,6 +99,18 @@ function centerMap() {
     bounds = new google.maps.LatLngBounds();
     bounds = bounds.extend(origenDestino.origen?.position!);
     bounds = bounds.extend(origenDestino.destino.position!);
+
+    // Añadir un margen extra para la infoWindow
+    const margin = 0.05; // Ajusta este valor según sea necesario
+    bounds.extend({
+      lat: bounds.getNorthEast().lat() + margin,
+      lng: bounds.getNorthEast().lng() + margin,
+    });
+    bounds.extend({
+      lat: bounds.getSouthWest().lat() - margin,
+      lng: bounds.getSouthWest().lng() - margin,
+    });
+
     map.fitBounds(bounds);
   }
 }
@@ -93,10 +123,15 @@ export async function showOriginPoint(this: google.maps.places.Autocomplete) {
     );
     return;
   }
-
-  createMarker(place.geometry.location!, "Origen")
+  createMarker(
+    place.geometry.location!,
+    "Origen",
+    place.name,
+    getAddress(place)
+  );
 }
 
+// maneja el autocompletado del input origen
 export async function showDestinyPoint(this: google.maps.places.Autocomplete) {
   const place = this.getPlace();
   if (!place.geometry) {
@@ -105,5 +140,68 @@ export async function showDestinyPoint(this: google.maps.places.Autocomplete) {
     );
     return;
   }
-  createMarker(place.geometry.location!, "Destino")
+  createMarker(
+    place.geometry.location!,
+    "Destino",
+    place.name,
+    getAddress(place)
+  );
+}
+
+// Maneja el autocompletado del input destino
+function getAddress(place: google.maps.places.PlaceResult): string {
+  let address = "";
+  if (place.address_components) {
+    address = [
+      (place.address_components[0] && place.address_components[0].short_name) ||
+        "",
+      (place.address_components[1] && place.address_components[1].short_name) ||
+        "",
+      (place.address_components[2] && place.address_components[2].short_name) ||
+        "",
+    ].join(" ");
+  }
+  return address;
+}
+
+export async function calculateRoute(e: Event) {
+  if (!origenDestino.origen?.position || !origenDestino.destino?.position) {
+    showDangerToast("Selecciona un punto de origen y un punto de destino");
+    return;
+  }
+  const directionsService = new google.maps.DirectionsService();
+  const kmHomeOrigen =
+    (
+      await directionsService.route({
+        origin: HOME,
+        destination: origenDestino.origen?.position,
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+    ).routes[0].legs[0].distance?.value! / 1000;
+  const kmHomeDestino =
+    (
+      await directionsService.route({
+        origin: origenDestino.destino?.position,
+        destination: HOME,
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+    ).routes[0].legs[0].distance?.value! / 1000;
+  const direcciones = await directionsService.route({
+    origin: origenDestino.origen?.position,
+    destination: origenDestino.destino?.position,
+    avoidHighways: false,
+    avoidTolls: false,
+    provideRouteAlternatives: true,
+    travelMode: google.maps.TravelMode.DRIVING,
+  });
+  direcciones.routes.forEach((_, i) => {
+    new google.maps.DirectionsRenderer({
+      map: map,
+      directions: direcciones,
+      routeIndex: i,
+      polylineOptions: new google.maps.Polyline({
+        strokeColor: ROUTES_COLORS[i],
+      }) as google.maps.PolylineOptions,
+    });
+  });
 }
