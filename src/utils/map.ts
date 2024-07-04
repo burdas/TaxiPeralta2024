@@ -15,11 +15,11 @@ interface OrigenDestino {
 const origenDestino: OrigenDestino = {
   origen: {
     position: null,
-    marker: null
+    marker: null,
   },
   destino: {
     position: null,
-    marker: null
+    marker: null,
   },
 };
 const HOME = { lat: 42.339044, lng: -1.806348 };
@@ -37,7 +37,7 @@ export async function createMap(
   elementId: string,
   center = PERALTA,
   zoom = 15,
-  mapId = 'MAP_ID'
+  mapId = "MAP_ID"
 ): Promise<google.maps.Map> {
   loader = new Loader({
     apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API as string,
@@ -49,9 +49,9 @@ export async function createMap(
   map = new Map(document.getElementById(elementId) as HTMLElement, {
     center,
     zoom,
-    mapId
+    mapId,
   });
-  return map
+  return map;
 }
 
 export const getAutoComplete = (el: string) =>
@@ -61,7 +61,7 @@ export const getAutoComplete = (el: string) =>
 
 async function createMarker(
   position: google.maps.LatLng,
-  title: string
+  title: 'Origen' | 'Destino'
 ): Promise<google.maps.marker.AdvancedMarkerElement> {
   const { AdvancedMarkerElement } = await loader.importLibrary("marker");
   const marker = new AdvancedMarkerElement({
@@ -69,24 +69,30 @@ async function createMarker(
     position: position,
     title: title,
   });
+  if(title === 'Origen'){
+    if (origenDestino.origen.marker) {origenDestino.origen.marker.map = null}
+    origenDestino.origen.marker = marker;
+  } else {
+    if (origenDestino.destino.marker) {origenDestino.destino.marker.map = null}
+    origenDestino.destino.marker = marker;
+  }
+  centerMap();
   return marker;
 }
 
 function centerMap() {
-  if (!origenDestino.destino.position) {
-    map.setCenter(origenDestino.origen?.position!);
+  if (!origenDestino.destino.marker?.position) {
+    map.setCenter(origenDestino.origen.marker?.position!);
     map.setZoom(15);
   } else {
     bounds = new google.maps.LatLngBounds();
-    bounds = bounds.extend(origenDestino.origen?.position!);
-    bounds = bounds.extend(origenDestino.destino.position!);
+    bounds = bounds.extend(origenDestino.origen?.marker?.position!);
+    bounds = bounds.extend(origenDestino.destino.marker.position!);
     map.fitBounds(bounds);
   }
 }
 
-export async function showOriginPoint(
-  this: google.maps.places.Autocomplete
-) {
+export async function showOriginPoint(this: google.maps.places.Autocomplete) {
   const place = this.getPlace();
   if (!place.geometry) {
     showDangerToast(
@@ -95,21 +101,10 @@ export async function showOriginPoint(
     return;
   }
 
-  if (origenDestino.origen.marker) {origenDestino.origen.marker.map = null;}
-  origenDestino.origen.position = place.geometry.location;
-  createMarker(place.geometry.location!, "Origen").then(
-    (marker) => {
-      // console.log(origenDestino.origen);
-      // origenDestino.origen!.marker!.remove()
-      origenDestino.origen.marker = marker
-    }
-  ).catch(err => console.log(err));
-  centerMap();
+  createMarker(place.geometry.location!, "Origen")
 }
 
-export async function showDestinyPoint(
-  this: google.maps.places.Autocomplete
-) {
+export async function showDestinyPoint(this: google.maps.places.Autocomplete) {
   const place = this.getPlace();
   if (!place.geometry) {
     showDangerToast(
@@ -117,12 +112,5 @@ export async function showDestinyPoint(
     );
     return;
   }
-  if (origenDestino.destino.marker) {origenDestino.destino.marker.map = null;}
-  origenDestino.destino.position = place.geometry.location
-  createMarker(place.geometry.location!, "Destino").then(
-    (marker) => {
-      origenDestino.destino!.marker = marker
-    }
-  );
-  centerMap();
+  createMarker(place.geometry.location!, "Destino")
 }
