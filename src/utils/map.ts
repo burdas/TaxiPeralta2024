@@ -74,6 +74,9 @@ function centerMap() {
   if (!origenDestino.destino?.position) {
     map.setCenter(origenDestino.origen?.position!);
     map.setZoom(15);
+  } else if (!origenDestino.origen?.position) {
+    map.setCenter(origenDestino.destino?.position!);
+    map.setZoom(15);
   } else {
     bounds = new google.maps.LatLngBounds();
     bounds = bounds.extend(origenDestino.origen?.position!);
