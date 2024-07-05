@@ -1,6 +1,6 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { showDangerToast } from "./Toast";
-import { HOME, PERALTA, ROUTES_COLORS, DARK_MAP} from "./MapConst";
+import { HOME, PERALTA, ROUTES_COLORS} from "./MapConst";
 
 let map: google.maps.Map;
 let loader: Loader;
@@ -19,7 +19,7 @@ export async function createMap(
   elementId: string,
   center = PERALTA,
   zoom = 15,
-  //mapId = "MAP_ID"
+  mapId = document.documentElement.classList.contains('dark') ? 'ca8d806c78f8a7be' : 'c0ff71cee42d74ed'
 ): Promise<google.maps.Map> {
   loader = new Loader({
     apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API as string,
@@ -31,8 +31,7 @@ export async function createMap(
   map = new Map(document.getElementById(elementId) as HTMLElement, {
     center,
     zoom,
-    //mapId,
-    styles: document.documentElement.classList.contains('dark') ? DARK_MAP : null
+    mapId,
   });
   return map;
 }
@@ -157,11 +156,18 @@ function getAddress(place: google.maps.places.PlaceResult): string {
 }
 
 export async function calculateRoute(e: Event) {
+  e.preventDefault();
   if (!origenDestino.origen?.position || !origenDestino.destino?.position) {
     showDangerToast("Selecciona un punto de origen y un punto de destino");
     return;
   }
+  // Spinner animation
+  document.getElementById("textCalcular")?.classList.toggle("hidden");
+  document.getElementById("spinner")?.classList.toggle("hidden");
+
   const directionsService = new google.maps.DirectionsService();
+
+  // Distancia total HOME -> ORIGEN -> DESTINO -> HOME
   const kmHomeOrigen =
     (
       await directionsService.route({
@@ -170,6 +176,7 @@ export async function calculateRoute(e: Event) {
         travelMode: google.maps.TravelMode.DRIVING,
       })
     ).routes[0].legs[0].distance?.value! / 1000;
+
   const kmHomeDestino =
     (
       await directionsService.route({
@@ -178,6 +185,7 @@ export async function calculateRoute(e: Event) {
         travelMode: google.maps.TravelMode.DRIVING,
       })
     ).routes[0].legs[0].distance?.value! / 1000;
+
   const direcciones = await directionsService.route({
     origin: origenDestino.origen?.position,
     destination: origenDestino.destino?.position,
@@ -191,9 +199,13 @@ export async function calculateRoute(e: Event) {
       map: map,
       directions: direcciones,
       routeIndex: i,
+      preserveViewport: true,
       polylineOptions: new google.maps.Polyline({
         strokeColor: ROUTES_COLORS[i],
-      }) as google.maps.PolylineOptions,
+        strokeWeight: 6,
+      }) as google.maps.PolylineOptions
     });
   });
+  document.getElementById("spinner")?.classList.toggle("hidden");
+  document.getElementById("textCalcular")?.classList.toggle("hidden");
 }

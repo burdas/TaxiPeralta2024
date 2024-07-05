@@ -11,6 +11,7 @@ export function showDangerToast(message: string) {
         style: {
             background: "#f43f5e",
         },
+
     }).showToast();
 }
 
