@@ -64,12 +64,20 @@
   </div>
 </section>
 <script>
-  import { createMap, getAutoComplete, showOriginPoint, showDestinyPoint, calculateRoute } from "../utils/map.ts";
+  import { createMap, getAutoComplete, showOriginPoint, showDestinyPoint, calculateRoute } from "../utils/Map.ts";
   import { showDangerToast } from "../utils/Toast";
+  import { DarkModeObserver } from "../utils/DarkModeObserver";
+  import { DARK_MAP } from "../utils/MapConst"
+
+  
   createMap("map")
     .then((map) => {
       document.getElementById("map")?.classList.remove("animate-pulse");
       console.info("Map has been initialized");
+
+      // Toggle map dark mode
+      new DarkModeObserver(() => map.setOptions({styles: DARK_MAP}), () => map.setOptions({styles: null}));
+
       const origen = getAutoComplete("origen");
       const destino = getAutoComplete("destino");
       origen.bindTo("bounds", map);
