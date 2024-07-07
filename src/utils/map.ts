@@ -1,6 +1,6 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { showDangerToast } from "./Toast";
-import { HOME, PERALTA, ROUTES_COLORS} from "./MapConst";
+import { HOME, PERALTA, ROUTES_COLORS} from "./MapUtils";
 
 let map: google.maps.Map;
 let loader: Loader;
@@ -13,13 +13,14 @@ const origenDestino: OrigenDestino = {
   origen: null,
   destino: null,
 };
+let displayRoutes: google.maps.DirectionsRenderer[] = [];
 
 // Create a new Loader instance y create a new Map instance y devuelve la instancia map
 export async function createMap(
   elementId: string,
   center = PERALTA,
   zoom = 15,
-  mapId = document.documentElement.classList.contains('dark') ? 'ca8d806c78f8a7be' : 'c0ff71cee42d74ed'
+  mapId = document.documentElement.classList.contains('dark') ? '77c33a9af64c292c' : 'c0ff71cee42d74ed'
 ): Promise<google.maps.Map> {
   loader = new Loader({
     apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API as string,
@@ -156,6 +157,10 @@ function getAddress(place: google.maps.places.PlaceResult): string {
 }
 
 export async function calculateRoute(e: Event) {
+  // Reset routes display
+  displayRoutes.map(e => e.setMap(null));
+  displayRoutes = []
+
   e.preventDefault();
   if (!origenDestino.origen?.position || !origenDestino.destino?.position) {
     showDangerToast("Selecciona un punto de origen y un punto de destino");
@@ -194,18 +199,29 @@ export async function calculateRoute(e: Event) {
     provideRouteAlternatives: true,
     travelMode: google.maps.TravelMode.DRIVING,
   });
-  direcciones.routes.forEach((_, i) => {
-    new google.maps.DirectionsRenderer({
+  direcciones.routes.forEach((route, i) => {
+    displayRoutes.push(new google.maps.DirectionsRenderer({
       map: map,
       directions: direcciones,
       routeIndex: i,
       preserveViewport: true,
+      suppressMarkers: true,
       polylineOptions: new google.maps.Polyline({
         strokeColor: ROUTES_COLORS[i],
         strokeWeight: 6,
       }) as google.maps.PolylineOptions
-    });
+    }));
   });
+
+  console.log(displayRoutes[0]!.getDirections()!.routes.map(r => r.legs[0].steps.length));
+  // Quitar el spinner de carga
   document.getElementById("spinner")?.classList.toggle("hidden");
   document.getElementById("textCalcular")?.classList.toggle("hidden");
+}
+
+function showRoutesInfoWindows() {
+  const routes = displayRoutes[0]!.getDirections()!.routes;
+  routes.forEach(r => {
+
+  })
 }

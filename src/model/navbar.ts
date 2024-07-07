@@ -5,31 +5,31 @@ export interface RouteProps {
 
 export const routeList: RouteProps[] = [
   {
-    href: "#Informacion",
+    href: "./#Informacion",
     label: "Información",
   },
   {
-    href: "#Tarifas",
+    href: "./#Tarifas",
     label: "Tarifas",
   },
   {
-    href: "#Galeria",
+    href: "./#Galeria",
     label: "Galeria",
   },
   {
-    href: "#Calculadora",
+    href: "./calculadora_viajes",
     label: "Calcula tu viaje",
   },
   {
-    href: "#Enlaces",
+    href: "./#Enlaces",
     label: "Enlaces",
   },
   {
-    href: "#FiestasPeralta",
+    href: "./FiestasPeralta",
     label: "Fiestas de Peralta",
   },
   {
-    href: "#Contacto",
+    href: "./#Contacto",
     label: "Contacto",
   },
 ];

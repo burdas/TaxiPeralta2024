@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MapDisplay from '../components/MapReact/MapDisplay';
+import NavBar from '../components/NavBar.astro';
+---
+
+<Layout title="Calculadora de viajes">
+    <NavBar />
+    <!-- <hr class="w-full text-black dark:text-white opacity-80 dark:opacity-20 h-[1px]" /> -->
+    <MapDisplay client:only="react">
+    </MapDisplay>
+</Layout>
