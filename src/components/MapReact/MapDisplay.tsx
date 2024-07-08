@@ -1,37 +1,60 @@
-import { Loader } from "@googlemaps/js-api-loader";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import MapController from "./MapController";
-import { PERALTA } from "../../utils/MapUtils";
+import { createMap } from "../../utils/Map2";
 import { showDangerToast } from "../../utils/Toast";
 
-export default function MapDisplay() {
-  useEffect(() => {
-    const loader = new Loader({
-      apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API,
-      version: "weekly",
-      libraries: ["places"],
-    });
+interface LugarProps {
+  autocomplete: google.maps.places.Autocomplete | null;
+  marker: google.maps.marker.AdvancedMarkerElement | null;
+}
 
-    loader
-      .importLibrary("maps")
-      .then(({ Map }) => {
-        new Map(document.getElementById("map")!, {
-          center: PERALTA,
-          zoom: 15,
-          mapId: document.documentElement.classList.contains('dark') ? '77c33a9af64c292c' : 'c0ff71cee42d74ed',
-          disableDefaultUI: true,
-        });
+export interface OrigenDestinoProps {
+  origen: LugarProps;
+  destino: LugarProps;
+}
+
+export default function MapDisplay() {
+  const mapRef = useRef(null);
+  const [map, setMap] = useState<google.maps.Map>();
+  const [origenDestino, setOrigenDestino] = useState<OrigenDestinoProps>({
+    origen: {
+      autocomplete: null,
+      marker: null,
+    },
+    destino: {
+      autocomplete: null,
+      marker: null,
+    },
+  });
+
+  useEffect(() => {
+    createMap(mapRef.current!)
+      .then((m) => {
+        setMap(m);
       })
       .catch((e) => {
+        console.error(`Error al cargar el mapa: ${e.error}`);
         showDangerToast("Ha ocurrido un error al cargar el mapa");
-        console.error(`Error: ${e.message}`);
       });
   }, []);
 
+  useEffect(() => {
+    if (origenDestino.origen.autocomplete) {
+      console.log(origenDestino);
+      const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
+      origenDestino.origen!.autocomplete!.bindTo("bounds", map!);
+      origenDestino.origen!.autocomplete!.bindTo("bounds", map!);
+    }
+  }, [origenDestino]);
+
   return (
     <main className="h-[calc(100dvh-80px)] w-full flex flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
-      <MapController />
-      <article id="map" className="flex-grow h-full bg-sky-900"></article>
+      <MapController setOrigenDestino={setOrigenDestino} />
+      <article
+        id="map"
+        ref={mapRef}
+        className="flex-grow h-full bg-sky-900"
+      ></article>
     </main>
   );
 }

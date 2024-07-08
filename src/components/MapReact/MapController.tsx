@@ -1,4 +1,29 @@
-export default function MapController() {
+import { useEffect, useRef } from "react";
+import type { OrigenDestinoProps } from "./MapDisplay";
+import { getAutoComplete } from "../../utils/Map2";
+
+interface MapControllerProps {
+  setOrigenDestino: React.Dispatch<
+    React.SetStateAction<OrigenDestinoProps>
+  >;
+}
+
+export default function MapController({ setOrigenDestino }:MapControllerProps ) {
+  const origenRef = useRef<HTMLInputElement>(null);
+  const destinoRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      const origenAutocomplete = await getAutoComplete(origenRef.current!);
+      const destinoAutocomplete = await getAutoComplete(destinoRef.current!);
+      const origenDestino: OrigenDestinoProps = {
+        origen: {autocomplete: origenAutocomplete, marker: null},
+        destino: {autocomplete: destinoAutocomplete, marker: null}
+      }
+      setOrigenDestino(origenDestino);
+    })()
+  },[])
+
   return (
     <article
       id="mapControllerBox"
@@ -18,6 +43,7 @@ export default function MapController() {
           </label>
           <input
             id="origen"
+            ref={origenRef}
             type="text"
             className="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Peralta"
@@ -32,6 +58,7 @@ export default function MapController() {
           </label>
           <input
             id="destino"
+            ref={destinoRef}
             type="text"
             className="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Pamplona"

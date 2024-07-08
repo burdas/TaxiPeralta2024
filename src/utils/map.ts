@@ -33,6 +33,7 @@ export async function createMap(
     center,
     zoom,
     mapId,
+    disableDefaultUI: true
   });
   return map;
 }
