@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
 import { getAutoComplete } from "../../utils/Map2";
 
@@ -6,21 +6,23 @@ interface MapControllerProps {
   setOrigenDestino: React.Dispatch<
     React.SetStateAction<OrigenDestinoProps>
   >;
+  map: google.maps.Map
 }
 
-export default function MapController({ setOrigenDestino }:MapControllerProps ) {
+export default function MapController({ setOrigenDestino, map }:MapControllerProps ) {
   const origenRef = useRef<HTMLInputElement>(null);
   const destinoRef = useRef(null);
+
+  const [originPlace, setOriginPlace] = useState<>()
 
   useEffect(() => {
     (async () => {
       const origenAutocomplete = await getAutoComplete(origenRef.current!);
       const destinoAutocomplete = await getAutoComplete(destinoRef.current!);
-      const origenDestino: OrigenDestinoProps = {
-        origen: {autocomplete: origenAutocomplete, marker: null},
-        destino: {autocomplete: destinoAutocomplete, marker: null}
-      }
-      setOrigenDestino(origenDestino);
+      origenAutocomplete.bindTo("bounds", map);
+      destinoAutocomplete.bindTo("bounds", map);
+      origenAutocomplete.addListener("place_changed", showOriginPoint);
+      destinoAutocomplete.addListener("place_changed", showDestinyPoint);
     })()
   },[])
 
