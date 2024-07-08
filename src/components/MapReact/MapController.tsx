@@ -1,30 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
 import { getAutoComplete } from "../../utils/Map2";
+import AutocompleInput from "./AutocompleInput";
 
 interface MapControllerProps {
-  setOrigenDestino: React.Dispatch<
-    React.SetStateAction<OrigenDestinoProps>
-  >;
-  map: google.maps.Map
+  setOrigenDestino: React.Dispatch<React.SetStateAction<OrigenDestinoProps>>;
+  map: google.maps.Map;
 }
 
-export default function MapController({ setOrigenDestino, map }:MapControllerProps ) {
-  const origenRef = useRef<HTMLInputElement>(null);
-  const destinoRef = useRef(null);
-
-  const [originPlace, setOriginPlace] = useState<>()
+export default function MapController({
+  setOrigenDestino,
+  map,
+}: MapControllerProps) {
+  const [originPlace, setOriginPlace] =
+    useState<google.maps.places.PlaceResult>();
+  const [destinyPlace, setDestinyPlace] =
+    useState<google.maps.places.PlaceResult>();
 
   useEffect(() => {
-    (async () => {
-      const origenAutocomplete = await getAutoComplete(origenRef.current!);
-      const destinoAutocomplete = await getAutoComplete(destinoRef.current!);
-      origenAutocomplete.bindTo("bounds", map);
-      destinoAutocomplete.bindTo("bounds", map);
-      origenAutocomplete.addListener("place_changed", showOriginPoint);
-      destinoAutocomplete.addListener("place_changed", showDestinyPoint);
-    })()
-  },[])
+    console.log("originPlace", originPlace);
+    console.log("destinyPlace", destinyPlace);
+    if (originPlace && destinyPlace) {
+      console.log("originPlace", originPlace);
+      console.log("destinyPlace", destinyPlace);
+    }
+  }, [originPlace, destinyPlace]);
 
   return (
     <article
@@ -36,36 +36,18 @@ export default function MapController({ setOrigenDestino, map }:MapControllerPro
         <span className="text-sky-500"> viaje</span>
       </h4>
       <div className="w-full space-y-4">
-        <div>
-          <label
-            htmlFor="origen"
-            className="text-sm font-medium text-black/80 dark:text-neutral-200/80"
-          >
-            Origen
-          </label>
-          <input
-            id="origen"
-            ref={origenRef}
-            type="text"
-            className="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Peralta"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="destino"
-            className="text-sm font-medium text-black/80 dark:text-neutral-200/80"
-          >
-            Destino
-          </label>
-          <input
-            id="destino"
-            ref={destinoRef}
-            type="text"
-            className="w-full outline-none bg-sky-900/20 border-1 border-blue-500 text-gray-900 text-sm rounded-lg focus:ring ring-blue-500 focus:border-blue-800 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Pamplona"
-          />
-        </div>
+        <AutocompleInput
+          title={"Origen"}
+          placeHolder={"Peralta"}
+          setPlace={setOriginPlace}
+          map={map}
+        />
+        <AutocompleInput
+          title={"Destino"}
+          placeHolder={"Pamplona"}
+          setPlace={setDestinyPlace}
+          map={map}
+        />
         <div className="flex flex-row justify-between">
           <label className="inline-flex items-center cursor-pointer">
             <input type="checkbox" value="" className="sr-only peer" />
