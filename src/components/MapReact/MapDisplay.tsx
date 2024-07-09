@@ -29,7 +29,7 @@ export default function MapDisplay() {
 
   return (
     <main className="h-[calc(100dvh-80px)] w-full flex flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
-      <MapController setOrigenDestino={setOrigenDestino} map={map!} />
+      <MapController setOrigenDestino={setOrigenDestino} map={map!} origenDestino={origenDestino} />
       <article
         id="map"
         ref={mapRef}

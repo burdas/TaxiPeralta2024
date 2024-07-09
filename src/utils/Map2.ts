@@ -6,7 +6,6 @@ let loader: Loader;
 let MapClass: typeof google.maps.Map;
 
 async function initMapLibraries() {
-
   loader = new Loader({
     apiKey: import.meta.env.PUBLIC_GOOGLE_MAPS_API as string,
     version: "weekly",
@@ -14,7 +13,7 @@ async function initMapLibraries() {
   });
 
   const { Map } = await loader.importLibrary("maps");
-  MapClass = Map
+  MapClass = Map;
 }
 
 // Create a new Loader instance y create a new Map instance y devuelve la instancia map
@@ -41,3 +40,42 @@ export const getAutoComplete = async (el: HTMLInputElement) => {
   await initMapLibraries();
   return new google.maps.places.Autocomplete(el);
 };
+
+// Obtiene la dirección de un objeto Places de google maps
+function getAddress(place: google.maps.places.PlaceResult): string {
+  let address = "";
+  if (place.address_components) {
+    address = [
+      (place.address_components[0] && place.address_components[0].short_name) ||
+        "",
+      (place.address_components[1] && place.address_components[1].short_name) ||
+        "",
+      (place.address_components[2] && place.address_components[2].short_name) ||
+        "",
+    ].join(" ");
+  }
+  return address;
+}
+
+// Genera un marcador en el mapa con su ventana de detalles
+export function createMarker(
+  title: "Origen" | "Destino",
+  map: google.maps.Map,
+  place: google.maps.places.PlaceResult
+): Promise<google.maps.marker.AdvancedMarkerElement> {
+  return loader.importLibrary("marker").then(({ AdvancedMarkerElement }) => {
+    const marker = new AdvancedMarkerElement({
+      map,
+      position: place.geometry?.location,
+      title: title,
+    });
+
+    const infoWindow = new google.maps.InfoWindow();
+    infoWindow.setContent(
+      "<div><strong>" + place.name + "</strong><br>" + getAddress(place)
+    );
+    infoWindow.setHeaderDisabled(true);
+    infoWindow.open(map, marker);
+    return marker;
+  });
+}

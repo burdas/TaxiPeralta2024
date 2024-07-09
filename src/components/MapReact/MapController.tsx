@@ -1,30 +1,48 @@
 import { useEffect, useRef, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
-import { getAutoComplete } from "../../utils/Map2";
+import { createMarker } from "../../utils/Map2";
 import AutocompleInput from "./AutocompleInput";
+import { showDangerToast } from "../../utils/Toast";
 
 interface MapControllerProps {
+  origenDestino: OrigenDestinoProps;
   setOrigenDestino: React.Dispatch<React.SetStateAction<OrigenDestinoProps>>;
   map: google.maps.Map;
 }
 
 export default function MapController({
+  origenDestino,
   setOrigenDestino,
   map,
 }: MapControllerProps) {
-  const [originPlace, setOriginPlace] =
-    useState<google.maps.places.PlaceResult>();
-  const [destinyPlace, setDestinyPlace] =
-    useState<google.maps.places.PlaceResult>();
+  const [originPlace, setOriginPlace] = useState<google.maps.places.PlaceResult>();
+  const [destinyPlace, setDestinyPlace] = useState<google.maps.places.PlaceResult>();
 
   useEffect(() => {
-    console.log("originPlace", originPlace);
-    console.log("destinyPlace", destinyPlace);
-    if (originPlace && destinyPlace) {
-      console.log("originPlace", originPlace);
-      console.log("destinyPlace", destinyPlace);
-    }
-  }, [originPlace, destinyPlace]);
+    if (!originPlace) return;
+    createMarker("Origen", map, originPlace).then(marker => {
+      const origenDestinoAux: OrigenDestinoProps = {...origenDestino};
+      if(origenDestinoAux.origen) origenDestinoAux.origen.map = null;
+      origenDestinoAux.origen = marker;
+      setOrigenDestino(origenDestinoAux)
+    }).catch(e => {
+      console.error(`Error al crear el marcador: ${e}`);
+      showDangerToast("Ha cocurrido un error al crear el marcador.")
+    })
+  }, [originPlace]);
+
+  useEffect(() => {
+    if (!destinyPlace) return;
+    createMarker("Destino", map, destinyPlace).then(marker => {
+      const origenDestinoAux: OrigenDestinoProps = {...origenDestino};
+      if(origenDestinoAux.destino) origenDestinoAux.destino.map = null;
+      origenDestinoAux.destino = marker;
+      setOrigenDestino(origenDestinoAux)
+    }).catch(e => {
+      console.error(`Error al crear el marcador: ${e}`);
+      showDangerToast("Ha cocurrido un error al crear el marcador.")
+    })
+  }, [destinyPlace]);
 
   return (
     <article
@@ -84,3 +102,4 @@ export default function MapController({
     </article>
   );
 }
+

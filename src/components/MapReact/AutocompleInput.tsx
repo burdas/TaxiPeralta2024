@@ -15,14 +15,12 @@ export default function AutocompleInput({title, placeHolder, setPlace, map}: Aut
     useEffect(() => {
         getAutoComplete(inputRef.current!).then((inputAc) => {
             if (!map) return;
+            inputAc.bindTo("bounds", map);
             inputAc.addListener("place_changed", () => {
-                console.log("Llega");
-                console.log(inputAc.getPlace());
                 setPlace(inputAc.getPlace());
             });
-            inputAc.bindTo("bounds", map);
         })
-    }, [])
+    }, [map])
 
     return (
         <div>
