@@ -1,6 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { showDangerToast } from "./Toast";
 import { HOME, PERALTA, ROUTES_COLORS } from "./MapUtils";
+import type { OrigenDestinoProps } from "../components/MapReact/MapDisplay";
 
 let loader: Loader;
 let MapClass: typeof google.maps.Map;
@@ -78,4 +79,34 @@ export function createMarker(
     infoWindow.open(map, marker);
     return marker;
   });
+}
+
+// Centra el mapa dependiendo de si es un único marcador o son dos
+export function centerMap(map: google.maps.Map | undefined, origenDestino: OrigenDestinoProps) {
+  if (!map) return;
+  if (origenDestino.origen && !origenDestino.destino){
+    map.setCenter(origenDestino.origen.position!);
+    map.setZoom(15);
+  } else if (!origenDestino.origen && origenDestino.destino){
+    map.setCenter(origenDestino.destino.position!);
+    map.setZoom(15);
+  } else if (origenDestino.origen && origenDestino.destino){
+    let bounds = new google.maps.LatLngBounds();
+    bounds = bounds.extend(origenDestino.origen?.position!);
+    bounds = bounds.extend(origenDestino.destino.position!);
+
+    // Añadir un margen extra para la infoWindow
+    const margin = 0.05; // Ajusta este valor según sea necesario
+    bounds.extend({
+      lat: bounds.getNorthEast().lat() + margin,
+      lng: bounds.getNorthEast().lng() + margin,
+    });
+    bounds.extend({
+      lat: bounds.getSouthWest().lat() - margin,
+      lng: bounds.getSouthWest().lng() - margin,
+    });
+
+
+    map.fitBounds(bounds);
+  }
 }

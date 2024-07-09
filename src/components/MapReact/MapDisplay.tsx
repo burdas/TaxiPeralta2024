@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import MapController from "./MapController";
-import { createMap } from "../../utils/Map2";
+import { centerMap, createMap } from "../../utils/Map2";
 import { showDangerToast } from "../../utils/Toast";
 
 export interface OrigenDestinoProps {
@@ -26,6 +26,10 @@ export default function MapDisplay() {
         showDangerToast("Ha ocurrido un error al cargar el mapa");
       });
   }, []);
+
+  useEffect(()=>{
+    centerMap(map, origenDestino)
+  },[origenDestino])
 
   return (
     <main className="h-[calc(100dvh-80px)] w-full flex flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
