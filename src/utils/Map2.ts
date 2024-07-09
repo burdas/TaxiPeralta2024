@@ -73,7 +73,7 @@ export function createMarker(
 
     const infoWindow = new google.maps.InfoWindow();
     infoWindow.setContent(
-      "<div><strong>" + place.name + "</strong><br>" + getAddress(place)
+      "<div><strong>" + place.name + "</strong><br>" + getAddress(place) + "</div>"
     );
     infoWindow.setHeaderDisabled(true);
     infoWindow.open(map, marker);
@@ -82,15 +82,21 @@ export function createMarker(
 }
 
 // Centra el mapa dependiendo de si es un único marcador o son dos
-export function centerMap(map: google.maps.Map | undefined, origenDestino: OrigenDestinoProps) {
+export function centerMap(
+  map: google.maps.Map | undefined,
+  origenDestino: OrigenDestinoProps
+) {
   if (!map) return;
-  if (origenDestino.origen && !origenDestino.destino){
+  if (!origenDestino.origen && !origenDestino.destino) {
+     map.setCenter(PERALTA);
+     map.setZoom(15);
+  } else if (origenDestino.origen && !origenDestino.destino) {
     map.setCenter(origenDestino.origen.position!);
     map.setZoom(15);
-  } else if (!origenDestino.origen && origenDestino.destino){
+  } else if (!origenDestino.origen && origenDestino.destino) {
     map.setCenter(origenDestino.destino.position!);
     map.setZoom(15);
-  } else if (origenDestino.origen && origenDestino.destino){
+  } else if (origenDestino.origen && origenDestino.destino) {
     let bounds = new google.maps.LatLngBounds();
     bounds = bounds.extend(origenDestino.origen?.position!);
     bounds = bounds.extend(origenDestino.destino.position!);
@@ -106,21 +112,19 @@ export function centerMap(map: google.maps.Map | undefined, origenDestino: Orige
       lng: bounds.getSouthWest().lng() - margin,
     });
 
-
     map.fitBounds(bounds);
   }
 }
 
-export async function calculateRoute(map: google.maps.Map, origenDestino: OrigenDestinoProps, displayRoutes: google.maps.DirectionsRenderer[], setDisplayRoutes: React.Dispatch<React.SetStateAction<google.maps.DirectionsRenderer[]>>) {
-  let displayRoutesAux: google.maps.DirectionsRenderer[] = [...displayRoutes]
+export async function calculateRoute(
+  map: google.maps.Map,
+  origenDestino: OrigenDestinoProps,
+  displayRoutes: google.maps.DirectionsRenderer[]
+): Promise<google.maps.DirectionsRenderer[]> {
+  let displayRoutesAux: google.maps.DirectionsRenderer[] = [...displayRoutes];
   // Reset routes display
-  displayRoutesAux.map(e => e.setMap(null));
-  displayRoutesAux = []
-
-  if (!origenDestino.origen?.position || !origenDestino.destino?.position) {
-    showDangerToast("Selecciona un punto de origen y un punto de destino");
-    return;
-  }
+  displayRoutesAux.map((e) => e.setMap(null));
+  displayRoutesAux = [];
 
   const directionsService = new google.maps.DirectionsService();
 
@@ -129,7 +133,7 @@ export async function calculateRoute(map: google.maps.Map, origenDestino: Origen
     (
       await directionsService.route({
         origin: HOME,
-        destination: origenDestino.origen?.position,
+        destination: origenDestino.origen?.position!,
         travelMode: google.maps.TravelMode.DRIVING,
       })
     ).routes[0].legs[0].distance?.value! / 1000;
@@ -137,33 +141,41 @@ export async function calculateRoute(map: google.maps.Map, origenDestino: Origen
   const kmHomeDestino =
     (
       await directionsService.route({
-        origin: origenDestino.destino?.position,
+        origin: origenDestino.destino?.position!,
         destination: HOME,
         travelMode: google.maps.TravelMode.DRIVING,
       })
     ).routes[0].legs[0].distance?.value! / 1000;
 
   const direcciones = await directionsService.route({
-    origin: origenDestino.origen?.position,
-    destination: origenDestino.destino?.position,
+    origin: origenDestino.origen?.position!,
+    destination: origenDestino.destino?.position!,
     avoidHighways: false,
     avoidTolls: false,
     provideRouteAlternatives: true,
     travelMode: google.maps.TravelMode.DRIVING,
   });
-  direcciones.routes.forEach((route, i) => {
-    displayRoutesAux.push(new google.maps.DirectionsRenderer({
-      map: map,
-      directions: direcciones,
-      routeIndex: i,
-      preserveViewport: true,
-      suppressMarkers: true,
-      polylineOptions: new google.maps.Polyline({
-        strokeColor: ROUTES_COLORS[i],
-        strokeWeight: 6,
-      }) as google.maps.PolylineOptions
-    }));
+  direcciones.routes.forEach((_, i) => {
+    const infoWindow = new google.maps.InfoWindow();
+    infoWindow.setContent(
+      "<div><strong>Prueba</strong><br>Prueba</div>"
+    );
+    infoWindow.setHeaderDisabled(true);
+    const dr = new google.maps.DirectionsRenderer({
+        map: map,
+        directions: direcciones,
+        routeIndex: i,
+        preserveViewport: true,
+        suppressMarkers: true,
+        infoWindow: infoWindow,
+        suppressInfoWindows: false,
+        polylineOptions: new google.maps.Polyline({
+          strokeColor: ROUTES_COLORS[i],
+          strokeWeight: 6,
+        }) as google.maps.PolylineOptions,
+      })
+    displayRoutesAux.push(dr);
   });
-  setDisplayRoutes(displayRoutesAux);
-  // console.log(displayRoutes[0]!.getDirections()!.routes.map(r => r.legs[0].steps.length));
+  console.log(displayRoutesAux[0]!.getDirections()!.routes.map(r => r.legs[0].steps.length));
+  return displayRoutesAux;
 }

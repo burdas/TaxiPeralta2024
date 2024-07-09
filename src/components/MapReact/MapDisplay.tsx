@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import MapController from "./MapController";
 import { centerMap, createMap } from "../../utils/Map2";
 import { showDangerToast } from "../../utils/Toast";
+import { PERALTA } from "../../utils/MapUtils";
 
 export interface OrigenDestinoProps {
   origen: google.maps.marker.AdvancedMarkerElement | null;
@@ -20,6 +21,8 @@ export default function MapDisplay() {
     createMap(mapRef.current!)
       .then((m) => {
         setMap(m);
+        m.setCenter(PERALTA);
+        m.setZoom(15);
       })
       .catch((e) => {
         console.error(`Error al cargar el mapa: ${e.error}`);

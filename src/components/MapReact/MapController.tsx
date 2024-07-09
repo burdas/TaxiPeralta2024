@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
-import { calculateRoute, createMarker } from "../../utils/Map2";
+import { calculateRoute, centerMap, createMarker } from "../../utils/Map2";
 import AutocompleInput from "./AutocompleInput";
 import { showDangerToast } from "../../utils/Toast";
 
@@ -20,9 +20,16 @@ export default function MapController({
   const [destinyPlace, setDestinyPlace] =
     useState<google.maps.places.PlaceResult>();
   const [disableButton, setDisableButton] = useState<Boolean>(true);
-  const [displayRoutes, setDisplayRoutes] = useState<google.maps.DirectionsRenderer[]>([]);
+  const [btnLoading, setBtnLoading] = useState<Boolean>(false);
+  const [displayRoutes, setDisplayRoutes] = useState<
+    google.maps.DirectionsRenderer[]
+  >([]);
+
+  useEffect(() => centerMap(map, origenDestino), []);
+
   useEffect(() => {
     if (!originPlace) return;
+    if (displayRoutes) displayRoutes.map((e) => e.setMap(null));
     createMarker("Origen", map, originPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -38,6 +45,7 @@ export default function MapController({
 
   useEffect(() => {
     if (!destinyPlace) return;
+    if (displayRoutes) displayRoutes.map((e) => e.setMap(null));
     createMarker("Destino", map, destinyPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -51,7 +59,10 @@ export default function MapController({
       });
   }, [destinyPlace]);
 
-  useEffect(() => setDisableButton(!originPlace || !destinyPlace), [originPlace, destinyPlace]);
+  useEffect(
+    () => setDisableButton(!originPlace || !destinyPlace),
+    [originPlace, destinyPlace]
+  );
 
   return (
     <article
@@ -95,27 +106,36 @@ export default function MapController({
           ) : (
             <button
               id="btnCalcular"
-              onClick={() => calculateRoute(map, origenDestino, displayRoutes, setDisplayRoutes)}
+              onClick={async () => {
+                setBtnLoading(true);
+                setDisplayRoutes(
+                  await calculateRoute(map, origenDestino, displayRoutes)
+                );
+                setBtnLoading(false);
+              }}
               className="rounded-md w-28 h-10 p-2 text-sm bg-sky-500 text-white hover:scale-105 active:scale-95 transition-all duration-200 inline-flex items-center justify-center"
             >
-              <svg
-                id="spinner"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                aria-hidden="true"
-                className="w-4 h-4 text-white animate-spin hidden"
-                viewBox="0 0 100 101"
-              >
-                <path
-                  fill="#E5E7EB"
-                  d="M100 50.5908c0 27.6143-22.3858 50.0002-50 50.0002S0 78.2051 0 50.5908C0 22.9766 22.3858.59082 50 .59082s50 22.38578 50 49.99998Zm-90.91856 0C9.08144 73.1895 27.4013 91.5094 50 91.5094s40.9186-18.3199 40.9186-40.9186C90.9186 27.9921 72.5987 9.67226 50 9.67226c-22.5987 0-40.91856 18.31984-40.91856 40.91854Z"
-                ></path>
-                <path
-                  fill="currentColor"
-                  d="M93.9676 39.0409c2.4254-.6371 3.8948-3.1293 3.0403-5.487-1.7147-4.7312-4.1369-9.1847-7.1912-13.2059-3.9715-5.2288-8.9341-9.6242-14.6043-12.93511-5.6702-3.31095-11.937-5.47264-18.4426-6.36165-5.0032-.683699-10.0722-.604397-15.0353.22749-2.4732.41455-3.9215 2.91905-3.2844 5.34453.6372 2.42548 3.1193 3.84844 5.6004 3.48384 3.8006-.55855 7.6686-.58021 11.4897-.058 5.324.7275 10.4526 2.4966 15.0929 5.2061 4.6404 2.7096 8.7016 6.3067 11.9518 10.5858 2.3326 3.0711 4.2148 6.4503 5.5962 10.0348.9019 2.34 3.361 3.8023 5.7865 3.1651Z"
-                ></path>
-              </svg>
-              <span id="textCalcular">Calcular</span>
+              {btnLoading ? (
+                <svg
+                  id="spinner"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  aria-hidden="true"
+                  className="w-4 h-4 text-white animate-spin"
+                  viewBox="0 0 100 101"
+                >
+                  <path
+                    fill="#E5E7EB"
+                    d="M100 50.5908c0 27.6143-22.3858 50.0002-50 50.0002S0 78.2051 0 50.5908C0 22.9766 22.3858.59082 50 .59082s50 22.38578 50 49.99998Zm-90.91856 0C9.08144 73.1895 27.4013 91.5094 50 91.5094s40.9186-18.3199 40.9186-40.9186C90.9186 27.9921 72.5987 9.67226 50 9.67226c-22.5987 0-40.91856 18.31984-40.91856 40.91854Z"
+                  ></path>
+                  <path
+                    fill="currentColor"
+                    d="M93.9676 39.0409c2.4254-.6371 3.8948-3.1293 3.0403-5.487-1.7147-4.7312-4.1369-9.1847-7.1912-13.2059-3.9715-5.2288-8.9341-9.6242-14.6043-12.93511-5.6702-3.31095-11.937-5.47264-18.4426-6.36165-5.0032-.683699-10.0722-.604397-15.0353.22749-2.4732.41455-3.9215 2.91905-3.2844 5.34453.6372 2.42548 3.1193 3.84844 5.6004 3.48384 3.8006-.55855 7.6686-.58021 11.4897-.058 5.324.7275 10.4526 2.4966 15.0929 5.2061 4.6404 2.7096 8.7016 6.3067 11.9518 10.5858 2.3326 3.0711 4.2148 6.4503 5.5962 10.0348.9019 2.34 3.361 3.8023 5.7865 3.1651Z"
+                  ></path>
+                </svg>
+              ) : (
+                <span id="textCalcular">Calcular</span>
+              )}
             </button>
           )}
         </div>
