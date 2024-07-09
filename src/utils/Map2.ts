@@ -110,3 +110,60 @@ export function centerMap(map: google.maps.Map | undefined, origenDestino: Orige
     map.fitBounds(bounds);
   }
 }
+
+export async function calculateRoute(map: google.maps.Map, origenDestino: OrigenDestinoProps, displayRoutes: google.maps.DirectionsRenderer[], setDisplayRoutes: React.Dispatch<React.SetStateAction<google.maps.DirectionsRenderer[]>>) {
+  let displayRoutesAux: google.maps.DirectionsRenderer[] = [...displayRoutes]
+  // Reset routes display
+  displayRoutesAux.map(e => e.setMap(null));
+  displayRoutesAux = []
+
+  if (!origenDestino.origen?.position || !origenDestino.destino?.position) {
+    showDangerToast("Selecciona un punto de origen y un punto de destino");
+    return;
+  }
+
+  const directionsService = new google.maps.DirectionsService();
+
+  // Distancia total HOME -> ORIGEN -> DESTINO -> HOME
+  const kmHomeOrigen =
+    (
+      await directionsService.route({
+        origin: HOME,
+        destination: origenDestino.origen?.position,
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+    ).routes[0].legs[0].distance?.value! / 1000;
+
+  const kmHomeDestino =
+    (
+      await directionsService.route({
+        origin: origenDestino.destino?.position,
+        destination: HOME,
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+    ).routes[0].legs[0].distance?.value! / 1000;
+
+  const direcciones = await directionsService.route({
+    origin: origenDestino.origen?.position,
+    destination: origenDestino.destino?.position,
+    avoidHighways: false,
+    avoidTolls: false,
+    provideRouteAlternatives: true,
+    travelMode: google.maps.TravelMode.DRIVING,
+  });
+  direcciones.routes.forEach((route, i) => {
+    displayRoutesAux.push(new google.maps.DirectionsRenderer({
+      map: map,
+      directions: direcciones,
+      routeIndex: i,
+      preserveViewport: true,
+      suppressMarkers: true,
+      polylineOptions: new google.maps.Polyline({
+        strokeColor: ROUTES_COLORS[i],
+        strokeWeight: 6,
+      }) as google.maps.PolylineOptions
+    }));
+  });
+  setDisplayRoutes(displayRoutesAux);
+  // console.log(displayRoutes[0]!.getDirections()!.routes.map(r => r.legs[0].steps.length));
+}

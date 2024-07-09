@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
-import { createMarker } from "../../utils/Map2";
+import { calculateRoute, createMarker } from "../../utils/Map2";
 import AutocompleInput from "./AutocompleInput";
 import { showDangerToast } from "../../utils/Toast";
 
@@ -20,7 +20,7 @@ export default function MapController({
   const [destinyPlace, setDestinyPlace] =
     useState<google.maps.places.PlaceResult>();
   const [disableButton, setDisableButton] = useState<Boolean>(true);
-
+  const [displayRoutes, setDisplayRoutes] = useState<google.maps.DirectionsRenderer[]>([]);
   useEffect(() => {
     if (!originPlace) return;
     createMarker("Origen", map, originPlace)
@@ -95,6 +95,7 @@ export default function MapController({
           ) : (
             <button
               id="btnCalcular"
+              onClick={() => calculateRoute(map, origenDestino, displayRoutes, setDisplayRoutes)}
               className="rounded-md w-28 h-10 p-2 text-sm bg-sky-500 text-white hover:scale-105 active:scale-95 transition-all duration-200 inline-flex items-center justify-center"
             >
               <svg
