@@ -3,6 +3,8 @@ import { showDangerToast } from "./Toast";
 import { HOME, PERALTA, ROUTES_COLORS } from "./MapUtils";
 import type { OrigenDestinoProps } from "../components/MapReact/MapDisplay";
 import type { CalculateRoutesProps } from "../components/MapReact/MapController";
+import { tarifa } from "../model/tarifas";
+import { numToEur, secToTimeFormat } from "./Format";
 
 let loader: Loader;
 let MapClass: typeof google.maps.Map;
@@ -177,9 +179,21 @@ export async function calculateRoute(
     });
     calculateDataAux.displayRoutes.push(dr);
 
+    const kmOrigenDesitno = route.legs[0].distance?.value! / 1000;
+    const kmTotales = kmHomeOrigen + kmOrigenDesitno + kmHomeDestino;
+    const duration = route.legs[0].duration?.value;
+    const price = (calculateData.tariffType ? tarifa.nocturna.kmRecorrido : tarifa.diurna.kmRecorrido) * kmTotales
+
+    console.log(`Distancia casa - origen: ${kmHomeOrigen}`);
+    console.log(`Distancia origen - destino: ${kmOrigenDesitno}`);
+    console.log(`Distancia destino - casa: ${kmHomeDestino}`);
+    console.log(`Distancia total: ${kmTotales}`);
+    console.log(`Tarifa nocturna: ${calculateData.tariffType}`);
+    console.log(`Precio tarifa: ${calculateData.tariffType ? tarifa.nocturna.kmRecorrido : tarifa.diurna.kmRecorrido}`);
+    console.log(`Precio total: ${price}`);
+
     const infoWindow = new google.maps.InfoWindow();
-      const content = `<div><strong class=\"text-xl font-semibold\" style=\"color: ${ROUTES_COLORS[i]}\">Prueba</strong><br>Prueba</div>`;
-      console.log(content);
+      const content = `<div><strong class=\"text-xl font-semibold\" style=\"color: ${ROUTES_COLORS[i]}\">${numToEur(price)}</strong><br>${kmOrigenDesitno.toFixed(0)} km<br>${secToTimeFormat(duration ?? 0)}</div>`;
       infoWindow.setContent(content);
       infoWindow.setHeaderDisabled(true);
       infoWindow.setPosition(getFirstNoOverlapingPosition(route, direcciones.routes.filter(d => d !== route)));
