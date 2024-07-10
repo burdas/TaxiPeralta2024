@@ -14,6 +14,21 @@ export interface CalculateRoutesProps {
   displayRoutes: google.maps.DirectionsRenderer[];
   displayInfoWindows: google.maps.InfoWindow[];
   tariffType: boolean;
+  routesPrices: number[],
+  routesDistances: number[],
+  routesDurations: number[]
+}
+
+export function resetCalculateData(el: CalculateRoutesProps): CalculateRoutesProps {
+  const aux = {...el}
+  if (aux.displayRoutes) aux.displayRoutes.map((e) => e.setMap(null));
+  if (aux.displayInfoWindows) aux.displayInfoWindows.map((e) => e.close());
+  aux.displayRoutes = [];
+  aux.displayInfoWindows = [];
+  aux.routesPrices = [];
+  aux.routesDistances = [];
+  aux.routesDurations = [];
+  return aux;
 }
 
 export default function MapController({
@@ -32,15 +47,17 @@ export default function MapController({
   >({
     displayRoutes: [],
     displayInfoWindows: [],
-    tariffType: false
+    tariffType: false,
+    routesPrices: [],
+    routesDistances: [],
+    routesDurations: []
   } as CalculateRoutesProps);
 
   useEffect(() => centerMap(map, origenDestino), []);
 
   useEffect(() => {
     if (!originPlace) return;
-    if (calculateData.displayRoutes) calculateData.displayRoutes.map((e) => e.setMap(null));
-    if (calculateData.displayInfoWindows) calculateData.displayInfoWindows.map((e) => e.close());
+    setCalculateData(resetCalculateData(calculateData));
     createMarker("Origen", map, originPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -56,8 +73,7 @@ export default function MapController({
 
   useEffect(() => {
     if (!destinyPlace) return;
-    if (calculateData.displayRoutes) calculateData.displayRoutes.map((e) => e.setMap(null));
-    if (calculateData.displayInfoWindows) calculateData.displayInfoWindows.map((e) => e.close());
+    setCalculateData(resetCalculateData(calculateData));
     createMarker("Destino", map, destinyPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -155,6 +171,9 @@ export default function MapController({
             </button>
           )}
         </div>
+        {calculateData.routesPrices.map(e => <p>{e}</p>)}
+        {calculateData.routesDurations.map(e => <p>{e}</p>)}
+        {calculateData.routesDistances.map(e => <p>{e}</p>)}
       </div>
     </article>
   );
