@@ -178,7 +178,9 @@ export async function calculateRoute(
     calculateDataAux.displayRoutes.push(dr);
 
     const infoWindow = new google.maps.InfoWindow();
-      infoWindow.setContent("<div><strong>Prueba</strong><br>Prueba</div>");
+      const content = `<div><strong class=\"text-xl font-semibold\" style=\"color: ${ROUTES_COLORS[i]}\">Prueba</strong><br>Prueba</div>`;
+      console.log(content);
+      infoWindow.setContent(content);
       infoWindow.setHeaderDisabled(true);
       infoWindow.setPosition(getFirstNoOverlapingPosition(route, direcciones.routes.filter(d => d !== route)));
       infoWindow.open(map);
