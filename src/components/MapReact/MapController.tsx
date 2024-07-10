@@ -10,6 +10,11 @@ interface MapControllerProps {
   map: google.maps.Map;
 }
 
+export interface CalculateRoutesProps {
+  displayRoutes: google.maps.DirectionsRenderer[];
+  displayInfoWindows: google.maps.InfoWindow[];
+}
+
 export default function MapController({
   origenDestino,
   setOrigenDestino,
@@ -21,15 +26,19 @@ export default function MapController({
     useState<google.maps.places.PlaceResult>();
   const [disableButton, setDisableButton] = useState<Boolean>(true);
   const [btnLoading, setBtnLoading] = useState<Boolean>(false);
-  const [displayRoutes, setDisplayRoutes] = useState<
-    google.maps.DirectionsRenderer[]
-  >([]);
+  const [calculateData, setCalculateData] = useState<
+    CalculateRoutesProps
+  >({
+    displayRoutes: [],
+    displayInfoWindows: []
+  } as CalculateRoutesProps);
 
   useEffect(() => centerMap(map, origenDestino), []);
 
   useEffect(() => {
     if (!originPlace) return;
-    if (displayRoutes) displayRoutes.map((e) => e.setMap(null));
+    if (calculateData.displayRoutes) calculateData.displayRoutes.map((e) => e.setMap(null));
+    if (calculateData.displayInfoWindows) calculateData.displayInfoWindows.map((e) => e.close());
     createMarker("Origen", map, originPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -45,7 +54,8 @@ export default function MapController({
 
   useEffect(() => {
     if (!destinyPlace) return;
-    if (displayRoutes) displayRoutes.map((e) => e.setMap(null));
+    if (calculateData.displayRoutes) calculateData.displayRoutes.map((e) => e.setMap(null));
+    if (calculateData.displayInfoWindows) calculateData.displayInfoWindows.map((e) => e.close());
     createMarker("Destino", map, destinyPlace)
       .then((marker) => {
         const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
@@ -108,8 +118,8 @@ export default function MapController({
               id="btnCalcular"
               onClick={async () => {
                 setBtnLoading(true);
-                setDisplayRoutes(
-                  await calculateRoute(map, origenDestino, displayRoutes)
+                setCalculateData(
+                  await calculateRoute(map, origenDestino, calculateData)
                 );
                 setBtnLoading(false);
               }}

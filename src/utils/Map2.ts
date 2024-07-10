@@ -2,6 +2,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { showDangerToast } from "./Toast";
 import { HOME, PERALTA, ROUTES_COLORS } from "./MapUtils";
 import type { OrigenDestinoProps } from "../components/MapReact/MapDisplay";
+import type { CalculateRoutesProps } from "../components/MapReact/MapController";
 
 let loader: Loader;
 let MapClass: typeof google.maps.Map;
@@ -73,7 +74,11 @@ export function createMarker(
 
     const infoWindow = new google.maps.InfoWindow();
     infoWindow.setContent(
-      "<div><strong>" + place.name + "</strong><br>" + getAddress(place) + "</div>"
+      "<div><strong>" +
+        place.name +
+        "</strong><br>" +
+        getAddress(place) +
+        "</div>"
     );
     infoWindow.setHeaderDisabled(true);
     infoWindow.open(map, marker);
@@ -88,8 +93,8 @@ export function centerMap(
 ) {
   if (!map) return;
   if (!origenDestino.origen && !origenDestino.destino) {
-     map.setCenter(PERALTA);
-     map.setZoom(15);
+    map.setCenter(PERALTA);
+    map.setZoom(15);
   } else if (origenDestino.origen && !origenDestino.destino) {
     map.setCenter(origenDestino.origen.position!);
     map.setZoom(15);
@@ -119,12 +124,14 @@ export function centerMap(
 export async function calculateRoute(
   map: google.maps.Map,
   origenDestino: OrigenDestinoProps,
-  displayRoutes: google.maps.DirectionsRenderer[]
-): Promise<google.maps.DirectionsRenderer[]> {
-  let displayRoutesAux: google.maps.DirectionsRenderer[] = [...displayRoutes];
+  calculateData: CalculateRoutesProps
+): Promise<CalculateRoutesProps> {
+  let calculateDataAux: CalculateRoutesProps = {... calculateData}
   // Reset routes display
-  displayRoutesAux.map((e) => e.setMap(null));
-  displayRoutesAux = [];
+  calculateDataAux.displayRoutes.map((e) => e.setMap(null));
+  calculateDataAux.displayRoutes = [];
+  calculateDataAux.displayInfoWindows.map(e => e.close());
+  calculateDataAux.displayInfoWindows = [];
 
   const directionsService = new google.maps.DirectionsService();
 
@@ -155,27 +162,70 @@ export async function calculateRoute(
     provideRouteAlternatives: true,
     travelMode: google.maps.TravelMode.DRIVING,
   });
-  direcciones.routes.forEach((_, i) => {
-    const infoWindow = new google.maps.InfoWindow();
-    infoWindow.setContent(
-      "<div><strong>Prueba</strong><br>Prueba</div>"
-    );
-    infoWindow.setHeaderDisabled(true);
+  direcciones.routes.forEach((route, i) => {
     const dr = new google.maps.DirectionsRenderer({
-        map: map,
-        directions: direcciones,
-        routeIndex: i,
-        preserveViewport: true,
-        suppressMarkers: true,
-        infoWindow: infoWindow,
-        suppressInfoWindows: false,
-        polylineOptions: new google.maps.Polyline({
-          strokeColor: ROUTES_COLORS[i],
-          strokeWeight: 6,
-        }) as google.maps.PolylineOptions,
-      })
-    displayRoutesAux.push(dr);
+      map: map,
+      directions: direcciones,
+      routeIndex: i,
+      preserveViewport: true,
+      suppressMarkers: true,
+      suppressInfoWindows: false,
+      polylineOptions: new google.maps.Polyline({
+        strokeColor: ROUTES_COLORS[i],
+        strokeWeight: 6,
+      }) as google.maps.PolylineOptions,
+    });
+    calculateDataAux.displayRoutes.push(dr);
+
+    const infoWindow = new google.maps.InfoWindow();
+      infoWindow.setContent("<div><strong>Prueba</strong><br>Prueba</div>");
+      infoWindow.setHeaderDisabled(true);
+      infoWindow.setPosition(getFirstNoOverlapingPosition(route, direcciones.routes.filter(d => d !== route)));
+      infoWindow.open(map);
+    calculateDataAux.displayInfoWindows.push(infoWindow);
   });
-  console.log(displayRoutesAux[0]!.getDirections()!.routes.map(r => r.legs[0].steps.length));
-  return displayRoutesAux;
+  return calculateDataAux;
+}
+
+// Obtiene la posicion del medio del segmento de la ruta que no se superpone con el resto de las rutas
+function getFirstNoOverlapingPosition(
+  currentRoute: google.maps.DirectionsRoute,
+  restRoutes: google.maps.DirectionsRoute[]
+): google.maps.LatLng {
+  const TRESHOLD = 2; // Establecemos el umbral de distancia (km) para que se considere que dos posiciones no se superponen
+
+  let posiblePositions: google.maps.LatLng[] = currentRoute.legs[0].steps.map(e => e.path).flat();
+  let evaluatedPositions: google.maps.LatLng[] = restRoutes.map(r => r.legs[0].steps.map(e => e.path).flat()).flat();
+
+  // Reducimos el tamaño de los arrays
+  const ARRAY_SIZE = 1000;
+  if (posiblePositions.length > ARRAY_SIZE) {
+    const posiblePositionsStep = Math.floor(posiblePositions.length / ARRAY_SIZE);
+    posiblePositions = posiblePositions.filter((_, i) => i % posiblePositionsStep === 0);
+  }
+  if (evaluatedPositions.length > ARRAY_SIZE) {
+    const evaluatedPositionsStep = Math.floor(evaluatedPositions.length / ARRAY_SIZE);
+    evaluatedPositions = evaluatedPositions.filter((_, i) => i % evaluatedPositionsStep === 0);
+  }
+
+  // Posición por defecto en caso de que no encontremos una posición libre
+  const DEFAULT_POSITION = posiblePositions[Math.floor(posiblePositions.length/2)];
+  const filteredPositions = posiblePositions.filter(pp => evaluatedPositions.every(ep => positionDistance(pp, ep) > TRESHOLD));
+  return filteredPositions.length > 0 ? filteredPositions[Math.floor(filteredPositions.length/2)] : DEFAULT_POSITION
+}
+
+// Calcula la distancia entre dos posiciones en kilómetros
+function positionDistance(a: google.maps.LatLng, b: google.maps.LatLng): number {
+  const toRadians = (n: number): number => (n * Math.PI) / 180;
+
+  const R = 6371; //Km
+  const diffLat = toRadians(b.lat() - a.lat());
+  const diffLng = toRadians(b.lng() - a.lng());
+  const aux =
+    Math.sin(diffLat / 2) * Math.sin(diffLat / 2) +
+    Math.cos(toRadians(a.lat())) *
+      Math.cos(toRadians(b.lat())) *
+      Math.sin(diffLng / 2) *
+      Math.sin(diffLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(aux), Math.sqrt(1 - aux));
 }
