@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { OrigenDestinoProps } from "./MapDisplay";
 import { calculateRoute, centerMap, createMarker } from "../../utils/Map2";
 import AutocompleInput from "./AutocompleInput";
 import { showDangerToast } from "../../utils/Toast";
+import RouteInfoBox from "./RouteInfoBox";
+import "./MapController.css"
 
 interface MapControllerProps {
   origenDestino: OrigenDestinoProps;
@@ -14,13 +16,15 @@ export interface CalculateRoutesProps {
   displayRoutes: google.maps.DirectionsRenderer[];
   displayInfoWindows: google.maps.InfoWindow[];
   tariffType: boolean;
-  routesPrices: number[],
-  routesDistances: number[],
-  routesDurations: number[]
+  routesPrices: number[];
+  routesDistances: number[];
+  routesDurations: number[];
 }
 
-export function resetCalculateData(el: CalculateRoutesProps): CalculateRoutesProps {
-  const aux = {...el}
+export function resetCalculateData(
+  el: CalculateRoutesProps
+): CalculateRoutesProps {
+  const aux = { ...el };
   if (aux.displayRoutes) aux.displayRoutes.map((e) => e.setMap(null));
   if (aux.displayInfoWindows) aux.displayInfoWindows.map((e) => e.close());
   aux.displayRoutes = [];
@@ -42,15 +46,13 @@ export default function MapController({
     useState<google.maps.places.PlaceResult>();
   const [disableButton, setDisableButton] = useState<Boolean>(true);
   const [btnLoading, setBtnLoading] = useState<Boolean>(false);
-  const [calculateData, setCalculateData] = useState<
-    CalculateRoutesProps
-  >({
+  const [calculateData, setCalculateData] = useState<CalculateRoutesProps>({
     displayRoutes: [],
     displayInfoWindows: [],
     tariffType: false,
     routesPrices: [],
     routesDistances: [],
-    routesDurations: []
+    routesDurations: [],
   } as CalculateRoutesProps);
 
   useEffect(() => centerMap(map, origenDestino), []);
@@ -92,10 +94,16 @@ export default function MapController({
     [originPlace, destinyPlace]
   );
 
+  const hasCalculatedResults =
+    calculateData.routesPrices.length > 0 &&
+    calculateData.routesDistances.length > 0 &&
+    calculateData.routesDurations.length > 0;
+
   return (
     <article
       id="mapControllerBox"
-      className="flex-none w-80 h-full dark:bg-black border-r-black/20 dark:border-r-white/20 p-3"
+      className="flex-none w-full md:w-80 h-fit md:h-full dark:bg-black border-r-black/20 dark:border-r-white/20 p-3 overflow-y-auto no-scrollbar"
+      style={{}}
     >
       <h4 className="text-xl font-semibold text-center dark:text-white">
         Calcula tu
@@ -116,11 +124,16 @@ export default function MapController({
         />
         <div className="flex flex-row justify-between">
           <label className="inline-flex items-center cursor-pointer">
-            <input type="checkbox" checked={calculateData.tariffType} onChange={()=>{
-              const aux = {... calculateData};
-              aux.tariffType = !aux.tariffType;
-              setCalculateData(aux); 
-            }} className="sr-only peer" />
+            <input
+              type="checkbox"
+              checked={calculateData.tariffType}
+              onChange={() => {
+                const aux = { ...calculateData };
+                aux.tariffType = !aux.tariffType;
+                setCalculateData(aux);
+              }}
+              className="sr-only peer"
+            />
             <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-sky-300 dark:peer-focus:ring-sky-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-sky-600"></div>
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               Tarifa nocturna
@@ -171,9 +184,19 @@ export default function MapController({
             </button>
           )}
         </div>
-        {calculateData.routesPrices.map(e => <p>{e}</p>)}
-        {calculateData.routesDurations.map(e => <p>{e}</p>)}
-        {calculateData.routesDistances.map(e => <p>{e}</p>)}
+        {hasCalculatedResults && (
+          <section className="p-2 hidden md:flex flex-col gap-2">
+            {calculateData.routesPrices.map((price, i) => (
+              <RouteInfoBox
+                key={`Ruta ${i}`}
+                routeIndex={i}
+                routePrice={price}
+                routeDistance={calculateData.routesDistances[i]}
+                routeDuration={calculateData.routesDurations[i]}
+              />
+            ))}
+          </section>
+        )}
       </div>
     </article>
   );

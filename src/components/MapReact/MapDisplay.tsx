@@ -35,12 +35,12 @@ export default function MapDisplay() {
   },[origenDestino])
 
   return (
-    <main className="h-[calc(100dvh-80px)] w-full flex flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
+    <main className="h-[calc(100dvh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
       <MapController setOrigenDestino={setOrigenDestino} map={map!} origenDestino={origenDestino} />
       <article
         id="map"
         ref={mapRef}
-        className="flex-grow h-full bg-sky-900"
+        className="w-full -order-1 md:order-none lg:flex-grow h-full bg-sky-900"
       ></article>
     </main>
   );
