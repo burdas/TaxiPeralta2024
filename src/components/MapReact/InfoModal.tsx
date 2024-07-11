@@ -14,22 +14,23 @@ export default function InfoModal() {
   return (
     <>
       <button
-        className="fixed top-24 right-4 p-2 rounded-lg bg-sky-500 text-white hover:scale-110 active:scale-90 transition-all duration-200"
+        className="fixed top-24 right-4 rounded-full border-2 border-white/40 bg-sky-500 text-white hover:scale-110 active:scale-90 transition-all duration-200"
         onClick={() => setOpen(true)}
         title="Información de la calculadora"
       >
         <svg
-          width="30"
-          height="30"
-          fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 40 40"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <path
-            d="M15 1.754a13.246 13.246 0 1 0 0 26.492 13.246 13.246 0 0 0 0-26.492M3.654 15a11.346 11.346 0 1 1 22.692 0 11.346 11.346 0 0 1-22.692 0M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M12 12h3a1 1 0 0 1 1 1v7h2v2h-6v-2h2v-6h-2z"
-            fill="currentColor"
-            fillRule="evenodd"
-            clipRule="evenodd"
-          />
+          <path d="M0 0h40v40H0z" stroke="none" />
+          <path d="M20 15h.017m-1.684 5H20v6.667h1.667" />
         </svg>
       </button>
       {open && (
@@ -38,7 +39,7 @@ export default function InfoModal() {
           onClick={() => setOpen(false)}
         >
           <div
-            className="bg-white dark:bg-black rounded-lg py-4 px-8 ring-2 ring-sky-500/60 mx-4"
+            className="bg-white dark:bg-black rounded-lg py-4 px-4 ring-2 ring-sky-500/60 mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-row justify-end">
@@ -66,7 +67,7 @@ export default function InfoModal() {
             <h2 className="dark:text-white text-md sm:text-2xl text-center w-full font-bold">
               Información
             </h2>
-            <ul className="mt-4 mx-auto max-w-[400px] mb-6">
+            <ul className="mt-4 mx-4 max-w-[400px] mb-6">
               {infoItems.map((m, i) => (
                 <li
                   key={i}
@@ -86,7 +87,9 @@ export default function InfoModal() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p className="dark:text-white text-sm sm:text-md flex-grow text-pretty">{m}</p>
+                  <p className="dark:text-white text-sm sm:text-md flex-grow text-pretty">
+                    {m}
+                  </p>
                 </li>
               ))}
             </ul>

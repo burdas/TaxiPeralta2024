@@ -4,7 +4,7 @@ import { calculateRoute, centerMap, createMarker } from "../../utils/Map2";
 import AutocompleInput from "./AutocompleInput";
 import { showDangerToast } from "../../utils/Toast";
 import RouteInfoBox from "./RouteInfoBox";
-import "./MapController.css"
+import "./MapController.css";
 
 interface MapControllerProps {
   origenDestino: OrigenDestinoProps;
@@ -102,8 +102,7 @@ export default function MapController({
   return (
     <article
       id="mapControllerBox"
-      className="flex-none w-full md:w-80 h-fit md:h-full dark:bg-black border-r-black/20 dark:border-r-white/20 p-3 overflow-y-auto no-scrollbar"
-      style={{}}
+      className="flex-none flex flex-col justify-between w-full md:w-80 h-fit md:h-full dark:bg-black border-r-black/20 dark:border-r-white/20 p-3 overflow-y-auto no-scrollbar"
     >
       <h4 className="text-xl font-semibold text-center dark:text-white">
         Calcula tu
@@ -198,6 +197,7 @@ export default function MapController({
           </section>
         )}
       </div>
+      <p className="dark:text-white w-full text-center mt-auto">prueba</p>
     </article>
   );
 }
