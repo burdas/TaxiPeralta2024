@@ -27,4 +27,20 @@ const nocturna = Object.entries(tarifa.nocturna);
     }
   </div>
   <CalculadoraTarifa />
+  <aside
+    class="flex flex-col mt-16 gap-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
+  >
+    <h3 class="font-bold text-4xl text-white">
+      ¡Tambien puedes usar la calculadora de viajes!
+    </h3>
+    <a
+      href="./calculadora_viajes"
+      class="group rounded-md border-white border-2 px-8 py-4 relative"
+    >
+      <div class="absolute h-full top-0 left-0 w-0 group-hover:w-full bg-white transition-all duration-500"></div>
+      <span class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500"
+        >Ir a la calculadora</span
+      >
+    </a>
+  </aside>
 </section>
