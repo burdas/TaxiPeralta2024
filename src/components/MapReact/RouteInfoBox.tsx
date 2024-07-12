@@ -8,8 +8,6 @@ interface RouteInfoBox {
   routeDuration: number;
 }
 
-const delayIndex = ["delay-0", "delay-200", "delay-300", "delay700", "delay-1000"];
-
 export default function RouteInfo({
   routeIndex,
   routePrice,
@@ -18,7 +16,7 @@ export default function RouteInfo({
 }: RouteInfoBox) {
   return (
     <article
-      className={`rounded-lg p-3 flex flex-row justify-between items-center animate-modalf transition-transform duration-500 ease-in-out ${delayIndex[routeIndex]}`}
+      className={`rounded-lg p-3 flex flex-row justify-between items-center animate-modalf transition-all duration-300 hover:scale-110`}
       style={{ backgroundColor: ROUTES_COLORS[routeIndex] }}
     >
       <div className="flex flex-col">

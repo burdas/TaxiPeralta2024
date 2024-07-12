@@ -14,7 +14,7 @@ export default function InfoModal() {
   return (
     <>
       <button
-        className="fixed top-24 right-4 rounded-full border-2 border-white/40 bg-sky-500 text-white hover:scale-110 active:scale-90 transition-all duration-200"
+        className="fixed top-24 right-4 rounded-full shadow-2xl shadow-sky-500 backdrop-blur-2xl bg-sky-500 text-white hover:scale-125 active:scale-75 transition-all duration-200 ease-in-out"
         onClick={() => setOpen(true)}
         title="Información de la calculadora"
       >
@@ -25,7 +25,7 @@ export default function InfoModal() {
           viewBox="0 0 40 40"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="4"
           strokeLinecap="round"
           strokeLinejoin="round"
         >

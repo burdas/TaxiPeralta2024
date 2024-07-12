@@ -35,6 +35,37 @@ export function resetCalculateData(
   return aux;
 }
 
+const useMarker = (
+  place: google.maps.places.PlaceResult | undefined,
+  label: "Origen" | "Destino",
+  map: google.maps.Map,
+  origenDestino: OrigenDestinoProps,
+  setOrigenDestino: (val: React.SetStateAction<OrigenDestinoProps>) => void,
+  calculateData: CalculateRoutesProps,
+  setCalculateData: (val: React.SetStateAction<CalculateRoutesProps>) => void
+) => {
+  useEffect(() => {
+    if (!place) return;
+    setCalculateData(resetCalculateData(calculateData));
+    createMarker(label, map, place)
+      .then((marker) => {
+        const origenDestinoAux = { ...origenDestino };
+        if (label === "Origen") {
+          if (origenDestinoAux.origen) origenDestinoAux.origen.map = null;
+          origenDestinoAux.origen = marker;
+        } else if (label === "Destino") {
+          if (origenDestinoAux.destino) origenDestinoAux.destino.map = null;
+          origenDestinoAux.destino = marker;
+        }
+        setOrigenDestino(origenDestinoAux);
+      })
+      .catch((e) => {
+        console.error(`Error al crear el marcador: ${e}`);
+        showDangerToast("Ha cocurrido un error al crear el marcador.");
+      });
+  }, [place]);
+};
+
 export default function MapController({
   origenDestino,
   setOrigenDestino,
@@ -55,39 +86,26 @@ export default function MapController({
     routesDurations: [],
   } as CalculateRoutesProps);
 
+  useMarker(
+    originPlace,
+    "Origen",
+    map,
+    origenDestino,
+    setOrigenDestino,
+    calculateData,
+    setCalculateData
+  );
+  useMarker(
+    destinyPlace,
+    "Destino",
+    map,
+    origenDestino,
+    setOrigenDestino,
+    calculateData,
+    setCalculateData
+  );
+
   useEffect(() => centerMap(map, origenDestino), []);
-
-  useEffect(() => {
-    if (!originPlace) return;
-    setCalculateData(resetCalculateData(calculateData));
-    createMarker("Origen", map, originPlace)
-      .then((marker) => {
-        const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
-        if (origenDestinoAux.origen) origenDestinoAux.origen.map = null;
-        origenDestinoAux.origen = marker;
-        setOrigenDestino(origenDestinoAux);
-      })
-      .catch((e) => {
-        console.error(`Error al crear el marcador: ${e}`);
-        showDangerToast("Ha cocurrido un error al crear el marcador.");
-      });
-  }, [originPlace]);
-
-  useEffect(() => {
-    if (!destinyPlace) return;
-    setCalculateData(resetCalculateData(calculateData));
-    createMarker("Destino", map, destinyPlace)
-      .then((marker) => {
-        const origenDestinoAux: OrigenDestinoProps = { ...origenDestino };
-        if (origenDestinoAux.destino) origenDestinoAux.destino.map = null;
-        origenDestinoAux.destino = marker;
-        setOrigenDestino(origenDestinoAux);
-      })
-      .catch((e) => {
-        console.error(`Error al crear el marcador: ${e}`);
-        showDangerToast("Ha cocurrido un error al crear el marcador.");
-      });
-  }, [destinyPlace]);
 
   useEffect(
     () => setDisableButton(!originPlace || !destinyPlace),
@@ -197,7 +215,16 @@ export default function MapController({
           </section>
         )}
       </div>
-      <p className="dark:text-white w-full text-center mt-auto">prueba</p>
+      <p className="dark:text-white w-full text-center mt-auto text-sm pt-4">
+        © Developed by{" "}
+        <a
+          className="text-blue-500 border-blue-500 hover:border-b-2 transition-all duration-100"
+          href="https://burdas.github.io"
+          target="_blank"
+        >
+          Burdas
+        </a>
+      </p>
     </article>
   );
 }

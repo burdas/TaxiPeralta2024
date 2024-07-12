@@ -10,26 +10,35 @@ export interface OrigenDestinoProps {
   destino: google.maps.marker.AdvancedMarkerElement | null;
 }
 
+const useMap = (mapRef: React.MutableRefObject<null>) => {
+  const [map, setMap] = useState<google.maps.Map>();
+
+  useEffect(() => {
+    const loadMap = async () => {
+      try {
+        const m = await createMap(mapRef.current!);
+        setMap(m);
+        m.setCenter(PERALTA);
+        m.setZoom(15);
+      } catch (e: any) {
+        console.error(`Error al cargar el mapa: ${e.error}`);
+        showDangerToast("Ha ocurrido un error al cargar el mapa");
+      }
+    };
+
+    loadMap();
+  }, [mapRef]);
+
+  return map;
+};
+
 export default function MapDisplay() {
   const mapRef = useRef(null);
-  const [map, setMap] = useState<google.maps.Map>();
+  const map = useMap(mapRef);
   const [origenDestino, setOrigenDestino] = useState<OrigenDestinoProps>({
     origen: null,
     destino: null,
   });
-
-  useEffect(() => {
-    createMap(mapRef.current!)
-      .then((m) => {
-        setMap(m);
-        m.setCenter(PERALTA);
-        m.setZoom(15);
-      })
-      .catch((e) => {
-        console.error(`Error al cargar el mapa: ${e.error}`);
-        showDangerToast("Ha ocurrido un error al cargar el mapa");
-      });
-  }, []);
 
   useEffect(() => {
     centerMap(map, origenDestino);
