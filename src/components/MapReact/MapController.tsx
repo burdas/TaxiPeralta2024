@@ -218,7 +218,7 @@ export default function MapController({
       <p className="dark:text-white w-full text-center mt-auto text-sm pt-4">
         © Developed by{" "}
         <a
-          className="text-blue-500 border-blue-500 hover:border-b-2 transition-all duration-100"
+          className="text-sky-500 border-sky-500 hover:border-b-2 transition-all duration-100"
           href="https://burdas.github.io"
           target="_blank"
         >

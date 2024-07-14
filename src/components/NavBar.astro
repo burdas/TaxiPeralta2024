@@ -3,13 +3,16 @@ import { routeList } from "../model/navbar.ts";
 import ThemeButton from "./ThemeButton.astro";
 import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
+
+const { scrollLimit, disableTheme } = Astro.props;
+
 ---
-<script>
-  
-</script>
-<header class="sticky z-50 top-0 w-full py-3 transition-color duration-700 ease-out">
+<header
+  class="sticky z-50 top-0 w-full py-3 transition-color duration-700 ease-out"
+  data-scroll={scrollLimit}
+>
   <nav class="flex flex-row justify-between place-items-center container">
-    <div class="inline-flex place-items-center p-2">
+    <a class="inline-flex place-items-center p-2" href="./">
       <Image
         src={logoImage}
         alt="logo de taxi peralta"
@@ -18,7 +21,7 @@ import logoImage from "../assets/logo.jpg";
       <p class="text-xl text-nowrap font-bold dark:text-white px-3">
         Taxi Peralta
       </p>
-    </div>
+    </a>
     <div
       class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
     >
@@ -37,7 +40,7 @@ import logoImage from "../assets/logo.jpg";
       }
     </div>
     <div class="flex flex-row">
-      <ThemeButton />
+      {!disableTheme && <ThemeButton />}
       <button
         class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
         id="dialogTrigger"
@@ -66,14 +69,14 @@ import logoImage from "../assets/logo.jpg";
   });
   const visibleOnScroll = () => {
     const nav = document.querySelector("header")!;
-    if (window.scrollY > 200) {
+    if (window.scrollY > parseInt(nav.dataset.scroll!)) {
       nav.classList.add("bg-white");
       nav.classList.add("dark:bg-black");
     } else {
       nav.classList.remove("bg-white");
       nav.classList.remove("dark:bg-black");
     }
-  }
+  };
   visibleOnScroll(); // Cuando se recarga la pagina
   window.addEventListener("scroll", visibleOnScroll); // Cuando se hace scroll
 </script>

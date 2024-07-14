@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import imgFiestas from "../assets/fiestas_peralta.avif";
+---
+
+<!-- <div class="h-[calc(100dvh-144px)]"></div> -->
+<Image
+  src={imgFiestas}
+  alt="Imagen de fiestas"
+  class="w-full h-full object-cover object-center absolute inset-0 -z-50 brightness-[0.5]"
+/>
+<main
+  class="w-full h-[calc(100dvh-144px)] flex flex-col justify-center items-center gap-6 px-6"
+>
+  <h1 class="text-5xl md:text-7xl text-white font-bold text-center">Fiestas de Peralta</h1>
+  <div id="countdownContainer" class="hidden flex-wrap justify-center w-full gap-2 text-white font-semibold text-center">
+    <p class="text-2xl md:text-4xl"><span id="days" class="text-4xl md:text-6xl">000</span> Días</p>
+    <p class="text-2xl md:text-4xl"><span id="hours" class="text-4xl md:text-6xl">000</span> Horas</p>
+    <p class="text-2xl md:text-4xl"><span id="minutes" class="text-4xl md:text-6xl">000</span> Minutos</p>
+    <p class="text-2xl md:text-4xl"><span id="seconds" class="text-4xl md:text-6xl">000</span> Segundos</p>
+  </div>
+</main>
+<script>
+  const countDownContainer = document.getElementById("countdownContainer");
+  const days = document.getElementById("days");
+  const hours = document.getElementById("hours");
+  const minutes = document.getElementById("minutes");
+  const seconds = document.getElementById("seconds");
+
+  const actualYear = new Date().getFullYear();
+  const firstDaySeptember = new Date(actualYear, 8, 1);
+  const daysToAdd = (7 - firstDaySeptember.getDay()) % 7;
+
+  // Create the date for the first Sunday of September
+  const rocketDate = new Date(actualYear, 8, daysToAdd, 13);
+
+  const countDown = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = rocketDate.getTime() - now;
+    const daysLeft = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hoursLeft = Math.floor(   (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutesLeft = Math.floor((   (distance % (1000 * 60 * 60)) / (1000 * 60)));
+    const secondsLeft = Math.floor((   (distance % (1000 * 60)) / 1000));
+    
+    days!.innerHTML = daysLeft.toString();
+    hours!.innerHTML = hoursLeft.toString();
+    minutes!.innerHTML = minutesLeft.toString();
+    seconds!.innerHTML = secondsLeft.toString();
+    if (countDownContainer!.classList.contains("hidden")) {
+        countDownContainer!.classList.remove("hidden");
+        countDownContainer!.classList.add("flex");
+    }
+  }, 1000);
+</script>

@@ -2,6 +2,7 @@
 import Contacto from '../components/Contacto.astro';
 import DialogMenu from '../components/DialogMenu.astro';
 import Enlaces from '../components/Enlaces.astro';
+import Footer from '../components/Footer.astro';
 import Galeria from '../components/Galeria.astro';
 import Hero from '../components/Hero.astro';
 import Informacion from '../components/Informacion.astro';
@@ -10,8 +11,8 @@ import Tarifas from '../components/Tarifas.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Welcome to Astro.">
-	<NavBar />
+<Layout title="Taxi Peralta">
+	<NavBar scrollLimit={200} disableTheme={false} />
 	<DialogMenu />
 	<Hero />
 	<Informacion />
@@ -19,4 +20,5 @@ import Layout from '../layouts/Layout.astro';
 	<Galeria />
 	<Enlaces />
 	<Contacto />
+	<Footer transparent={false} />
 </Layout>

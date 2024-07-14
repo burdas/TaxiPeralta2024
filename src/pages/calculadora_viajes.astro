@@ -5,7 +5,7 @@ import NavBar from '../components/NavBar.astro';
 ---
 
 <Layout title="Calculadora de viajes">
-    <NavBar />
+    <NavBar scrollLimit={0} disableTheme={false} />
     <!-- <hr class="w-full text-black dark:text-white opacity-80 dark:opacity-20 h-[1px]" /> -->
     <MapDisplay client:only="react">
     </MapDisplay>

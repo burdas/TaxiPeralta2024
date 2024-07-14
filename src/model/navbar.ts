@@ -25,7 +25,7 @@ export const routeList: RouteProps[] = [
     label: "Enlaces",
   },
   {
-    href: "./FiestasPeralta",
+    href: "./fiestas_peralta",
     label: "Fiestas de Peralta",
   },
   {

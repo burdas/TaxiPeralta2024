@@ -1,0 +1,43 @@
+---
+const { transparent } = Astro.props;
+---
+
+{
+  transparent ? (
+    <footer class="w-full h-16 flex justify-center">
+      <div class="container h-full flex flex-row justify-around items-center">
+        <p class="text-sm dark:text-white">
+          © 2024 Taxi Peralta. Todos los derechos reservados.
+        </p>
+        <p class="dark:text-white text-sm">
+          Developed by{" "}
+          <a
+            class="text-white font-semibold border-white hover:border-b-2 transition-all duration-100"
+            href="https://burdas.github.io"
+            target="_blank"
+          >
+            Burdas
+          </a>
+        </p>
+      </div>
+    </footer>
+  ) : (
+    <footer class="w-full h-16 bg-gradient-to-b from-sky-500/80 to-sky-500 flex justify-center">
+      <div class="container h-full flex flex-row justify-around items-center">
+        <p class="text-sm dark:text-white">
+          © 2024 Taxi Peralta. Todos los derechos reservados.
+        </p>
+        <p class="dark:text-white text-sm">
+          Developed by{" "}
+          <a
+            class="text-white font-semibold border-white hover:border-b-2 transition-all duration-100"
+            href="https://burdas.github.io"
+            target="_blank"
+          >
+            Burdas
+          </a>
+        </p>
+      </div>
+    </footer>
+  )
+}

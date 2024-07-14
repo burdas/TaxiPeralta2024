@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import heroImage from "../assets/hero.webp";
+import HeroButton from "./HeroButton.astro";
 ---
 
 <main
@@ -14,7 +15,7 @@ import heroImage from "../assets/hero.webp";
     class="-z-20 overflow-visible opacity-20 dark:opacity-40 md:opacity-100 dark:md:opacity-100"
   />
   <article
-    class="flex flex-col justify-center items-center h-full absolute inset-0 md:static"
+    class="flex flex-col justify-center items-center h-full absolute inset-0 md:static gap-4"
   >
     <h1 class="text-6xl sm:text-7xl dark:text-white font-bold text-center">
       Toño <span
@@ -27,11 +28,12 @@ import heroImage from "../assets/hero.webp";
     >
       Taxi Peralta
     </h2>
-    <a
+    <!-- <a
       href="#contacto"
       class="py-3 px-12 bg-gradient-to-r from-sky-500 to-sky-500/90 md:to-sky-500/60 text-white hover:scale-110 active:scale-95 transition-transform duration-800 font-semibold rounded-xl text-lg mt-6"
     >
       Contactar
-    </a>
+    </a> -->
+    <HeroButton />
   </article>
 </main>
