@@ -2,8 +2,6 @@
 import { Image } from "astro:assets";
 import imgFiestas from "../assets/fiestas_peralta.avif";
 ---
-
-<!-- <div class="h-[calc(100dvh-144px)]"></div> -->
 <Image
   src={imgFiestas}
   alt="Imagen de fiestas"
@@ -34,7 +32,7 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
   // Create the date for the first Sunday of September
   const rocketDate = new Date(actualYear, 8, daysToAdd, 13);
 
-  const countDown = setInterval(() => {
+  setInterval(() => {
     const now = new Date().getTime();
     const distance = rocketDate.getTime() - now;
     const daysLeft = Math.floor(distance / (1000 * 60 * 60 * 24));

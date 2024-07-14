@@ -1,5 +1,4 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import { showDangerToast } from "./Toast";
 import { HOME, PERALTA, ROUTES_COLORS } from "./MapUtils";
 import type { OrigenDestinoProps } from "../components/MapReact/MapDisplay";
 import { resetCalculateData, type CalculateRoutesProps } from "../components/MapReact/MapController";
@@ -62,7 +61,7 @@ function getAddress(place: google.maps.places.PlaceResult): string {
 }
 
 // Genera un marcador en el mapa con su ventana de detalles
-export function createMarker(
+export async function  createMarker(
   title: "Origen" | "Destino",
   map: google.maps.Map,
   place: google.maps.places.PlaceResult
