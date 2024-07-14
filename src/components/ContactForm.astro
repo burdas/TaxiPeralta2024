@@ -1,0 +1,122 @@
+<form
+  id="contactForm"
+  name="contactForm"
+  class="mt-8 max-w-[600px] mx-auto space-y-4"
+>
+  <div class="relative w-full">
+    <input
+      required
+      type="email"
+      name="email"
+      id="ContactFormEmail"
+      class="block p-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-[1px] border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=""
+    />
+    <label
+      for="ContactFormEmail"
+      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-black px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+      >Introduce tu correo electrónico</label
+    >
+  </div>
+  <div class="relative w-full">
+    <input
+      type="tel"
+      name="telefono"
+      id="ContactFormTelephone"
+      class="block p-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-[1px] border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "
+    />
+    <label
+      for="ContactFormTelephone"
+      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-black px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+      >Introduce tu número de teléfono</label
+    >
+  </div>
+  <div class="relative w-full">
+    <textarea
+      id="ContactFormMessage"
+      required
+      name="message"
+      rows="10"
+      class="block p-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-[1px] border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      placeholder=" "></textarea>
+    <label
+      for="ContactFormMessage"
+      class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-black px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-6 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+      >Introduce aqui tu mensaje</label
+    >
+  </div>
+  <div class="flex justify-end">
+    <button
+      type="submit"
+      class="relative inline-flex items-center justify-center p-4 px-6 py-3 overflow-hidden font-medium text-sky-600 transition duration-300 ease-out border-2 border-sky-500 rounded-lg shadow-md group"
+    >
+      <span
+        class="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-sky-500 group-hover:translate-x-0 ease"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg
+        >
+      </span>
+      <span
+        class="absolute flex items-center justify-center w-full h-full text-sky-500 transition-all duration-300 transform group-hover:translate-x-full ease"
+        >Enviar</span
+      >
+      <span class="relative invisible">Enviar</span>
+    </button>
+  </div>
+</form>
+<style>
+  /* Modo claro (por defecto) */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: black !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  }
+
+  /* Modo oscuro cuando la clase 'dark' está presente en la etiqueta html */
+  html.dark input:-webkit-autofill,
+  html.dark input:-webkit-autofill:hover,
+  html.dark input:-webkit-autofill:focus,
+  html.dark input:-webkit-autofill:active {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px black inset !important;
+  }
+</style>
+<script>
+  import { showDangerToast, showOkToast } from "../utils/Toast";
+
+  const FORM_URL = "https://formspree.io/f/xjkbkrwd";
+  const form = document.getElementById("contactForm") as HTMLFormElement;
+  console.log(form);
+  form!.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const formDataObject = Object.fromEntries(formData.entries());
+    fetch(FORM_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formDataObject),
+    })
+      .then((response) => {
+        if (response.ok) {
+          showOkToast("Se ha enviado correctamente");
+          form.reset();
+        } else showDangerToast("Se ha producido un error");
+      })
+      .catch((error) => {
+        showDangerToast("Se ha producido un error");
+      });
+  });
+</script>
