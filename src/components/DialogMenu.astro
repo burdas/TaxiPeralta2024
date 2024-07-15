@@ -1,40 +1,60 @@
 ---
 import { routeList } from "../model/navbar";
+import { Image } from "astro:assets";
+import logoImage from "../assets/logo.jpg";
+import ThemeButton from "./ThemeButton.astro";
+
+const { disableTheme } = Astro.props;
 ---
 
-<dialog id="dialogMenu" class="w-1/2 h-fit rounded-lg dark:bg-gray-800 pb-6">
-    <div class="w-full flex flex-row justify-end p-2">
+<dialog
+  id="dialogMenu"
+  class="w-full dark:bg-black m-0 max-w-full h-[100vh] max-h-[100vh]"
+>
+  <div class="flex flex-row justify-between place-items-center container py-3">
+    <a class="inline-flex place-items-center p-2" href="./">
+      <Image
+        src={logoImage}
+        alt="logo de taxi peralta"
+        class="h-10 w-10 rounded-sm"
+      />
+      <p class="text-xl text-nowrap font-bold dark:text-white px-3">
+        Taxi Peralta
+      </p>
+    </a>
+    <div class="flex flex-row">
+      {!disableTheme && <ThemeButton />}
       <button
         class="lg:hidden hover:ring-2 ring-sky-500 p-3 rounded-md transition-all duration-400"
         id="dialogClose"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="15"
-          height="15"
-          fill="none"
-          class="dark:text-white"
-          ><path
-            fill="currentColor"
-            fill-rule="evenodd"
-            d="M12.854 2.854a.5.5 0 0 0-.708-.708L7.5 6.793 2.854 2.146a.5.5 0 1 0-.708.708L6.793 7.5l-4.647 4.646a.5.5 0 0 0 .708.708L7.5 8.207l4.646 4.647a.5.5 0 0 0 .708-.708L8.207 7.5l4.647-4.646Z"
-            clip-rule="evenodd"></path></svg
-        >
+      <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      fill="none"
+      class="dark:text-white"
+      ><path
+        fill="currentColor"
+        fill-rule="evenodd"
+        d="M12.854 2.854a.5.5 0 0 0-.708-.708L7.5 6.793 2.854 2.146a.5.5 0 1 0-.708.708L6.793 7.5l-4.647 4.646a.5.5 0 0 0 .708.708L7.5 8.207l4.646 4.647a.5.5 0 0 0 .708-.708L8.207 7.5l4.647-4.646Z"
+        clip-rule="evenodd"></path></svg
+    >
       </button>
     </div>
+  </div>
+  <div class="flex flex-col justify-center gap-4 items-center h-[calc(100vh-80px)] px-6">
     {
       routeList.map(({ href, label }) => (
-        <div class="transition-transform duration-75 group w-fit mx-auto mt-4">
-          <a
-            href={href}
-            class="font-medium text-md rounded-md py-2 px-3 dark:text-white"
-          >
-            {label}
-          </a>
-          <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-sky-500" />
-        </div>
+        <a
+          href={href}
+          class="font-medium text-md rounded-md py-2 px-3 dark:text-white border-2 border-sky-500 hover:bg-sky-500 transition-colors duration-300 w-full md:w-1/2 xl:w-1/4]"
+        >
+          {label}
+        </a>
       ))
     }
+  </div>
 </dialog>
 <script>
   const dialogMenu = document.getElementById("dialogMenu") as HTMLDialogElement;

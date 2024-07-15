@@ -61,8 +61,8 @@ const { scrollLimit, disableTheme } = Astro.props;
       </button>
     </div>
   </nav>
-  <DialogMenu />
 </header>
+<DialogMenu disableTheme={disableTheme} />
 <script>
   const dialogTrigger = document.getElementById("dialogTrigger");
   const dialog = document.getElementById("dialogMenu") as HTMLDialogElement;
