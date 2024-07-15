@@ -28,17 +28,36 @@ const nocturna = Object.entries(tarifa.nocturna);
   </div>
   <CalculadoraTarifa />
   <aside
-    class="flex flex-col mt-16 gap-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
+    class="flex flex-col mt-16 gap-6 p-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
   >
-    <h3 class="font-bold text-4xl text-white">
+    <h3 class="font-bold text-2xl md:text-4xl text-center text-white">
       ¡Tambien puedes usar la calculadora de viajes!
     </h3>
     <a
       href="./calculadora_viajes"
       class="group rounded-md border-white border-2 px-8 py-4 relative"
     >
-      <div class="absolute h-full top-0 left-0 w-0 group-hover:w-full bg-white transition-all duration-500"></div>
-      <span class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500"
+      <div
+        class="absolute h-full top-0 left-0 w-0 group-hover:w-full bg-white transition-all duration-500"
+      >
+      </div>
+      <span
+        class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500 flex flex-row gap-3 justify-center items-center"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+            d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path><path
+            d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z"></path><path
+            d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5"
+          ></path></svg
         >Ir a la calculadora</span
       >
     </a>

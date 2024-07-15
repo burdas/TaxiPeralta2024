@@ -3,6 +3,7 @@ import { routeList } from "../model/navbar.ts";
 import ThemeButton from "./ThemeButton.astro";
 import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
+import DialogMenu from "./DialogMenu.astro";
 
 const { scrollLimit, disableTheme } = Astro.props;
 
@@ -60,6 +61,7 @@ const { scrollLimit, disableTheme } = Astro.props;
       </button>
     </div>
   </nav>
+  <DialogMenu />
 </header>
 <script>
   const dialogTrigger = document.getElementById("dialogTrigger");
