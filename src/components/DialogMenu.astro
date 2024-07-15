@@ -48,7 +48,7 @@ const { disableTheme } = Astro.props;
       routeList.map(({ href, label }) => (
         <a
           href={href}
-          class="font-medium text-md rounded-md py-2 px-3 dark:text-white border-2 border-sky-500 hover:bg-sky-500 transition-colors duration-300 w-full md:w-1/2 xl:w-1/4]"
+          class="nav-link font-medium text-md rounded-md py-2 px-3 dark:text-white border-2 border-sky-500 hover:bg-sky-500 transition-colors duration-300 w-full md:w-1/2 xl:w-1/4]"
         >
           {label}
         </a>
@@ -62,4 +62,6 @@ const { disableTheme } = Astro.props;
   dialogClose!.addEventListener("click", () => {
     dialogMenu.close();
   });
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(e => e.addEventListener("click", () => dialogMenu.close()))
 </script>
