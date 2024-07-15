@@ -45,7 +45,7 @@ export default function MapDisplay() {
   }, [origenDestino]);
 
   return (
-    <main className="h-[calc(100dvh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
+    <main className="h-[calc(100vh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
       <MapController
         setOrigenDestino={setOrigenDestino}
         map={map!}

@@ -9,7 +9,7 @@ const { disableTheme } = Astro.props;
 
 <dialog
   id="dialogMenu"
-  class="w-full dark:bg-black m-0 max-w-full h-[100dvh] max-h-[100dvh]"
+  class="w-full dark:bg-black m-0 max-w-full h-[100vh] max-h-[100vh]"
 >
   <div class="flex flex-row justify-between place-items-center container py-3">
     <a class="inline-flex place-items-center p-2" href="./">
@@ -43,7 +43,7 @@ const { disableTheme } = Astro.props;
       </button>
     </div>
   </div>
-  <div class="flex flex-col justify-center gap-4 items-center h-[calc(100dvh-80px)] px-6">
+  <div class="flex flex-col justify-center gap-4 items-center h-[calc(100vh-80px)] px-6">
     {
       routeList.map(({ href, label }) => (
         <a
