@@ -108,7 +108,6 @@
 
   const FORM_URL = "https://formspree.io/f/xjkbkrwd";
   const form = document.getElementById("contactForm") as HTMLFormElement;
-  console.log(form);
   form!.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(form);
