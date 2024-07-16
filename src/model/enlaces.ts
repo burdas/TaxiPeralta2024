@@ -33,7 +33,7 @@ export interface EnlaceProps {
       label: "Atlas histórico mundial",
     },
     {
-        href: "https://taxiperalta.com/NutriCalc/",
+        href: "https://nutri-calc-virid.vercel.app/",
         label: "Calculo nutricional",
       },
   ];
