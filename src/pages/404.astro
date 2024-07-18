@@ -1,0 +1,25 @@
+---
+import Footer from "../components/Footer.astro";
+import NavBar from "../components/NavBar.astro";
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import imgFiestas from "../assets/hero.webp";
+---
+
+<Layout title="Error 404">
+  <NavBar scrollLimit={200} disableTheme={true} />
+  <Image
+  src={imgFiestas}
+  alt="Imagen de fiestas"
+  class="w-full h-full object-scale-down object-center absolute inset-0 -z-50 brightness-[0.5] opacity-50"
+/>
+  <main
+    class="w-full h-[calc(100dvh-144px)] flex flex-col justify-center items-center"
+  >
+    <h1 class="text-[16rem] font-bold dark:text-white">404</h1>
+    <p class="text-3xl font-extralight dark:text-white">
+      La página solicitada no existe
+    </p>
+  </main>
+  <Footer transparent={true} />
+</Layout>
