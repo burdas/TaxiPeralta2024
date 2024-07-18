@@ -7,11 +7,11 @@ import imgFiestas from "../assets/hero.webp";
 ---
 
 <Layout title="Error 404">
-  <NavBar scrollLimit={200} disableTheme={true} />
+  <NavBar scrollLimit={200} disableTheme={false} />
   <Image
   src={imgFiestas}
   alt="Imagen de fiestas"
-  class="w-full h-full p-4 md:p-0 object-scale-down object-center absolute inset-0 -z-50 brightness-[0.5] opacity-50"
+  class="w-full h-full p-4 md:p-0 object-scale-down object-center absolute inset-0 -z-50 dark:brightness-[0.5] opacity-40 dark:opacity-50"
 />
   <main
     class="container h-[calc(100dvh-144px)] flex flex-col justify-center items-center"
