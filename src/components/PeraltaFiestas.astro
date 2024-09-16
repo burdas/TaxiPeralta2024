@@ -34,7 +34,16 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
   const daysToAdd = (7 - firstDaySeptember.getDay()) % 7;
 
   // Create the date for the first Sunday of September
-  const rocketDate = new Date(actualYear, 8, daysToAdd, 13);
+  const rocketDateActualYear = new Date(actualYear, 8, daysToAdd, 13);
+
+  const nextYear = new Date().getFullYear() + 1;
+  const firstDaySeptemberNextYear = new Date(nextYear, 8, 1);
+  const daysToAddNextYear = (7 - firstDaySeptemberNextYear.getDay()) % 7;
+
+  // Create the date for the first Sunday of September
+  const rocketDateNextYear = new Date(nextYear, 8, daysToAddNextYear, 13);
+
+  const rocketDate = rocketDateActualYear > new Date() ? rocketDateActualYear : rocketDateNextYear;
 
   setInterval(() => {
     const now = new Date().getTime();
