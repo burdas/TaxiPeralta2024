@@ -14,19 +14,30 @@ interface NotionNumber {
 }
 
 interface NotionProperties {
-    Tipo?: { select?: NotionSelect };
-    Nombre?: { title?: NotionTitle[] };
-    "Precio (€)"?: NotionNumber;
+    Tipo: { select: NotionSelect };
+    Nombre: { title: NotionTitle[] };
+    "Precio (€)": NotionNumber;
 }
 
 interface NotionResult {
     properties: NotionProperties;
 }
 
+interface TarifaRaw {
+    tipo: string;
+    nombre: string;
+    precio: number;
+}
+
+interface TipoDeTarifa {
+    kmRecorrido: number,
+    horaEspera: number,
+    minimoPercepcion: number
+}
+
 interface Tarifa {
-    tipo: string | null;
-    nombre: string | null;
-    precio: number | null;
+    diurna: TipoDeTarifa,
+    nocturna: TipoDeTarifa
 }
 
 export async function GET() {
@@ -49,13 +60,35 @@ export async function GET() {
 
     const responseJson: { results: NotionResult[] } = await response.json()
 
-    const tarifas: Tarifa[] = responseJson.results.map((item): Tarifa => ({
-        tipo: item.properties["Tipo"]?.select?.name || null,
-        nombre: item.properties.Nombre?.title?.[0]?.text.content || null,
-        precio: item.properties["Precio (€)"]?.number || null
+    const tarifas: TarifaRaw[] = responseJson.results.map((item): TarifaRaw => ({
+        tipo: item.properties["Tipo"]?.select?.name,
+        nombre: item.properties.Nombre?.title?.[0]?.text.content,
+        precio: item.properties["Precio (€)"]?.number
     }));
 
-    return new Response(JSON.stringify(tarifas), {
+    return new Response(JSON.stringify(transformarDatos(tarifas)), {
         headers: { "Content-Type": "application/json" },
       });
 }
+
+const transformarDatos = (datos: TarifaRaw[]) => {
+    const resultado: Tarifa = {
+        diurna: { kmRecorrido: 0, horaEspera: 0, minimoPercepcion: 0 },
+        nocturna: { kmRecorrido: 0, horaEspera: 0, minimoPercepcion: 0 }
+    };;
+
+    datos.forEach(({ tipo, nombre, precio }) => {
+        console.log(tipo, nombre, precio);
+        if (tipo === 'Diurna') {
+            if (nombre === 'Km Recorrido') resultado.diurna.kmRecorrido = precio;
+            if (nombre === 'Hora de espera') resultado.diurna.horaEspera = precio;
+            if (nombre === 'Mínimo de percepción') resultado.diurna.minimoPercepcion = precio;
+        } else {
+            if (nombre === 'Km Recorrido') resultado.nocturna.kmRecorrido = precio;
+            if (nombre === 'Hora de espera') resultado.nocturna.horaEspera = precio;
+            if (nombre === 'Mínimo de percepción') resultado.nocturna.minimoPercepcion = precio;
+        }
+    });
+
+    return resultado;
+};
