@@ -13,7 +13,7 @@ export const onRequest: MiddlewareHandler = async ({ request }, next) => {
     const origin = request.headers.get("origin");
 
     if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-        return new Response(JSON.stringify({ error: "Acceso no autorizado" }), {
+        return new Response(JSON.stringify({ error: `Acceso no autorizado ${origin}` }), {
             status: 403,
             headers: { "Content-Type": "application/json" },
         });
