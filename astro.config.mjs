@@ -5,9 +5,9 @@ import sitemap from '@astrojs/sitemap';
 
 import vercel from '@astrojs/vercel';
 
-// https://astro.build/config
 export default defineConfig({
   site: 'https://taxiperalta.com',
   integrations: [tailwind(), react(), sitemap()],
+  output: "hybrid",
   adapter: vercel(),
 });

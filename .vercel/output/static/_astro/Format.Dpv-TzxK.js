@@ -1,1 +1,0 @@
-const s={diurna:{kmRecorrido:.7,horaEspera:19.38},nocturna:{kmRecorrido:.88,horaEspera:28.83}},n=new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}),c=r=>n.format(r),e=r=>{const o=Math.floor(r/3600),t=Math.floor(r%3600/60),a=r%60;return(o===0?"":`${o}h `)+(t===0?"":`${t}m `)+(a===0?"":`${a}s`)};export{c as n,e as s,s as t};
