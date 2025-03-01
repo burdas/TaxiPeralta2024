@@ -10,7 +10,7 @@ export const onRequest: MiddlewareHandler = async ({ request }, next) => {
         return next();
     }
 
-    const origin = request.headers.get("origin");
+    const origin = request.headers.get("origin") || request.headers.get("referer");
 
     if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         return new Response(JSON.stringify({ error: `Acceso no autorizado ${origin}` }), {
