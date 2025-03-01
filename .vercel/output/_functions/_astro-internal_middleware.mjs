@@ -10,7 +10,10 @@ const ALLOWED_ORIGINS = [
   "https://taxiperalta.com",
   "https://taxi-peralta2024-3pc3.vercel.app/"
 ];
-const onRequest$1 = async ({ request }, next) => {
+const onRequest$1 = async ({ request, url }, next) => {
+  if (!url.pathname.startsWith("/api/")) {
+    return next();
+  }
   const origin = request.headers.get("origin") || request.headers.get("referer");
   if (!origin || ALLOWED_ORIGINS.includes(origin)) {
     return new Response(JSON.stringify({ error: `Acceso no autorizado ${origin}` }), {

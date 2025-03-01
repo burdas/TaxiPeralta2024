@@ -7,8 +7,12 @@ const ALLOWED_ORIGINS = [
     "https://taxi-peralta2024-3pc3.vercel.app/"
 ];
 
-export const onRequest: MiddlewareHandler = async ({ request }, next) => {
-    if (import.meta.env.MODE === "development" || import.meta.env.OUTPUT === "static") {
+export const onRequest: MiddlewareHandler = async ({ request, url }, next) => {
+    if (!url.pathname.startsWith("/api/")) {
+        return next();
+    }
+
+    if (import.meta.env.DEV || import.meta.env.PRERENDER) {
         return next();
     }
 
