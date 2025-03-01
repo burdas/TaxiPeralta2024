@@ -8,6 +8,6 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   site: 'https://taxiperalta.com',
   integrations: [tailwind(), react(), sitemap()],
-  output: "hybrid",
+  output: "static",
   adapter: vercel(),
 });
