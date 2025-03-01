@@ -1,6 +1,9 @@
 import type { MiddlewareHandler } from "astro";
 
-const ALLOWED_ORIGIN = "https://taxiperalta.com";
+const ALLOWED_ORIGINS = [
+    "https://taxiperalta.com",
+    "https://taxi-peralta2024-3pc3.vercel.app/"
+];
 
 export const onRequest: MiddlewareHandler = async ({ request }, next) => {
     if (import.meta.env.MODE === "development" || import.meta.env.OUTPUT === "static") {
@@ -9,7 +12,7 @@ export const onRequest: MiddlewareHandler = async ({ request }, next) => {
 
     const origin = request.headers.get("origin");
 
-    if (!origin || origin !== ALLOWED_ORIGIN) {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
         return new Response(JSON.stringify({ error: "Acceso no autorizado" }), {
             status: 403,
             headers: { "Content-Type": "application/json" },
