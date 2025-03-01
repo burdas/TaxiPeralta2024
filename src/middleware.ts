@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import type { MiddlewareHandler } from "astro";
 
 const ALLOWED_ORIGINS = [

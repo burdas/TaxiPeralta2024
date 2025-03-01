@@ -1,0 +1,1 @@
+import{a}from"./Toast.EIMiZq-H.js";const r=document.querySelectorAll(".copy-contact-button");r.forEach(o=>{o.addEventListener("click",e=>{const t=e.currentTarget.dataset.href;t&&(navigator.clipboard.writeText(t),a("Se ha copiado al portapapeles"))})});

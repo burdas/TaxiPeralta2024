@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import {
   ENDPOINT,
   DATABASE_ID,
