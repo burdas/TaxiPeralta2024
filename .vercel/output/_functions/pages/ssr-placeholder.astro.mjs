@@ -6,7 +6,8 @@ export { renderers } from '../renderers.mjs';
 
 const prerender = false;
 const $$SsrPlaceholder = createComponent(($$result, $$props, $$slots) => {
-  return renderTemplate`${maybeRenderHead()}<p>SSR enabled</p>`;
+  const randomNumber = Math.random();
+  return renderTemplate`${maybeRenderHead()}<p>SSR enabled ${randomNumber}</p>`;
 }, "D:/Proyectos/TaxiPeralta2024/src/pages/ssr-placeholder.astro", void 0);
 
 const $$file = "D:/Proyectos/TaxiPeralta2024/src/pages/ssr-placeholder.astro";

@@ -6,7 +6,7 @@ async function GET() {
   const response = await fetch(ENDPOINT.replace("DATABASE_ID", DATABASE_ID), {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${"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"}`,
+      "Authorization": `Bearer ${process.env.NOTION_API}`,
       "Content-Type": "application/json",
       "Notion-Version": "2022-06-28"
     },
