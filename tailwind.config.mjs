@@ -17,17 +17,17 @@ export default {
       xl: "1280px",
       "2xl": "1536px",
     },
-    extend: {
-      animation: {
-        modalf: "modalf 0.30s ease-in-out",
-      },
-      keyframes: {
-        modalf: {
-          "0%": { opacity: 0 },
-          "100%": { opacity: 1 },
-        },
-      },
-    },
+    // extend: {
+    //   animation: {
+    //     modalf: "modalf 0.30s ease-in-out",
+    //   },
+    //   keyframes: {
+    //     modalf: {
+    //       "0%": { opacity: 0 },
+    //       "100%": { opacity: 1 },
+    //     },
+    //   },
+    // },
   },
   plugins: [],
 };

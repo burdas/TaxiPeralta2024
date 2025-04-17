@@ -11,7 +11,7 @@ const { href, label, type } = Astro.props;
   <a
     href={`${type}:${href}`}
     title={type === "mailto" ? "Enviar correo" : "Llamar por telefono"}
-    class="flex flex-row group items-center h-full gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full px-8 py-auto shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring hover:bg-sky-200/20 hover:scale-105 hover:ring"
+    class="flex flex-row group items-center h-full gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full px-8 py-auto shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 dark:hover:ring-sky-300/40 hover:ring-sky-400/50"
   >
     <slot />
     <p class="text-lg font-medium">{label}</p>
@@ -19,7 +19,7 @@ const { href, label, type } = Astro.props;
   <button
     data-href={href}
     title="Copiar al portapapeles"
-    class="copy-contact-button flex justify-center items-center dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full ease-in-out shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-125 dark:hover:ring hover:bg-sky-200/20 hover:scale-125 hover:ring w-0 h-0 group-hover:w-14 group-hover:h-14 opacity-0 group-hover:opacity-100 -translate-x-10 group-hover:translate-x-0"
+    class="copy-contact-button flex justify-center items-center dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full ease-in-out shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-125 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-125 hover:ring-2 w-0 h-0 group-hover:w-14 group-hover:h-14 opacity-0 group-hover:opacity-100 -translate-x-10 group-hover:translate-x-0 dark:hover:ring-sky-300/40 hover:ring-sky-400/50"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
