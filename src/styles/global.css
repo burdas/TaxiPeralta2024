@@ -2,6 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
     --animate-modalf: modalf 0.30s ease-in-out;
+    --animate-open-right: open-right 0.30s ease;
 
     @keyframes modalf {
         0% {
@@ -11,6 +12,17 @@
         100% {
             opacity: 1;
             transform: scale(1);
+        }
+    }
+
+    @keyframes open-right {
+        0% {
+            opacity: 0;
+            transform: translate(100%, 0);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(0, 0);
         }
     }
 }

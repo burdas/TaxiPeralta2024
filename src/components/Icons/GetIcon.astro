@@ -1,0 +1,19 @@
+---
+import Contacto from "./Contacto.astro";
+import Enlaces from "./Enlaces.astro";
+import Galeria from "./Galeria.astro";
+import Tarifas from "./Tarifas.astro";
+import Calculadora from "./Calculadora.astro";
+import Fiesta from "./Fiesta.astro";
+import Info from "./info.astro";
+
+const icon = Astro.props.icon;
+
+---
+{icon === "Info" && <Info />}
+{icon === "Tarifas" && <Tarifas />}
+{icon === "Galeria" && <Galeria />}
+{icon === "Calculadora" && <Calculadora />}
+{icon === "Enlaces" && <Enlaces />}
+{icon === "Fiesta" && <Fiesta />}
+{icon === "Contacto" && <Contacto />}
