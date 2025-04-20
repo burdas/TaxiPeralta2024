@@ -6,7 +6,7 @@ export function showDangerToast(message: string) {
         text: message + "  ",
         duration: 3000,
         close: true,
-        gravity: "bottom",
+        gravity: "top",
         position: "right",
         style: {
             background: "#f43f5e",
@@ -20,7 +20,7 @@ export function showOkToast(message: string) {
         text: message + "  ",
         duration: 3000,
         close: true,
-        gravity: "bottom",
+        gravity: "top",
         position: "right",
         style: {
             background: "#22c55e",

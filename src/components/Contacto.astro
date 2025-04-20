@@ -1,6 +1,7 @@
 ---
 import ContactForm from "./ContactForm.astro";
 import ContactLink from "./ContactLink.astro";
+import GetIcon from "./Icons/GetIcon.astro";
 ---
 
 <section id="Contacto" class="container min-h-[calc(70vh)] py-24">
@@ -12,34 +13,10 @@ import ContactLink from "./ContactLink.astro";
     class="grid grid-cols-1 md:grid-cols-2 gap-6 justify-between items-center justify-items-center mt-8 w-full"
   >
     <ContactLink href="619461076" label="619 46 10 76" type="tel">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        ><path stroke="none" d="M0 0h24v24H0z"></path><path
-          d="M6 5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5zM11 4h2M12 17v.01"
-        ></path></svg
-      >
+      <GetIcon icon="Telefono" />
     </ContactLink>
     <ContactLink href="948750185" label="948 75 01 85" type="tel">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        ><path stroke="none" d="M0 0h24v24H0z"></path><path
-          d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
-        ></path><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"></path></svg
-      >
+      <GetIcon icon="Telefono" />
     </ContactLink>
   </article>
   <h4 class="dark:text-white font-semibold text-2xl text-center mt-8">
@@ -53,21 +30,7 @@ import ContactLink from "./ContactLink.astro";
       label="taxi1peralta@gmail.com"
       type="mailto"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        class="icon icon-tabler icons-tabler-outline icon-tabler-mail"
-        viewBox="0 0 24 24"
-        ><path stroke="none" d="M0 0h24v24H0z"></path><path
-          d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"
-        ></path><path d="m3 7 9 6 9-6"></path></svg
-      >
+      <GetIcon icon="Correo" />
     </ContactLink>
   </article>
   <h4 class="dark:text-white font-semibold text-2xl text-center mt-16">

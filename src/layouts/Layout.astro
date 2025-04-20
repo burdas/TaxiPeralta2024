@@ -5,6 +5,8 @@ interface Props {
 
 const { title } = Astro.props;
 
+import "../styles/global.css";
+
 import LOGO from "../assets/logo.jpg";
 import OG_IMAGE from "../assets/taxiPeraltaBanner.jpg";
 const URL = "https://taxiperalta.com";
@@ -67,7 +69,7 @@ const URL = "https://taxiperalta.com";
     </script>
   </head>
   <body
-    class="dark:bg-black transition-colors duration-300"
+    class="dark:bg-black transition-colors duration-300 ease-out"
   >
     <slot />
   </body>

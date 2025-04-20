@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import GetIcon from "./Icons/GetIcon.astro";
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/galery/*.avif"
@@ -16,7 +17,7 @@ const importImages = Object.values(images);
           return (
             <button
               class:list={[
-                "overflow-hidden rounded-xl imgButton",
+                "overflow-hidden rounded-xl imgButton cursor-pointer",
                 { "min-[374px]:col-span-2 ": i % 4 === 0 || i % 4 === 3 },
               ]}
               data-src={val.default.src}
@@ -32,49 +33,45 @@ const importImages = Object.values(images);
       )
     }
   </div>
-  <dialog id="dialogImage" class="bg-transparent animate-modalf">
-    <div class="max-w-[1200px] h-ful" id="dialogDiv">
-      <img
-        id="imageExtendida"
-        alt="Imagen de la galeria extendida"
-        class="w-full h-full rounded-xl"
-      />
-      <button
-        id="imgDialogClose"
-        class="fixed top-8 right-8 border-2 border-sky-500 rounded-xl p-2 text-sky-500 hover:text-white dark:hover:text-black hover:bg-sky-500"
-        ><svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          ><path
-            d="M17.139 3.805a0.667 0.667 0 0 0 -0.944 -0.944L10 9.057 3.805 2.861a0.667 0.667 0 1 0 -0.944 0.944L9.057 10l-6.196 6.195a0.667 0.667 0 0 0 0.944 0.944L10 10.943l6.195 6.196a0.667 0.667 0 0 0 0.944 -0.944L10.943 10z"
-            fill="currentColor"
-            fill-rule="evenodd"
-            clip-rule="evenodd"></path></svg
-        ></button
-      >
-    </div>
-  </dialog>
+  <!-- <dialog
+  id="dialogImage"
+  class="bg-transparent animate-modalf fixed inset-0 flex justify-center items-center z-50 p-4"
+> -->
+<dialog
+id="dialogImage"
+class="fixed inset-0 m-auto rounded-lg shadow-lg bg-transparent animate-modalf"
+>
+  <div class="max-w-[1400px] w-full h-full max-h-[90vh]" id="dialogDiv">
+    <img
+      id="imageExtendida"
+      alt="Imagen de la galeria extendida"
+      class="w-full h-full object-contain rounded-xl"
+    />
+    <button
+      id="imgDialogClose"
+      class="fixed cursor-pointer top-8 right-8 p-2 text-gray-200 hover:bg-gray-100/10 dark:hover:bg-gray-100/10 transition-all duration-300 ease-in-out rounded-md"
+    >
+      <GetIcon icon="Cruz" />
+    </button>
+  </div>
+</dialog>
+
 </section>
 <script>
   document
     .querySelectorAll(".animate-pulse")
     .forEach((e) => e.classList.remove("animate-pulse"));
-  const dialogImage = document.getElementById(
-    "dialogImage"
-  ) as HTMLDialogElement;
-  const imageExtendida = document.getElementById(
-    "imageExtendida"
-  ) as HTMLImageElement;
+  const dialogImage = document.getElementById("dialogImage") as HTMLDialogElement;
+  const imageExtendida = document.getElementById("imageExtendida") as HTMLImageElement;
   const dialogDiv = document.getElementById("dialogDiv") as HTMLImageElement;
   dialogImage.addEventListener("click", () => {
+    document.body.style.overflow = "auto";
     imageExtendida.src = "";
     dialogImage.close();
   });
-  dialogDiv.addEventListener("click", (e) => e.stopPropagation());
+  // dialogDiv.addEventListener("click", (e) => e.stopPropagation());
   const showDialog = (src: string) => {
+    document.body.style.overflow = "hidden";
     imageExtendida.src = src ?? "";
     dialogImage.showModal();
   };
@@ -84,6 +81,7 @@ const importImages = Object.values(images);
     e.addEventListener("click", () => showDialog(src!));
   });
   document.getElementById("imgDialogClose")!.addEventListener("click", () => {
+    document.body.style.overflow = "auto";
     imageExtendida.src = "";
     dialogImage.close();
   });
@@ -91,5 +89,6 @@ const importImages = Object.values(images);
 <style>
   dialog::backdrop {
     backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.5);
   }
 </style>
