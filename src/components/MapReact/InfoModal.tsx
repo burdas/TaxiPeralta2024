@@ -38,7 +38,7 @@ export default function InfoModal() {
             <div className="flex flex-row justify-end">
               <button
                 id="imgDialogClose"
-                className="border-2 border-sky-500 rounded-xl p-2 text-sky-500 hover:text-white dark:hover:text-black hover:bg-sky-500"
+                className="rounded-md p-2 dark:text-white/50 hover:bg-gray-100 dark:hover:bg-gray-100/10 transition-colors duration-300 ease-in-out"
                 onClick={() => setOpen(false)}
               >
                 <svg

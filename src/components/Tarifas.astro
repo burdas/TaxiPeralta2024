@@ -1,6 +1,7 @@
 ---
 import { tarifa } from "../model/tarifas.ts";
 import CalculadoraTarifa from "./CalculadoraTarifa.astro";
+import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 
 const diurna = Object.entries(tarifa.diurna);
@@ -43,23 +44,10 @@ const nocturna = Object.entries(tarifa.nocturna);
       </div>
       <span
         class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500 flex flex-row gap-3 justify-center items-center"
-        ><svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
-            d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path><path
-            d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z"></path><path
-            d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5"
-          ></path></svg
-        >Ir a la calculadora</span
-      >
+        >
+        <GetIcon icon="Calculadora" />
+        Ir a la calculadora
+      </span>
     </a>
   </aside>
 </section>
