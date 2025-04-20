@@ -28,11 +28,11 @@ export default function InfoModal() {
       </button>
       {open && (
         <aside
-          className="fixed inset-0 bg-black/10 dark:bg-white/10 flex justify-center items-center z-50 animate-modalf"
+          className="fixed inset-0 backdrop-blur-xs bg-black/50 flex justify-center items-center z-50"
           onClick={() => setOpen(false)}
         >
           <div
-            className="bg-white dark:bg-black rounded-lg py-4 px-4 ring-2 ring-sky-500/60 mx-4"
+            className="bg-white dark:bg-black rounded-lg py-4 px-4 ring-2 ring-sky-500/60 mx-4 animate-modalf"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-row justify-end">
