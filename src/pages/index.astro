@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Contacto from '../components/Contacto.astro';
 import Enlaces from '../components/Enlaces.astro';
 import Footer from '../components/Footer.astro';
@@ -14,7 +15,7 @@ import Layout from '../layouts/Layout.astro';
 	<NavBar scrollLimit={200} disableTheme={false} />
 	<Hero />
 	<Informacion />
-	<Tarifas />
+	<Tarifas server:defer />
 	<Galeria />
 	<Enlaces />
 	<Contacto />
