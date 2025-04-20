@@ -71,6 +71,7 @@ const $$TarifaCard = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Card", $$Card, { "class": "w-full space-y-1" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "AnimateBadge", $$AnimateBadge, { "tipo": tipo }, { "default": ($$result3) => renderTemplate`${capitalizeFirstLetter(tipo)}` })} ${maybeRenderHead()}<h4 class="text-xl font-semibold text-black dark:text-white"> ${title.slice(0, indiceUltimoEspacio)} <span class="text-sky-500"> ${title.slice(indiceUltimoEspacio + 1)} </span> </h4> <p class="text-lg font-medium text-neutral-700/70 dark:text-neutral-200/80"> ${numToEur(cantidad)} </p> ` })}`;
 }, "D:/Proyectos/TaxiPeralta2024/src/components/TarifaCard.astro", void 0);
 
+const prerender = false;
 const $$Tarifas = createComponent(async ($$result, $$props, $$slots) => {
   const prueba = await fetch("http://www.randomnumberapi.com/api/v1.0/random?min=0&max=100").then((res) => res.json());
   const diurna = Object.entries(tarifa.diurna);
@@ -87,4 +88,4 @@ Ir a la calculadora
 const $$file = "D:/Proyectos/TaxiPeralta2024/src/components/Tarifas.astro";
 const $$url = undefined;
 
-export { $$Card as $, $$Tarifas as a, $$file as b, $$url as c };
+export { $$Card as $, $$Tarifas as a, $$file as b, $$url as c, prerender as p };
