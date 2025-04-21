@@ -8,6 +8,7 @@ import Hero from '../components/Hero.astro';
 import Informacion from '../components/Informacion.astro';
 import NavBar from '../components/NavBar.astro';
 import Tarifas from '../components/Tarifas.astro';
+import TarifasSkeleton from '../components/TarifasSkeleton.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -15,7 +16,9 @@ import Layout from '../layouts/Layout.astro';
 	<NavBar scrollLimit={200} disableTheme={false} />
 	<Hero />
 	<Informacion />
-	<Tarifas server:defer />
+	<Tarifas server:defer>
+		<TarifasSkeleton slot="fallback" />
+	</Tarifas>
 	<Galeria />
 	<Enlaces />
 	<Contacto />

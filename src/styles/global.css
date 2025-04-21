@@ -3,6 +3,7 @@
 @theme {
     --animate-modalf: modalf 0.30s ease-in-out;
     --animate-open-right: open-right 0.30s ease;
+    --animate-pulse2: pulse2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
     @keyframes modalf {
         0% {
@@ -23,6 +24,12 @@
         100% {
             opacity: 1;
             transform: translate(0, 0);
+        }
+    }
+
+    @keyframes pulse2 {
+        50% {
+            opacity: 0.2;
         }
     }
 }
