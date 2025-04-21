@@ -4,9 +4,9 @@ import CalculadoraTarifa from "./CalculadoraTarifa.astro";
 import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 
-const baseUrl = window.location.origin;
-console.log(baseUrl);
-const tarifas = await fetch(`${baseUrl}/api/tarifas`).then((res) => res.json());
+const url = new URL(Astro.request.url);
+const dominio = url.origin;
+const tarifas = await fetch(`${dominio}/api/tarifas`).then((res) => res.json());
 
 const diurna = Object.entries(tarifas.diurna);
 const nocturna = Object.entries(tarifas.nocturna);
