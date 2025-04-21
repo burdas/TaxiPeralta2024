@@ -4,7 +4,9 @@ import CalculadoraTarifa from "./CalculadoraTarifa.astro";
 import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 
-const isProd = import.meta.env.MODE === "production";
+const isProd = import.meta.env.MODE === "production"
+console.log(isProd);
+console.log(import.meta.env.SITE);
 const baseUrl = isProd ? import.meta.env.SITE : "http://localhost:4321";
 const tarifas = await fetch(`${baseUrl}/api/tarifas`).then((res) => res.json());
 
