@@ -5,6 +5,7 @@ import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 
 const baseUrl = window.location.origin;
+console.log(baseUrl);
 const tarifas = await fetch(`${baseUrl}/api/tarifas`).then((res) => res.json());
 
 const diurna = Object.entries(tarifas.diurna);
