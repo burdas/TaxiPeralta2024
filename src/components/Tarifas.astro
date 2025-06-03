@@ -9,7 +9,7 @@ console.error('Llega error!!');
 const url = new URL(Astro.request.url);
 const dominio = url.origin;
 console.log(dominio);
-const tarifas = await fetch(`${dominio}/api/tarifas`).then((res) =>{ console.log(res); return res.json() });
+const tarifas = await fetch(`${dominio}/api/tarifas`, { method: 'GET' }).then((res) =>{ console.log(res); return res.json() });
 
 const diurna = Object.entries(tarifas.diurna);
 const nocturna = Object.entries(tarifas.nocturna);
