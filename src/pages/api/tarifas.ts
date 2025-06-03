@@ -81,7 +81,8 @@ export async function GET() {
           return [key, newInner];
         })
       );
-      
+
+    console.log(JSON.stringify({ ...output, date: maxDate }));
     return new Response(JSON.stringify({ ...output, date: maxDate }), {
       status: 200,
       headers: {
