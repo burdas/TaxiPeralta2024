@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+import NavBar from "../components/NavBar.astro";
+import Layout from "../layouts/Layout.astro";
+import {verifySession} from '../auth/session';
+import AdminLayout from "../components/AdminReact/AdminLayout";
+
+// Verificar sesión
+const session = Astro.cookies.get('session')?.value;
+if (!session || !verifySession(session)) {
+    return Astro.redirect('/login');
+}
+---
+
+<Layout title="Admin">
+    <NavBar scrollLimit={0} disableTheme={false} />
+    <AdminLayout client:only="react" />
+</Layout>

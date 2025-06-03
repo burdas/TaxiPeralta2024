@@ -14,8 +14,7 @@ const nocturna = Object.entries(tarifas.nocturna);
 
 const formatDate = (fecha: Date) => new Intl.DateTimeFormat('es-ES', {
   timeZone: 'Europe/Madrid',
-  dateStyle: 'short',
-  timeStyle: 'short',
+  dateStyle: 'medium',
 }).format(fecha);
 ---
 
@@ -46,7 +45,7 @@ const formatDate = (fecha: Date) => new Intl.DateTimeFormat('es-ES', {
     class="flex flex-col mt-16 gap-6 p-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
   >
     <h3 class="font-bold text-2xl md:text-4xl text-center text-white">
-      ¡Tambien puedes usar la calculadora de viajes!
+      ¡También puedes usar la calculadora de viajes!
     </h3>
     <a
       href="./calculadora_viajes"
