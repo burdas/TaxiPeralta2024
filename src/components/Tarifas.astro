@@ -4,6 +4,8 @@ import CalculadoraTarifa from "./CalculadoraTarifa.astro";
 import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 
+console.log('Llega log!!');
+console.error('Llega error!!');
 const url = new URL(Astro.request.url);
 const dominio = url.origin;
 console.log(dominio);
