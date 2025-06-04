@@ -20,12 +20,12 @@ export async function GET(context: APIContext): Promise<Response> {
 	const state = context.url.searchParams.get("state");
 
 	if (storedState === null || codeVerifier === null || code === null || state === null) {
-		return new Response("Algo ha ido mal. Vuélvelo a intentar", {
+		return new Response("Algo ha ido mal. Vuélvelo a intentar 1", {
 			status: 400
 		});
 	}
 	if (storedState !== state) {
-		return new Response("Algo ha ido mal. Vuélvelo a intentar", {
+		return new Response("Algo ha ido mal. Vuélvelo a intentar 2", {
 			status: 400
 		});
 	}
@@ -34,7 +34,7 @@ export async function GET(context: APIContext): Promise<Response> {
 	try {
 		tokens = await google.validateAuthorizationCode(code, codeVerifier!);
 	} catch (e) {
-		return new Response("Algo ha ido mal. Vuélvelo a intentar", {
+		return new Response("Algo ha ido mal. Vuélvelo a intentar 3", {
 			status: 400
 		});
 	}
