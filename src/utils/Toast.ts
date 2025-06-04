@@ -10,6 +10,7 @@ export function showDangerToast(message: string) {
         position: "right",
         style: {
             background: "#f43f5e",
+            fontWeight: "bold",
         },
 
     }).showToast();
@@ -24,6 +25,7 @@ export function showOkToast(message: string) {
         position: "right",
         style: {
             background: "#22c55e",
+            fontWeight: "bold",
         },
     }).showToast();
 }
