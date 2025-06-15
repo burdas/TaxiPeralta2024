@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from "@astrojs/react";
 import sitemap from '@astrojs/sitemap';
+import svgr from 'vite-plugin-svgr'
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -13,7 +14,7 @@ export default defineConfig({
   integrations: [react(), sitemap()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss(), svgr({include: '**/*.svg?react',})]
   },
 
   adapter: vercel()

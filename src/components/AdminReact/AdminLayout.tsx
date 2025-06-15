@@ -1,5 +1,5 @@
 import FooterLogout from "./FooterLogout";
-import TarifasForm from "@/components/AdminReact/TarifasForm.tsx";
+import TarifasForm from "@/components/AdminReact/Tarifas/TarifasForm.tsx";
 
 export default function AdminLayout() {
     return (

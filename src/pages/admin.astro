@@ -1,11 +1,11 @@
 ---
+import Loader from "../components/Icons/Loader.astro";
 export const prerender = false;
 import NavBar from "../components/NavBar.astro";
 import Layout from "../layouts/Layout.astro";
 import {verifySession} from '../auth/session';
 import AdminLayout from "../components/AdminReact/AdminLayout";
 
-// Verificar sesión
 const session = Astro.cookies.get('session')?.value;
 if (!session || !verifySession(session)) {
     return Astro.redirect('/login');
@@ -14,5 +14,9 @@ if (!session || !verifySession(session)) {
 
 <Layout title="Admin">
     <NavBar scrollLimit={0} disableTheme={false} />
-    <AdminLayout client:only="react" />
+    <AdminLayout client:only="react">
+        <div slot="fallback" class="w-full h-[calc(100dvh-80px)] flex justify-center items-center">
+            <Loader className="size-24 animate-spin" />
+        </div>
+    </AdminLayout>
 </Layout>
