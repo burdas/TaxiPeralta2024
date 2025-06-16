@@ -1,6 +1,17 @@
 ---
-import { enlaces } from "../model/enlaces";
+export const prerender = false;
+
+const url = new URL(Astro.request.url);
+const dominio = url.origin;
+console.log(dominio);
+const enlaces = await fetch(`${dominio}/api/enlaces-interes`, { method: 'GET', credentials: 'include' }).then((res) => res.json());
+
 import GetIcon from "./Icons/GetIcon.astro";
+
+interface EnlaceProps {
+    url: string;
+    texto: string;
+}
 ---
 
 <section id="Enlaces" class="container pt-24">
@@ -9,14 +20,14 @@ import GetIcon from "./Icons/GetIcon.astro";
   </h3>
   <div class="flex flex-wrap justify-center items-center p-4 mt-8 gap-4">
     {
-      enlaces.map((e) => (
+      enlaces.map((e: EnlaceProps) => (
         <a
           class="flex flex-row items-center gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full px-6 py-2 shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 ring-sky-400/50 dark:hover:ring-sky-300/40"
-          href={e.href}
+          href={e.url}
           target="_blank"
         >
           <GetIcon icon="EnlaceNewTab" />
-          <p class="flex-grow">{e.label}</p>
+          <p class="flex-grow">{e.texto}</p>
         </a>
       ))
     }
