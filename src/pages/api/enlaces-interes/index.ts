@@ -50,7 +50,6 @@ export async function POST(context: APIContext) {
 
     try {
         const enlaceData = await context.request.json();
-
         const response = await fetch(`${apiUrl}/enlaces-interes`, {
             method: 'POST',
             headers: {
