@@ -14,7 +14,7 @@ export default defineConfig({
   integrations: [react(), sitemap()],
 
   vite: {
-    plugins: [tailwindcss(), svgr({include: '**/*.svg?react',})]
+    plugins: [tailwindcss({include: './src/**/*.{js,jsx,ts,tsx}'}), svgr({include: '**/*.svg?react',})]
   },
 
   adapter: vercel()
