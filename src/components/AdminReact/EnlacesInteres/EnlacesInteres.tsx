@@ -1,12 +1,10 @@
 "use client";
 
 import {useState, useEffect} from 'react';
-import Mas from '@/components/Icons/svg/Mas.svg?react';
 import {showDangerToast} from "@/utils/Toast.ts";
 import EnlaceInteres from "@/components/AdminReact/EnlacesInteres/EnlaceInteres.tsx";
 import {EnlaceInteresNuevo} from "@/components/AdminReact/EnlacesInteres/EnlaceInteresNuevo.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
-import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 
 
 interface EnlaceInteres {

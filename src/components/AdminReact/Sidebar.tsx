@@ -1,5 +1,5 @@
 import {Button} from "@/components/ui/button.tsx";
-import React, {type Dispatch, type FC, type SetStateAction, type SVGProps, useRef} from "react";
+import {type Dispatch, type FC, type SetStateAction, type SVGProps, useRef} from "react";
 import Logout from "@/components/Icons/svg/logout.svg?react";
 import {ConfirmDialog} from "@/components/AdminReact/Shared/ConfirmDialog.tsx";
 

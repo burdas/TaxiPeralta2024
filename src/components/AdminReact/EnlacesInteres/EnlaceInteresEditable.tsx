@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import ExternalLink from "@/components/Icons/svg/ExternalLink.svg?react";
 import {Card} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";

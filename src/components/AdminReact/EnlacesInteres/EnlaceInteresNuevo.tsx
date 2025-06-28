@@ -4,11 +4,6 @@ import {useState} from 'react';
 import Mas from '@/components/Icons/svg/Mas.svg?react';
 import {EnlaceInteresEditable} from "@/components/AdminReact/EnlacesInteres/EnlaceInteresEditable.tsx";
 
-interface NewLink {
-    texto: string;
-    url: string;
-}
-
 interface Props {
     fetchEnlacesFromApi: () => void;
 }
