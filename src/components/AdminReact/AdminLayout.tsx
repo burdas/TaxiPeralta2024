@@ -1,7 +1,7 @@
 import TarifasForm from "@/components/AdminReact/Tarifas/TarifasForm.tsx";
 import EnlacesInteres from "@/components/AdminReact/EnlacesInteres/EnlacesInteres.tsx";
 import TarifasIcon from "@/components/Icons/svg/tarifasIcon.svg?react";
-import EnlacesDeInteres from "@/components/Icons/svg/EnlacesDeInteres.svg?react";
+import EnlacesDeInteres from "@/components/Icons/svg/enlacesDeInteres.svg?react";
 import {type FC, type SVGProps, useEffect, useState} from "react";
 import Sidebar from "@/components/AdminReact/Sidebar.tsx";
 
