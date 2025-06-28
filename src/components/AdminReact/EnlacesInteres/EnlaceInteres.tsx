@@ -1,6 +1,6 @@
 "use client";
 
-import ExternalLink from "@/components/Icons/svg/externalLink.svg?react";
+import ExternalLink from "@/components/Icons/svg/external-link.svg?react";
 import {Card} from "@/components/ui/card.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {formatDate} from "@/utils/Format";

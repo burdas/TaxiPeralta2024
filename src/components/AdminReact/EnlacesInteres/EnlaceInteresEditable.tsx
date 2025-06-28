@@ -1,11 +1,11 @@
 "use client";
 
 import {useState} from 'react';
-import ExternalLink from "@/components/icons/svg/externalLink.svg?react";
+import ExternalLink from "@/components/Icons/svg/external-link.svg?react";
 import {Card} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import Cross from "@/components/icons/svg/cross.svg?react";
-import Check from "@/components/icons/svg/check.svg?react";
+import Cross from "@/components/Icons/svg/cross.svg?react";
+import Check from "@/components/Icons/svg/check.svg?react";
 import {Input} from "@/components/ui/input.tsx";
 import {showDangerToast, showOkToast} from "@/utils/Toast.ts";
 
