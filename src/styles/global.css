@@ -5,6 +5,8 @@
     --animate-modalf: modalf 0.30s ease-in-out;
     --animate-open-right: open-right 0.30s ease;
     --animate-pulse2: pulse2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    --animate-fade-in: fade-in 0.30s ease-in-out;
+    --animate-fade-out: fadeOut 0.30s ease-in-out;
 
     @keyframes modalf {
         0% {
@@ -33,6 +35,16 @@
             opacity: 0.2;
         }
     }
+
+    @keyframes fade-out {
+        0% { opacity: 1 }
+        100% { opacity: 0 }
+    }
+
+    @keyframes fade-in {
+        0% { opacity: 0 }
+        100% { opacity: 1 }
+    }
 }
 
 .container {
@@ -41,6 +53,23 @@
     margin-left: auto;
     padding-right: 2rem;
     padding-left: 2rem;
+}
+
+.container-min {
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 2rem;
+    padding-left: 2rem;
+}
+
+/* Puedes añadir esto a tu archivo global */
+.scrollbar-hide {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari y Chrome */
 }
 
 @media (min-width: 1400px) {

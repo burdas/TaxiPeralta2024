@@ -48,7 +48,6 @@ export async function PUT(context: APIContext) {
 export async function GET() {
   const apiUrl = import.meta.env.TAXI_PERALTA_API_URL;
   const apiKey = import.meta.env.TAXI_PERALTA_API_KEY;
-  console.log(apiUrl, apiKey);
 
 
   if (!apiUrl || !apiKey) {
@@ -82,7 +81,6 @@ export async function GET() {
         })
       );
 
-    console.log(JSON.stringify({ ...output, date: maxDate }));
     return new Response(JSON.stringify({ ...output, date: maxDate }), {
       status: 200,
       headers: {

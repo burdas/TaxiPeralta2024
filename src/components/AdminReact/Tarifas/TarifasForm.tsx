@@ -74,7 +74,7 @@ export default function TarifasForm() {
     }
 
     return (
-        <div className="w-full mt-16">
+        <section className="w-full mt-16">
             <h2 className="text-2xl font-bold my-6">Configuración de Tarifas</h2>
             <form onSubmit={handleSubmit} className="space-y-6 w-full">
                 <div className="space-y-8">
@@ -85,7 +85,7 @@ export default function TarifasForm() {
                     <LoadingButton isLoading={isSaveLoading} />
                  </div>
             </form>
-        </div>
+        </section>
     );
 }
 

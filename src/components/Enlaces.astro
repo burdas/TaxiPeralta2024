@@ -3,7 +3,6 @@ export const prerender = false;
 
 const url = new URL(Astro.request.url);
 const dominio = url.origin;
-console.log(dominio);
 const enlaces = await fetch(`${dominio}/api/enlaces-interes`, { method: 'GET', credentials: 'include' }).then((res) => res.json());
 
 import GetIcon from "./Icons/GetIcon.astro";

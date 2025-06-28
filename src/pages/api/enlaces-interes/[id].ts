@@ -19,8 +19,9 @@ export async function PUT(context: APIContext) {
 
     try {
         const enlaces = await context.request.json();
+        const { id } = context.params
 
-        const response = await fetch(`${apiUrl}/enlaces-interes/${enlaces.id}`, {
+        const response = await fetch(`${apiUrl}/enlaces-interes/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,8 +62,6 @@ export async function DELETE(context: APIContext) {
 
     try {
         const { id } = context.params
-        console.log(id);
-        console.log(`${apiUrl}/enlaces-interes/${id}`);
         const response = await fetch(`${apiUrl}/enlaces-interes/${id}`, {
             method: 'DELETE',
             headers: {
