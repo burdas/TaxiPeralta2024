@@ -74,18 +74,18 @@ export default function TarifasForm() {
     }
 
     return (
-        <div className="w-full mt-16">
+        <section className="w-full mt-16">
             <h2 className="text-2xl font-bold my-6">Configuración de Tarifas</h2>
             <form onSubmit={handleSubmit} className="space-y-6 w-full">
                 <div className="space-y-8">
                     <TarifaCard tipo="diurna" datos={tarifas.diurna} onChange={handleChange} />
                     <TarifaCard tipo="nocturna" datos={tarifas.nocturna} onChange={handleChange} />
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end animate-fade-in">
                     <LoadingButton isLoading={isSaveLoading} />
                  </div>
             </form>
-        </div>
+        </section>
     );
 }
 

@@ -9,7 +9,7 @@ export default function LoadingButton({ isLoading }: Props) {
     return (
         <Button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 min-w-40"
+            className="min-w-40"
             disabled={isLoading}
         >
             {isLoading ? (

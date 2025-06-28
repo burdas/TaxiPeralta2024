@@ -3,19 +3,14 @@ export const prerender = false;
 import CalculadoraTarifa from "./CalculadoraTarifa.astro";
 import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
+import { formatDate } from "@/utils/Format";
 
 const url = new URL(Astro.request.url);
 const dominio = url.origin;
-console.log(dominio);
 const tarifas = await fetch(`${dominio}/api/tarifas`, { method: 'GET', credentials: 'include' }).then((res) => res.json());
 
 const diurna = Object.entries(tarifas.diurna);
 const nocturna = Object.entries(tarifas.nocturna);
-
-const formatDate = (fecha: Date) => new Intl.DateTimeFormat('es-ES', {
-  timeZone: 'Europe/Madrid',
-  dateStyle: 'medium',
-}).format(fecha);
 ---
 
 <section id="Tarifas" class="container min-h-[calc(70vh)] pt-24">

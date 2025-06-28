@@ -12,3 +12,8 @@ export const secToTimeFormat = (seconds: number): string => {
     const s = seconds % 60;
     return (h === 0 ? '' : `${h}h `) + (m === 0 ? '' : `${m}m `) + (s === 0 ? '' : `${s}s`)
 };
+
+export const formatDate = (fecha: Date) => new Intl.DateTimeFormat('es-ES', {
+    timeZone: 'Europe/Madrid',
+    dateStyle: 'medium',
+}).format(fecha);
