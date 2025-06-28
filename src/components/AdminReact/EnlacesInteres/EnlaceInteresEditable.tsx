@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from 'react';
-import ExternalLink from "@/components/Icons/svg/externalLink.svg?react";
+import ExternalLink from "@/components/icons/svg/externalLink.svg?react";
 import {Card} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import Cross from "@/components/icons/svg/cross.svg?react";
