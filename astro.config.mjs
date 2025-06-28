@@ -5,6 +5,7 @@ import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite';
 
 import vercel from '@astrojs/vercel';
+import path from "path";
 
 // https://astro.build/config
 export default defineConfig({
