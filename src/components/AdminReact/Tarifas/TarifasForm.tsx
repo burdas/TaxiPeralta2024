@@ -81,7 +81,7 @@ export default function TarifasForm() {
                     <TarifaCard tipo="diurna" datos={tarifas.diurna} onChange={handleChange} />
                     <TarifaCard tipo="nocturna" datos={tarifas.nocturna} onChange={handleChange} />
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-end animate-fade-in">
                     <LoadingButton isLoading={isSaveLoading} />
                  </div>
             </form>

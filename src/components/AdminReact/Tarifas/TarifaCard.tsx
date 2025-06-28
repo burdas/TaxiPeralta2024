@@ -18,7 +18,7 @@ export default function TarifaCard({ tipo, datos, onChange }: Props) {
     const titulo = tipo === "diurna" ? "Tarifa Diurna" : "Tarifa Nocturna";
 
     return (
-        <Card>
+        <Card className="!animate-fade-in">
             <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                 <Icon />
                 <CardTitle className="text-xl font-semibold">{titulo}</CardTitle>

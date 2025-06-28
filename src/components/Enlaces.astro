@@ -21,12 +21,14 @@ interface EnlaceProps {
     {
       enlaces.map((e: EnlaceProps) => (
         <a
-          class="flex flex-row items-center gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full px-6 py-2 shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 ring-sky-400/50 dark:hover:ring-sky-300/40"
+          class="flex flex-row items-center gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full pl-6 pr-2 py-2 shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 ring-sky-400/50 dark:hover:ring-sky-300/40"
           href={e.url}
           target="_blank"
         >
-          <GetIcon icon="EnlaceNewTab" />
-          <p class="flex-grow">{e.texto}</p>
+          <p class="flex-grow font-medium">{e.texto}</p>
+          <div class="rounded-full p-2 bg-sky-500/30 dark:bg-sky-500/80">
+            <GetIcon icon="EnlaceNewTab" />
+          </div>
         </a>
       ))
     }

@@ -5,11 +5,6 @@ import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite';
 
 import vercel from '@astrojs/vercel';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,11 +22,6 @@ export default defineConfig({
                 include: '**/*.svg?react',
                 exportAsDefault: true
             })],
-        resolve: {
-            alias: {
-                '@': path.resolve(__dirname, 'src'), // <-- muy importante
-            },
-        },
     },
 
     adapter: vercel()
