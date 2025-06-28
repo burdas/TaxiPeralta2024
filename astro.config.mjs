@@ -13,7 +13,12 @@ export default defineConfig({
   integrations: [react(), sitemap()],
 
   vite: {
-    plugins: [tailwindcss({ configFile: './tailwind.config.cjs'}), svgr({include: '**/*.svg?react',})]
+    plugins: [
+        tailwindcss({ configFile: './tailwind.config.cjs'}),
+        svgr({
+          include: '**/*.svg?react',
+          exportAsDefault: true
+        })]
   },
 
   adapter: vercel()
