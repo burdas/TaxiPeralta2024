@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import {defineConfig} from 'astro/config';
 import react from "@astrojs/react";
 import sitemap from '@astrojs/sitemap';
 import svgr from 'vite-plugin-svgr'
@@ -8,18 +8,21 @@ import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-  site: 'https://taxiperalta.com',
-  integrations: [react(), sitemap()],
+    output: "server",
+    site: 'https://taxiperalta.com',
+    integrations: [react(), sitemap()],
+    build: {
+        assetsInlineLimit: 0
+    },
 
-  vite: {
-    plugins: [
-        tailwindcss({ configFile: './tailwind.config.cjs'}),
-        svgr({
-          include: '**/*.svg?react',
-          exportAsDefault: true
-        })]
-  },
+    vite: {
+        plugins: [
+            tailwindcss({configFile: './tailwind.config.cjs'}),
+            svgr({
+                include: '**/*.svg?react',
+                exportAsDefault: true
+            })]
+    },
 
-  adapter: vercel()
+    adapter: vercel()
 });
