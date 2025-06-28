@@ -5,11 +5,6 @@ import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite';
 
 import vercel from '@astrojs/vercel';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // https://astro.build/config
 export default defineConfig({
