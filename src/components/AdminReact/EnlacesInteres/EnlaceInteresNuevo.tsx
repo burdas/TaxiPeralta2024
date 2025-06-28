@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from 'react';
-import Mas from '@/components/Icons/svg/Mas.svg?react';
+import Mas from '@/components/Icons/svg/mas.svg?react';
 import {EnlaceInteresEditable} from "@/components/AdminReact/EnlacesInteres/EnlaceInteresEditable.tsx";
 
 interface Props {
