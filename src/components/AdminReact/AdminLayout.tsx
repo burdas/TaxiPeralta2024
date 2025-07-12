@@ -2,8 +2,10 @@ import TarifasForm from "@/components/AdminReact/Tarifas/TarifasForm.tsx";
 import EnlacesInteres from "@/components/AdminReact/EnlacesInteres/EnlacesInteres.tsx";
 import TarifasIcon from "@/components/Icons/svg/tarifasIcon.svg?react";
 import EnlacesDeInteres from "@/components/Icons/svg/enlacesDeInteres.svg?react";
+import Chart from "@/components/Icons/svg/chart.svg?react";
 import {type FC, type SVGProps, useEffect, useState} from "react";
 import Sidebar from "@/components/AdminReact/Sidebar.tsx";
+import Visitas from "@/components/AdminReact/Visitas/Visitas.tsx";
 
 type Section = {
     text: string;
@@ -13,6 +15,7 @@ type Section = {
 const sections: Section[] = [
     { text: "Tarifas", icon: TarifasIcon },
     { text: "Enlaces de interés", icon: EnlacesDeInteres },
+    { text: "Visitas", icon: Chart}
 ]
 type ActiveSections = typeof sections[number]['text'];
 
@@ -39,6 +42,7 @@ export default function AdminLayout() {
                 </h1>
                 {activeSection === "Tarifas" && <TarifasForm />}
                 {activeSection === "Enlaces de interés" && <EnlacesInteres />}
+                {activeSection === "Visitas" && <Visitas />}
             </main>
         </div>
     );

@@ -42,8 +42,8 @@ export default function EnlacesInteres() {
             <section className="w-full mt-16">
                 <h2 className="text-2xl font-bold my-6">Enlaces de interés</h2>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-                    {[1, 2, 3, 4, 5, 6, 7].map(() => (
-                        <Skeleton className="w-full h-[150px]" />
+                    {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+                        <Skeleton key={i} className="w-full h-[150px]" />
                     ))}
                 </div>
             </section>

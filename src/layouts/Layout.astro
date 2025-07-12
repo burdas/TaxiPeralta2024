@@ -120,3 +120,51 @@ const URL = "https://taxiperalta.com";
     border: 1px solid var(--sb-track-color);
   }
 </style>
+<script>
+  import { routeList } from "../model/navbar.ts";
+  const { ip } = await fetch('/api/ip').then(res => res.json());
+  console.log(ip);
+
+  const sectionElements = routeList
+      .filter(item => item.href.includes("#"))
+      .map(item => document.getElementById(item.href.replace("./#", "")))
+      .filter(el => el !== null);
+  const heroSection = document.getElementById('heroSection');
+  heroSection && sectionElements.push(heroSection);
+  const fiestasDePeraltaSection = document.getElementById('FiestasDePeralta');
+  fiestasDePeraltaSection && sectionElements.push(fiestasDePeraltaSection);
+  const politicaDePrivacidadSection = document.getElementById('PoliticaDePrivacidad');
+  politicaDePrivacidadSection && sectionElements.push(politicaDePrivacidadSection);
+
+  const buildObserver = () => new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            console.log(entry.target.id ?? 'No hay id');
+            const visita = {
+              ip: ip,
+              pagina: entry.target.id,
+            }
+            // fetch('/api/visitas', {
+            //   method: "POST",
+            //   headers: {'Content-Type': 'application/json'},
+            //   body: JSON.stringify(visita),
+            // })
+            //     .then(res => res.json())
+            //     .then(res => console.log(res))
+            //     .catch(err => console.error(err));
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.3
+      }
+  );
+
+  sectionElements.map(section => {
+    const observer = buildObserver();
+    observer.observe(section)
+  });
+</script>
