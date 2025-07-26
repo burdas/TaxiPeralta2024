@@ -136,17 +136,17 @@ export function VisitaChart({chartData, title}: Props): JSX.Element {
     )
 
     return (
-        <Card className="py-4 sm:py-0">
-            <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
-                <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
+        <Card className="pt-0 pb-4">
+            <CardHeader className="flex items-stretch border-b !p-0">
+                <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-3 sm:pb-0">
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>
-                        Resultados de los 3 últimos meses
+                        Resultados totales
                     </CardDescription>
                 </div>
                 <div className="flex">
                     <div
-                        className="data-[active=true]:bg-muted/50 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
+                        className="data-[active=true]:bg-muted/50 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l border-t-0 border-l px-8 py-6"
                     >
                         <span className="text-lg leading-none font-bold sm:text-3xl">
                             {total.toLocaleString()}

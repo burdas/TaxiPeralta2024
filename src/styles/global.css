@@ -214,7 +214,13 @@ button:hover {
         --chart-3: oklch(0.398 0.07 227.392);
         --chart-4: oklch(0.828 0.189 84.429);
         --chart-5: oklch(0.769 0.188 70.08);
+        --chart-6: oklch(0.72 0.172 310.5);
+        --chart-7: oklch(0.65 0.2 20);
+        --chart-8: oklch(0.55 0.12 145);
+        --chart-9: oklch(0.78 0.18 110);
+        --chart-10: oklch(0.43 0.08 250);
     }
+
 
     .dark {
         --chart-1: oklch(0.488 0.243 264.376);
@@ -222,6 +228,11 @@ button:hover {
         --chart-3: oklch(0.769 0.188 70.08);
         --chart-4: oklch(0.627 0.265 303.9);
         --chart-5: oklch(0.645 0.246 16.439);
+        --chart-6: oklch(0.58 0.2 200);
+        --chart-7: oklch(0.52 0.23 45);
+        --chart-8: oklch(0.63 0.22 135);
+        --chart-9: oklch(0.72 0.21 90);
+        --chart-10: oklch(0.5 0.2 250);
     }
 }
 
