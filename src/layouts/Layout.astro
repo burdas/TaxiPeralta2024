@@ -143,16 +143,13 @@ const URL = "https://taxiperalta.com";
             console.log(entry.target.id ?? 'No hay id');
             const visita = {
               ip: ip,
-              pagina: entry.target.id,
+              pagina: mapSections(entry.target.id),
             }
-            // fetch('/api/visitas', {
-            //   method: "POST",
-            //   headers: {'Content-Type': 'application/json'},
-            //   body: JSON.stringify(visita),
-            // })
-            //     .then(res => res.json())
-            //     .then(res => console.log(res))
-            //     .catch(err => console.error(err));
+            fetch('/api/visitas', {
+              method: "POST",
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify(visita),
+            });
 
             observer.unobserve(entry.target);
           }
@@ -167,4 +164,23 @@ const URL = "https://taxiperalta.com";
     const observer = buildObserver();
     observer.observe(section)
   });
+
+  const mapSections = (section: string):string => {
+    switch (section) {
+      case "heroSection":
+        return "Portada";
+      case "FiestasDePeralta":
+        return "Fiestas de Peralta";
+      case "PoliticaDePrivacidad":
+        return "Política de privacidad";
+      case "Informacion":
+        return "Información";
+      case "Galeria":
+          return "Galería";
+      case "Enlaces":
+          return "Enlaces de interés";
+      default:
+        return section;
+    }
+  }
 </script>

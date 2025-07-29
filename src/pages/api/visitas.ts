@@ -1,4 +1,5 @@
 import type {APIContext} from "astro";
+import {verifySession} from "@/auth/session.ts";
 
 export const prerender = false;
 
@@ -13,7 +14,6 @@ export async function POST(context: APIContext) {
 
     try {
         const visita = await context.request.json();
-        console.log(visita);
 
         const response = await fetch(`${apiUrl}/visitas`, {
             method: 'POST',
@@ -48,6 +48,11 @@ export async function GET(context: APIContext) {
     if (!apiUrl || !apiKey) {
         console.error('API URL or API KEY not set in environment variables.');
         return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    }
+
+    const session = context.cookies.get('session')?.value;
+    if (!session || !verifySession(session)) {
+        return context.redirect('/unauthorized', 307);
     }
 
     try {

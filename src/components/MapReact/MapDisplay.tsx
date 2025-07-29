@@ -28,7 +28,15 @@ const useMap = (mapRef: React.MutableRefObject<null>) => {
 
     const sendAnalytics = async () => {
       const { ip } = await fetch('/api/ip').then(res => res.json());
-      console.log(`Calculadora de rutas - IP: ${ip}`);
+      const visita = {
+        ip: ip,
+        pagina: "Calculadora de rutas",
+      }
+      fetch('/api/visitas', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(visita),
+      });
     }
 
     loadMap();
