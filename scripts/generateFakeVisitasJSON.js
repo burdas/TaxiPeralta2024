@@ -11,8 +11,8 @@ async function fetchAndSave() {
 
         const data = await response.json();
 
-        await writeFile('./public/fake_visitas.json', JSON.stringify(data, null, 2)); // lo guardas en la carpeta pública
-        console.log('✅ Datos guardados en public/fake_visitas.json');
+        await writeFile('./public/fake-visitas.json', JSON.stringify(data, null, 2)); // lo guardas en la carpeta pública
+        console.log('✅ Datos guardados en public/fake-visitas.json');
     } catch (err) {
         console.error('❌ Error al hacer fetch o guardar:', err);
     }
