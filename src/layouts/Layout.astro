@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import CookieConsentBanner from "../components/CookieConsentBanner.astro";
+
 interface Props {
   title: string;
 }
@@ -72,6 +74,7 @@ const URL = "https://taxiperalta.com";
     class="dark:bg-black transition-colors duration-300 ease-out"
   >
     <slot />
+    <CookieConsentBanner />
   </body>
 </html>
 <style>
@@ -122,8 +125,6 @@ const URL = "https://taxiperalta.com";
 </style>
 <script>
   import { routeList } from "../model/navbar.ts";
-  const { ip } = await fetch('/api/ip').then(res => res.json());
-  console.log(ip);
 
   const sectionElements = routeList
       .filter(item => item.href.includes("#"))
@@ -135,35 +136,6 @@ const URL = "https://taxiperalta.com";
   fiestasDePeraltaSection && sectionElements.push(fiestasDePeraltaSection);
   const politicaDePrivacidadSection = document.getElementById('PoliticaDePrivacidad');
   politicaDePrivacidadSection && sectionElements.push(politicaDePrivacidadSection);
-
-  const buildObserver = () => new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            console.log(entry.target.id ?? 'No hay id');
-            const visita = {
-              ip: ip,
-              pagina: mapSections(entry.target.id),
-            }
-            fetch('/api/visitas', {
-              method: "POST",
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify(visita),
-            });
-
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.3
-      }
-  );
-
-  sectionElements.map(section => {
-    const observer = buildObserver();
-    observer.observe(section)
-  });
 
   const mapSections = (section: string):string => {
     switch (section) {
@@ -183,4 +155,45 @@ const URL = "https://taxiperalta.com";
         return section;
     }
   }
+
+  const buildObserver = () => new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const pagina = mapSections(entry.target.id);
+            
+            // Check consent before tracking
+            const cookies = document.cookie.split(';');
+            const consentCookie = cookies.find(c => c.trim().startsWith('analytics_consent='));
+            const hasConsent = consentCookie?.split('=')[1] === 'true';
+            
+            if (hasConsent) {
+              fetch('/api/ip')
+                .then(res => res.json())
+                .then(({ ip }) => {
+                  const visita = {
+                    ip: ip,
+                    pagina: pagina,
+                  };
+                  fetch('/api/visitas', {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(visita),
+                  });
+                });
+            }
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.3
+      }
+  );
+
+  sectionElements.map(section => {
+    const observer = buildObserver();
+    observer.observe(section)
+  });
 </script>

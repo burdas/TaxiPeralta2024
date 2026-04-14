@@ -42,7 +42,8 @@ export async function PUT(context: APIContext) {
       }
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+    console.error('Error in PUT /api/tarifas:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }
 
@@ -86,10 +87,10 @@ export async function GET(context: APIContext) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        // "Access-Control-Allow-Origin": baseUrl(),
       }
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+    console.error('Error in GET /api/tarifas:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

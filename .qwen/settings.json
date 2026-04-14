@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(set *)",
-      "Bash(dir *)"
+      "Bash(dir *)",
+      "Bash(git fetch *)"
     ]
   },
   "$version": 3

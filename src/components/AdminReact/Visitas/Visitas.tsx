@@ -14,7 +14,7 @@ const FAKE_DATA_URL = "/api/fake-visitas";
 const REAL_DATA_URL = "/api/visitas";
 
 const transformToMonthlyData = (chartData: Record<string, Visita[]>): BarChartData[] => {
-    const monthlyData: Record<string, BarChartData> = {};
+    const monthlyData: Record<string, BarChartData & { sortKey: string }> = {};
     const monthNames = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
@@ -30,7 +30,7 @@ const transformToMonthlyData = (chartData: Record<string, Visita[]>): BarChartDa
             const monthName = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
 
             if (!monthlyData[monthKey]) {
-                monthlyData[monthKey] = { month: monthName };
+                monthlyData[monthKey] = { month: monthName, sortKey: monthKey };
             }
 
             monthlyData[monthKey][pagina] = Number(monthlyData[monthKey][pagina] || 0) + 1;
@@ -38,11 +38,8 @@ const transformToMonthlyData = (chartData: Record<string, Visita[]>): BarChartDa
     });
 
     return Object.values(monthlyData)
-        .sort((a, b) => {
-            const [yearA, monthA] = Object.keys(monthlyData).find(key => monthlyData[key].month === a.month)!.split('-');
-            const [yearB, monthB] = Object.keys(monthlyData).find(key => monthlyData[key].month === b.month)!.split('-');
-            return new Date(parseInt(yearA), parseInt(monthA) - 1).getTime() - new Date(parseInt(yearB), parseInt(monthB) - 1).getTime();
-        }) as BarChartData[];
+        .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+        .map(({ sortKey, ...rest }) => rest as BarChartData);
 };
 
 export default function Visitas() {
@@ -74,7 +71,6 @@ export default function Visitas() {
                             }, {})
                     );
                 }
-                console.log(resultPorPagina);
                 setChartData(resultPorPagina);
             } catch (error) {
                 console.error(error);
@@ -93,21 +89,28 @@ export default function Visitas() {
         setOriginUrl(originUrl === REAL_DATA_URL ? FAKE_DATA_URL : REAL_DATA_URL);
     }
 
+    const barChartData = transformToMonthlyData(chartData);
+    const availablePages = Object.keys(chartData);
+
+    const TestModeToggle = () => (
+        <Toggle
+            aria-label="Modo de prueba"
+            size="lg"
+            className="p-5 !text-white hover:ring ring-white"
+            data-state={originUrl === FAKE_DATA_URL ? "on" : "off"}
+            onClick={toggleOriginUrl}
+        >
+            <span className={`rounded-full size-2 inline-block ${originUrl === FAKE_DATA_URL ? "bg-green-500" : "bg-red-500"}`} />
+            Modo de prueba
+        </Toggle>
+    );
+
     if (isLoading) {
         return (
             <section className="w-full mt-16 pb-8">
                 <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold my-6">Visitas</h2>
-                    <Toggle
-                        aria-label="Modo de prueba"
-                        size="lg"
-                        className="p-5 !text-white hover:ring ring-white"
-                        data-state={originUrl === FAKE_DATA_URL ? "on" : "off"}
-                        onClick={toggleOriginUrl}
-                    >
-                        <span className={`rounded-full size-2 inline-block ${originUrl === FAKE_DATA_URL ? "bg-green-500" : "bg-red-500"}`} />
-                        Modo de prueba
-                    </Toggle>
+                    <TestModeToggle />
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
@@ -118,24 +121,11 @@ export default function Visitas() {
         );
     }
 
-
-    const barChartData = transformToMonthlyData(chartData);
-    const availablePages = Object.keys(chartData);
-
     return (
         <section className="w-full mt-16 pb-8">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold my-6">Visitas</h2>
-                <Toggle
-                    aria-label="Modo de prueba"
-                    size="lg"
-                    className="p-5 !text-white hover:ring ring-white"
-                    data-state={originUrl === FAKE_DATA_URL ? "on" : "off"}
-                    onClick={toggleOriginUrl}
-                >
-                    <span className={`rounded-full size-2 inline-block ${originUrl === FAKE_DATA_URL ? "bg-green-500" : "bg-red-500"}`} />
-                    Modo de prueba
-                </Toggle>
+                <TestModeToggle />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
                 <VisitasBarChart data={barChartData} pages={availablePages} />

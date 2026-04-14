@@ -27,16 +27,23 @@ const useMap = (mapRef: React.MutableRefObject<null>) => {
     };
 
     const sendAnalytics = async () => {
-      const { ip } = await fetch('/api/ip').then(res => res.json());
-      const visita = {
-        ip: ip,
-        pagina: "Calculadora de rutas",
+      // Check consent before tracking
+      const cookies = document.cookie.split(';');
+      const consentCookie = cookies.find(c => c.trim().startsWith('analytics_consent='));
+      const hasConsent = consentCookie?.split('=')[1] === 'true';
+      
+      if (hasConsent) {
+        const { ip } = await fetch('/api/ip').then(res => res.json());
+        const visita = {
+          ip: ip,
+          pagina: "Calculadora de rutas",
+        }
+        fetch('/api/visitas', {
+          method: "POST",
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(visita),
+        });
       }
-      fetch('/api/visitas', {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(visita),
-      });
     }
 
     loadMap();

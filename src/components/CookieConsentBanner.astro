@@ -1,0 +1,86 @@
+<div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg" style="display: none;">
+    <div class="container mx-auto max-w-6xl">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex-1">
+                <h3 class="font-bold text-lg mb-2">🍪 Uso de cookies analíticas</h3>
+                <p class="text-sm text-gray-700 dark:text-gray-300">
+                    Utilizamos cookies analíticas para entender cómo interactúas con nuestro sitio web y mejorar tu experiencia.
+                    Estas cookies recopilan información de forma anónima, incluyendo tu dirección IP anonimizada.
+                    Puedes aceptar o rechazar estas cookies.
+                    <a href="/#PoliticaDePrivacidad" class="text-sky-500 hover:underline">
+                        Más información
+                    </a>
+                </p>
+            </div>
+            <div class="flex gap-3 shrink-0">
+                <button
+                    id="cookie-reject-btn"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                    Rechazar
+                </button>
+                <button
+                    id="cookie-accept-btn"
+                    class="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-lg hover:bg-sky-600 transition-colors"
+                >
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONSENT_COOKIE_NAME = 'analytics_consent';
+    const CONSENT_COOKIE_DAYS = 365;
+
+    function setAnalyticsConsent(consent: boolean) {
+        if (typeof document === 'undefined') return;
+        
+        const expires = new Date();
+        expires.setDate(expires.getDate() + CONSENT_COOKIE_DAYS);
+        
+        document.cookie = `${CONSENT_COOKIE_NAME}=${consent}; expires=${expires.toUTCString()}; path=/`;
+    }
+
+    function hasAnalyticsConsent() {
+        if (typeof document === 'undefined') return false;
+        
+        const cookies = document.cookie.split(';');
+        const consentCookie = cookies.find(c => c.trim().startsWith(`${CONSENT_COOKIE_NAME}=`));
+        
+        return consentCookie?.split('=')[1] === 'true';
+    }
+
+    // Check if consent is already set
+    if (!hasAnalyticsConsent()) {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+            banner.style.display = 'block';
+        }
+    }
+
+    // Handle accept button
+    const acceptBtn = document.getElementById('cookie-accept-btn');
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => {
+            setAnalyticsConsent(true);
+            const banner = document.getElementById('cookie-consent-banner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        });
+    }
+
+    // Handle reject button
+    const rejectBtn = document.getElementById('cookie-reject-btn');
+    if (rejectBtn) {
+        rejectBtn.addEventListener('click', () => {
+            setAnalyticsConsent(false);
+            const banner = document.getElementById('cookie-consent-banner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        });
+    }
+</script>

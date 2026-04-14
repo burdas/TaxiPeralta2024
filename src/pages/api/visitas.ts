@@ -36,7 +36,8 @@ export async function POST(context: APIContext) {
             }
         });
     } catch (err) {
-        return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+        console.error('Error in POST /api/visitas:', err);
+        return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
     }
 }
 
@@ -73,6 +74,7 @@ export async function GET(context: APIContext) {
             }
         });
     } catch (err) {
-        return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+        console.error('Error in GET /api/visitas:', err);
+        return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
     }
 }
