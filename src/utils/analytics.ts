@@ -39,15 +39,13 @@ const getUserIP = async (): Promise<string> => {
 };
 
 /**
- * Track page view (only if user has given consent)
+ * Track page view (always send, but anonymize IP without consent)
  */
 export const trackPageView = async (pagina: string): Promise<void> => {
-    if (!hasAnalyticsConsent()) {
-        return;
-    }
-
     try {
-        const ip = await getUserIP();
+        const hasConsent = hasAnalyticsConsent();
+        const ip = hasConsent ? await getUserIP() : 'IP no disponible';
+        
         const visita = {
             ip: ip,
             pagina: pagina,
