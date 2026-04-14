@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-test('debe redirigir a alguna ubicación', async ({ page }) => {
+test('debe redirigir a alguna ubicación', async ({ page, context }) => {
+  context.clearCookies();
   const response = await page.goto('http://localhost:4321/admin');
   
   // Verificar que hubo una redirección (la URL de respuesta es diferente a la solicitada)

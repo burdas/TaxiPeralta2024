@@ -1,5 +1,6 @@
 import type {APIContext} from "astro";
 import {verifySession} from "@/auth/session.ts";
+import {baseUrl} from "@/utils/Routes.ts";
 
 export const prerender = false;
 
@@ -41,11 +42,12 @@ export async function PUT(context: APIContext) {
       }
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+    console.error('Error in PUT /api/tarifas:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }
 
-export async function GET() {
+export async function GET(context: APIContext) {
   const apiUrl = import.meta.env.TAXI_PERALTA_API_URL;
   const apiKey = import.meta.env.TAXI_PERALTA_API_KEY;
 
@@ -84,10 +86,11 @@ export async function GET() {
     return new Response(JSON.stringify({ ...output, date: maxDate }), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), { status: 500 });
+    console.error('Error in GET /api/tarifas:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

@@ -26,7 +26,32 @@ const useMap = (mapRef: React.MutableRefObject<null>) => {
       }
     };
 
+    const sendAnalytics = async () => {
+      // Always track, but anonymize IP without consent
+      const cookies = document.cookie.split(';');
+      const consentCookie = cookies.find(c => c.trim().startsWith('analytics_consent='));
+      const hasConsent = consentCookie?.split('=')[1] === 'true';
+      
+      const visita = {
+        ip: hasConsent ? 'pending' : 'IP no disponible',
+        pagina: "Calculadora de rutas",
+      };
+
+      if (hasConsent) {
+        const { ip } = await fetch('/api/ip').then(res => res.json());
+        visita.ip = ip;
+      }
+
+      fetch('/api/visitas', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(visita),
+      });
+    }
+
     loadMap();
+    sendAnalytics();
+
   }, [mapRef]);
 
   return map;
@@ -45,7 +70,9 @@ export default function MapDisplay() {
   }, [origenDestino]);
 
   return (
-    <main className="h-[calc(100dvh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
+    <main
+        id="CalculadoraDeRutas"
+        className="h-[calc(100dvh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
       <MapController
         setOrigenDestino={setOrigenDestino}
         map={map!}
