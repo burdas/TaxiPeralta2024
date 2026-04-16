@@ -75,7 +75,7 @@ export async function  createMarker(
 
     const infoWindow = new google.maps.InfoWindow();
     infoWindow.setContent(
-      "<div><strong>" +
+      "<div class=\"text-zinc-800\"><strong>" +
         place.name +
         "</strong><br>" +
         getAddress(place) +
@@ -193,7 +193,7 @@ export async function calculateRoute(
     // console.log(`Precio total: ${price}`);
 
     const infoWindow = new google.maps.InfoWindow();
-      const content = `<div><strong class=\"text-xl font-semibold\" style=\"color: ${ROUTES_COLORS[i]}\">${numToEur(price)}</strong><br>${kmOrigenDesitno.toFixed(0)} km<br>${secToTimeFormat(duration ?? 0)}</div>`;
+      const content = `<div class=\"text-zinc-800\"><strong class=\"text-xl font-semibold\" style=\"color: ${ROUTES_COLORS[i]}\">${numToEur(price)}</strong><br>${kmOrigenDesitno.toFixed(0)} km<br>${secToTimeFormat(duration ?? 0)}</div>`;
       infoWindow.setContent(content);
       infoWindow.setHeaderDisabled(true);
       infoWindow.setPosition(getFirstNoOverlapingPosition(route, direcciones.routes.filter(d => d !== route)));
