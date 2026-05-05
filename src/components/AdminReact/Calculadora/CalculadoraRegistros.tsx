@@ -33,6 +33,7 @@ import { format, isWithinInterval, startOfDay, endOfDay, parseISO } from "date-f
 import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
+import RegistroDetalleDialog from "./RegistroDetalleDialog.tsx";
 
 type Registro = {
     id: number;
@@ -185,6 +186,7 @@ export default function CalculadoraRegistros() {
                             <TableHead className="w-[200px]">Fecha</TableHead>
                             <TableHead>Origen</TableHead>
                             <TableHead>Destino</TableHead>
+                            <TableHead className="w-[100px] text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -205,11 +207,14 @@ export default function CalculadoraRegistros() {
                                     </TableCell>
                                     <TableCell>{reg.origen}</TableCell>
                                     <TableCell>{reg.destino}</TableCell>
+                                    <TableCell className="text-right">
+                                        <RegistroDetalleDialog registro={reg} />
+                                    </TableCell>
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={4} className="h-24 text-center">
+                                <TableCell colSpan={5} className="h-24 text-center">
                                     No se encontraron resultados.
                                 </TableCell>
                             </TableRow>
