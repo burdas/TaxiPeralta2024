@@ -62,3 +62,36 @@ export const trackPageView = async (pagina: string): Promise<void> => {
         }
     }
 };
+
+/**
+ * Track travel calculator search
+ */
+export const trackCalculadoraSearch = async (data: {
+    origen: string;
+    origen_lat: number;
+    origen_lon: number;
+    destino: string;
+    destino_lat: number;
+    destino_lon: number;
+}): Promise<void> => {
+    try {
+        const hasConsent = hasAnalyticsConsent();
+        const ip = hasConsent ? await getUserIP() : 'IP no disponible';
+        
+        const registro = {
+            ip: ip,
+            ...data,
+            fecha: new Date().toISOString()
+        };
+
+        await fetch('/api/registro-calculadora', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registro),
+        });
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.error('Error tracking calculator search:', error);
+        }
+    }
+};
