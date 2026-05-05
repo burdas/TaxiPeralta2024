@@ -42,7 +42,7 @@ export default function CalculadoraRegistros() {
     if (isLoading) {
         return (
             <section className="w-full mt-16 pb-8">
-                <h2 className="text-2xl font-bold my-6 dark:text-white">Consultas Calculadora</h2>
+                <h2 className="text-2xl font-bold my-6 dark:text-white">Calculadora de rutas</h2>
                 <div className="space-y-4">
                     {[1, 2, 3, 4, 5].map((i) => (
                         <Skeleton key={i} className="w-full h-12" />
@@ -54,13 +54,12 @@ export default function CalculadoraRegistros() {
 
     return (
         <section className="w-full mt-16 pb-8">
-            <h2 className="text-2xl font-bold my-6 dark:text-white">Consultas Calculadora</h2>
+            <h2 className="text-2xl font-bold my-6 dark:text-white">Calculadora de rutas</h2>
             <div className="overflow-x-auto bg-white dark:bg-zinc-900 rounded-lg shadow border dark:border-zinc-800">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="border-b dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50">
                             <th className="p-4 font-semibold dark:text-white">Fecha</th>
-                            <th className="p-4 font-semibold dark:text-white">IP</th>
                             <th className="p-4 font-semibold dark:text-white">Origen</th>
                             <th className="p-4 font-semibold dark:text-white">Destino</th>
                         </tr>
@@ -77,14 +76,13 @@ export default function CalculadoraRegistros() {
                                         minute: '2-digit'
                                     })}
                                 </td>
-                                <td className="p-4 text-sm dark:text-zinc-300 font-mono">{reg.ip}</td>
                                 <td className="p-4 text-sm dark:text-zinc-300">{reg.origen}</td>
                                 <td className="p-4 text-sm dark:text-zinc-300">{reg.destino}</td>
                             </tr>
                         ))}
                         {registros.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="p-8 text-center text-zinc-500 dark:text-zinc-400">
+                                <td colSpan={3} className="p-8 text-center text-zinc-500 dark:text-zinc-400">
                                     No hay registros disponibles.
                                 </td>
                             </tr>

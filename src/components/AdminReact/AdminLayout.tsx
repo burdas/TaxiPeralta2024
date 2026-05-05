@@ -18,7 +18,7 @@ const sections: Section[] = [
     { text: "Tarifas", icon: TarifasIcon },
     { text: "Enlaces de interés", icon: EnlacesDeInteres },
     { text: "Visitas", icon: Chart},
-    { text: "Consultas Calculadora", icon: CalculadoraIcon }
+    { text: "Calculadora de rutas", icon: CalculadoraIcon }
 ]
 type ActiveSections = typeof sections[number]['text'];
 
@@ -46,7 +46,7 @@ export default function AdminLayout() {
                 {activeSection === "Tarifas" && <TarifasForm />}
                 {activeSection === "Enlaces de interés" && <EnlacesInteres />}
                 {activeSection === "Visitas" && <Visitas />}
-                {activeSection === "Consultas Calculadora" && <CalculadoraRegistros />}
+                {activeSection === "Calculadora de rutas" && <CalculadoraRegistros />}
             </main>
         </div>
     );

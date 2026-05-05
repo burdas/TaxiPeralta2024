@@ -177,10 +177,10 @@ export default function MapController({
 
                 if (originPlace && destinyPlace && results.routesPrices.length > 0) {
                   trackCalculadoraSearch({
-                    origen: originPlace.name || originPlace.formatted_address || "",
+                    origen: originPlace.formatted_address || originPlace.name || "",
                     origen_lat: originPlace.geometry?.location?.lat() || 0,
                     origen_lon: originPlace.geometry?.location?.lng() || 0,
-                    destino: destinyPlace.name || destinyPlace.formatted_address || "",
+                    destino: destinyPlace.formatted_address || destinyPlace.name || "",
                     destino_lat: destinyPlace.geometry?.location?.lat() || 0,
                     destino_lon: destinyPlace.geometry?.location?.lng() || 0,
                   });
