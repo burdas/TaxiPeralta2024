@@ -30,24 +30,11 @@ export const setAnalyticsConsent = (consent: boolean): void => {
 };
 
 /**
- * Get user's IP address
- */
-const getUserIP = async (): Promise<string> => {
-    const response = await fetch('/api/ip');
-    const data = await response.json();
-    return data.ip;
-};
-
-/**
  * Track page view (always send, but anonymize IP without consent)
  */
 export const trackPageView = async (pagina: string): Promise<void> => {
     try {
-        const hasConsent = hasAnalyticsConsent();
-        const ip = hasConsent ? await getUserIP() : 'IP no disponible';
-        
         const visita = {
-            ip: ip,
             pagina: pagina,
         };
 
@@ -59,6 +46,35 @@ export const trackPageView = async (pagina: string): Promise<void> => {
     } catch (error) {
         if (import.meta.env.DEV) {
             console.error('Error tracking page view:', error);
+        }
+    }
+};
+
+/**
+ * Track travel calculator search
+ */
+export const trackCalculadoraSearch = async (data: {
+    origen: string;
+    origen_lat: number;
+    origen_lon: number;
+    destino: string;
+    destino_lat: number;
+    destino_lon: number;
+}): Promise<void> => {
+    try {
+        const registro = {
+            ...data,
+            fecha: new Date().toISOString()
+        };
+
+        await fetch('/api/registro-calculadora', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registro),
+        });
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.error('Error tracking calculator search:', error);
         }
     }
 };

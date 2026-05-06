@@ -15,20 +15,26 @@ export async function POST(context: APIContext) {
     try {
         const body = await context.request.json();
         
+        // Basic validation
+        if (!body.origen || !body.destino) {
+            return new Response(JSON.stringify({ error: 'Origen y destino son requeridos' }), { status: 400 });
+        }
+
         // Server-side IP detection (override if "IP no disponible" or missing)
         const detectedIp = context.request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'IP no disponible';
-        const visita = {
+        const registro = {
             ...body,
             ip: (body.ip === 'IP no disponible' || !body.ip) ? detectedIp : body.ip,
+            fecha: body.fecha || new Date().toISOString()
         };
 
-        const response = await fetch(`${apiUrl}/visitas`, {
+        const response = await fetch(`${apiUrl}/registro-calculadora-viajes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Api-Key': apiKey,
             },
-            body: JSON.stringify(visita)
+            body: JSON.stringify(registro)
         });
 
         if (!response.ok) {
@@ -43,7 +49,7 @@ export async function POST(context: APIContext) {
             }
         });
     } catch (err) {
-        console.error('Error in POST /api/visitas:', err);
+        console.error('Error in POST /api/registro-calculadora:', err);
         return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
     }
 }
@@ -51,7 +57,6 @@ export async function POST(context: APIContext) {
 export async function GET(context: APIContext) {
     const apiUrl = import.meta.env.TAXI_PERALTA_API_URL;
     const apiKey = import.meta.env.TAXI_PERALTA_API_KEY;
-
 
     if (!apiUrl || !apiKey) {
         console.error('API URL or API KEY not set in environment variables.');
@@ -64,7 +69,7 @@ export async function GET(context: APIContext) {
     }
 
     try {
-        const response = await fetch(`${apiUrl}/visitas`, {
+        const response = await fetch(`${apiUrl}/registro-calculadora-viajes`, {
             headers: {
                 'X-Api-Key': apiKey,
             }
@@ -81,7 +86,7 @@ export async function GET(context: APIContext) {
             }
         });
     } catch (err) {
-        console.error('Error in GET /api/visitas:', err);
+        console.error('Error in GET /api/registro-calculadora:', err);
         return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
     }
 }

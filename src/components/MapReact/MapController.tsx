@@ -5,6 +5,7 @@ import AutocompleInput from "./AutocompleInput";
 import { showDangerToast } from "../../utils/Toast";
 import RouteInfoBox from "./RouteInfoBox";
 import "./MapController.css";
+import { trackCalculadoraSearch } from "../../utils/analytics";
 
 interface MapControllerProps {
   origenDestino: OrigenDestinoProps;
@@ -170,10 +171,20 @@ export default function MapController({
               id="btnCalcular"
               onClick={async () => {
                 setBtnLoading(true);
-                setCalculateData(
-                  await calculateRoute(map, origenDestino, calculateData)
-                );
+                const results = await calculateRoute(map, origenDestino, calculateData);
+                setCalculateData(results);
                 setBtnLoading(false);
+
+                if (originPlace && destinyPlace && results.routesPrices.length > 0) {
+                  trackCalculadoraSearch({
+                    origen: originPlace.formatted_address || originPlace.name || "",
+                    origen_lat: originPlace.geometry?.location?.lat() || 0,
+                    origen_lon: originPlace.geometry?.location?.lng() || 0,
+                    destino: destinyPlace.formatted_address || destinyPlace.name || "",
+                    destino_lat: destinyPlace.geometry?.location?.lat() || 0,
+                    destino_lon: destinyPlace.geometry?.location?.lng() || 0,
+                  });
+                }
               }}
               className="rounded-md w-28 h-10 p-2 text-sm bg-sky-500 text-white hover:scale-105 active:scale-95 transition-all duration-200 inline-flex items-center justify-center"
             >
