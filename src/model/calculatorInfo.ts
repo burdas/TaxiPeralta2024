@@ -1,3 +1,15 @@
+export interface Registro {
+    id: number;
+    ip: string;
+    origen: string;
+    origen_lat: number;
+    origen_lon: number;
+    destino: string;
+    destino_lat: number;
+    destino_lon: number;
+    fecha: string;
+}
+
 export const infoItems = [
     "El precio que muestra la calculadora es orientativo.",
     "No están incluidos peajes, aparcamiento ni otros costes.",

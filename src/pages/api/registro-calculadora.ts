@@ -13,7 +13,20 @@ export async function POST(context: APIContext) {
     }
 
     try {
-        const registro = await context.request.json();
+        const body = await context.request.json();
+        
+        // Basic validation
+        if (!body.origen || !body.destino) {
+            return new Response(JSON.stringify({ error: 'Origen y destino son requeridos' }), { status: 400 });
+        }
+
+        // Server-side IP detection (override if "IP no disponible" or missing)
+        const detectedIp = context.request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'IP no disponible';
+        const registro = {
+            ...body,
+            ip: (body.ip === 'IP no disponible' || !body.ip) ? detectedIp : body.ip,
+            fecha: body.fecha || new Date().toISOString()
+        };
 
         const response = await fetch(`${apiUrl}/registro-calculadora-viajes`, {
             method: 'POST',
@@ -52,7 +65,7 @@ export async function GET(context: APIContext) {
 
     const session = context.cookies.get('session')?.value;
     if (!session || !verifySession(session)) {
-        return context.redirect('/unauthorized', 307);
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     try {

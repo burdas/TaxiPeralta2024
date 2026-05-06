@@ -13,7 +13,14 @@ export async function POST(context: APIContext) {
     }
 
     try {
-        const visita = await context.request.json();
+        const body = await context.request.json();
+        
+        // Server-side IP detection (override if "IP no disponible" or missing)
+        const detectedIp = context.request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'IP no disponible';
+        const visita = {
+            ...body,
+            ip: (body.ip === 'IP no disponible' || !body.ip) ? detectedIp : body.ip,
+        };
 
         const response = await fetch(`${apiUrl}/visitas`, {
             method: 'POST',
@@ -53,7 +60,7 @@ export async function GET(context: APIContext) {
 
     const session = context.cookies.get('session')?.value;
     if (!session || !verifySession(session)) {
-        return context.redirect('/unauthorized', 307);
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     try {
@@ -63,7 +70,7 @@ export async function GET(context: APIContext) {
             }
         });
         if (!response.ok) {
-            return new Response(await response.text());
+            return new Response(await response.text(), { status: response.status });
         }
         const data = await response.json();
 

@@ -30,24 +30,11 @@ export const setAnalyticsConsent = (consent: boolean): void => {
 };
 
 /**
- * Get user's IP address
- */
-const getUserIP = async (): Promise<string> => {
-    const response = await fetch('/api/ip');
-    const data = await response.json();
-    return data.ip;
-};
-
-/**
  * Track page view (always send, but anonymize IP without consent)
  */
 export const trackPageView = async (pagina: string): Promise<void> => {
     try {
-        const hasConsent = hasAnalyticsConsent();
-        const ip = hasConsent ? await getUserIP() : 'IP no disponible';
-        
         const visita = {
-            ip: ip,
             pagina: pagina,
         };
 
@@ -75,11 +62,7 @@ export const trackCalculadoraSearch = async (data: {
     destino_lon: number;
 }): Promise<void> => {
     try {
-        const hasConsent = hasAnalyticsConsent();
-        const ip = hasConsent ? await getUserIP() : 'IP no disponible';
-        
         const registro = {
-            ip: ip,
             ...data,
             fecha: new Date().toISOString()
         };

@@ -12,18 +12,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { MapPinned } from "lucide-react";
 import { createMap } from "@/utils/Map2";
 import { showDangerToast } from "@/utils/Toast";
-
-type Registro = {
-    id: number;
-    ip: string;
-    origen: string;
-    origen_lat: number;
-    origen_lon: number;
-    destino: string;
-    destino_lat: number;
-    destino_lon: number;
-    fecha: string;
-};
+import type { Registro } from "@/model/calculatorInfo.ts";
 
 interface RegistroDetalleDialogProps {
     registro: Registro;
@@ -97,6 +86,8 @@ export default function RegistroDetalleDialog({ registro }: RegistroDetalleDialo
             setIsOpen(open);
             if (open) {
                 // Give some time for the dialog to animate and the ref to be available
+                // This is a common pattern for dialogs that need to initialize third-party libraries
+                // like Google Maps once the DOM element is fully rendered.
                 setTimeout(initMap, 300);
             }
         }}>

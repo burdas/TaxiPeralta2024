@@ -34,18 +34,7 @@ import { es } from "date-fns/locale";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import RegistroDetalleDialog from "./RegistroDetalleDialog.tsx";
-
-type Registro = {
-    id: number;
-    ip: string;
-    origen: string;
-    origen_lat: number;
-    origen_lon: number;
-    destino: string;
-    destino_lat: number;
-    destino_lon: number;
-    fecha: string;
-};
+import type { Registro } from "@/model/calculatorInfo.ts";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -62,7 +51,8 @@ export default function CalculadoraRegistros() {
                 const res = await fetch("/api/registro-calculadora");
                 if (!res.ok) throw new Error("Error al cargar los registros");
                 const data = await res.json();
-                setRegistros(data.sort((a: Registro, b: Registro) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()));
+                // Immutable sort
+                setRegistros([...data].sort((a: Registro, b: Registro) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()));
             } catch (error) {
                 console.error(error);
                 showDangerToast("Error al cargar los registros");
