@@ -1,16 +1,11 @@
 ---
 export const prerender = false;
 
-const url = new URL(Astro.request.url);
-const dominio = url.origin;
-const enlaces = await fetch(`${dominio}/api/enlaces-interes`, { method: 'GET', credentials: 'include' }).then((res) => res.json());
+import { getEnlacesInteres, type IEnlace } from "@/services/externalApi";
+
+const enlaces = await getEnlacesInteres();
 
 import GetIcon from "./Icons/GetIcon.astro";
-
-interface EnlaceProps {
-    url: string;
-    texto: string;
-}
 ---
 
 <section id="Enlaces" class="container pt-24">
@@ -19,7 +14,7 @@ interface EnlaceProps {
   </h3>
   <div class="flex flex-wrap justify-center items-center p-4 mt-8 gap-4">
     {
-      enlaces.map((e: EnlaceProps) => (
+      enlaces.map((e: IEnlace) => (
         <a
           class="flex flex-row items-center gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full pl-6 pr-2 py-2 shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 ring-sky-400/50 dark:hover:ring-sky-300/40"
           href={e.url}

@@ -47,43 +47,12 @@ export async function PUT(context: APIContext) {
   }
 }
 
+import { getTarifas } from "@/services/externalApi.ts";
+
 export async function GET(context: APIContext) {
-  const apiUrl = import.meta.env.TAXI_PERALTA_API_URL;
-  const apiKey = import.meta.env.TAXI_PERALTA_API_KEY;
-
-
-  if (!apiUrl || !apiKey) {
-    console.error('API URL or API KEY not set in environment variables.');
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
-  }
-
   try {
-    const response = await fetch(`${apiUrl}/tarifas`, {
-      headers: {
-        'X-Api-Key': apiKey,
-      }
-    });
-    if (!response.ok) {
-      return new Response(await response.text());
-    }
-    const data = await response.json();
-
-    let maxDate: string | number | Date | null = null;
-    const output: { [key: string]: { [key: string]: number } } = Object.fromEntries(
-        Object.entries(data).map(([key, value]) => {
-          const newInner: { [key: string]: number } = {};
-          for (const [innerKey, innerValue] of Object.entries(value as Record<string, { value: number; date: string }>)) {
-            const { value: val, date } = innerValue;
-            newInner[innerKey] = val;
-            if (!maxDate || new Date(date) > new Date(maxDate)) {
-              maxDate = date;
-            }
-          }
-          return [key, newInner];
-        })
-      );
-
-    return new Response(JSON.stringify({ ...output, date: maxDate }), {
+    const data = await getTarifas();
+    return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',

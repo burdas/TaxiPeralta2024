@@ -5,9 +5,9 @@ import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 import { formatDate } from "@/utils/Format";
 
-const url = new URL(Astro.request.url);
-const dominio = url.origin;
-const tarifas = await fetch(`${dominio}/api/tarifas`, { method: 'GET', credentials: 'include' }).then((res) => res.json());
+import { getTarifas } from "@/services/externalApi";
+
+const tarifas = await getTarifas();
 
 const diurna = Object.entries(tarifas.diurna);
 const nocturna = Object.entries(tarifas.nocturna);
@@ -33,7 +33,7 @@ const nocturna = Object.entries(tarifas.nocturna);
     }
   </div>
   <p class="mt-3 text-center text-sm text-neutral-700/70 dark:text-neutral-200/80">
-    Última actualización: {formatDate(new Date(tarifas.date))}
+    Última actualización: {tarifas.date ? formatDate(new Date(tarifas.date)) : "N/A"}
   </p>
   <CalculadoraTarifa />
   <aside
