@@ -9,7 +9,6 @@ interface Props {
 const { title } = Astro.props;
 
 
-import LOGO from "../assets/logo.jpg";
 import OG_IMAGE from "../assets/taxiPeraltaBanner.jpg";
 const URL = "https://taxiperalta.com";
 ---
@@ -30,7 +29,7 @@ const URL = "https://taxiperalta.com";
     <meta charset="UTF-8" />
     <meta name="description" content="Taxi de Peralta, Navarra (España)" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href={LOGO.src} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="author" content="Burdas">

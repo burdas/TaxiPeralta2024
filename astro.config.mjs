@@ -24,5 +24,7 @@ export default defineConfig({
             })],
     },
 
-    adapter: vercel()
+    adapter: vercel({
+        imageService: true
+    })
 });
