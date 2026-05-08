@@ -1,6 +1,7 @@
 ---
 export const prerender = true;
 import CalculadoraTarifa from "./CalculadoraTarifa.astro";
+import CalculadoraTarifaMobile from "./CalculadoraTarifaMobile.astro";
 import Card from "./Card.astro";
 import GetIcon from "./Icons/GetIcon.astro";
 
@@ -21,7 +22,12 @@ const fakeTarifas = Array.from({ length: 6 });
       ))
     }
   </div>
-  <CalculadoraTarifa />
+  <div class="hidden md:block">
+    <CalculadoraTarifa />
+  </div>
+  <div class="block md:hidden">
+    <CalculadoraTarifaMobile />
+  </div>
   <aside
     class="flex flex-col mt-16 gap-6 p-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
   >

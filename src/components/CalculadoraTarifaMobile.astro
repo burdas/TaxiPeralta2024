@@ -1,0 +1,137 @@
+---
+---
+<p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80 mt-16 px-4">El precio siguiente es <u>orientativo</u>, no se tienen en cuenta otros costes.</p>
+
+<form class="flex flex-col items-center gap-8 mt-16 mb-24 px-4">
+  {[
+    { id: "mobileInputKmRecorridoDiurno", label: "Km Recorrido (Diurno)" },
+    { id: "mobileInputHoraEsperaDiurno", label: "Hora de espera (Diurno)" },
+    { id: "mobileInputKmRecorridoNocturno", label: "Km Recorrido (Nocturno)" },
+    { id: "mobileInputHoraEsperaNocturno", label: "Hora de espera (Nocturno)" }
+  ].map((item, index) => (
+    <div class="flex items-center justify-between w-full gap-4">
+      <span class="text-xs text-neutral-500 uppercase font-medium">{item.label}</span>
+      <div class="flex items-center gap-4">
+        <button type="button" class="btn-decrement-mobile text-4xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <input
+          id={item.id}
+          type="number"
+          class="w-14 text-center outline-none bg-transparent text-gray-900 dark:text-white text-4xl font-bold"
+          placeholder="0"
+        />
+        <button type="button" class="btn-increment-mobile text-4xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </div>
+    </div>
+  ))}
+  
+  <div class="flex flex-col items-center gap-4 w-full">
+      <div class="w-full text-left">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-neutral-300 dark:text-neutral-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </div>
+      <div class="w-full h-px bg-neutral-300 dark:bg-neutral-700"></div>
+      <input
+        id="mobileInputTotalTarifas"
+        type="text"
+        disabled
+        class="w-full text-right outline-none bg-transparent text-4xl font-bold p-2"
+        value="0,00 €"
+      />
+  </div>
+</form>
+
+<style>
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+</style>
+
+<script>
+  import { numToEur } from "../utils/Format";
+
+  let currentTarifas: any = null;
+
+  const fetchTarifas = async () => {
+    try {
+      const response = await fetch("/api/tarifas");
+      if (response.ok) {
+        currentTarifas = await response.json();
+        changeTotalTarifas();
+      }
+    } catch (error) {
+      console.error("Error fetching tariffs:", error);
+    }
+  };
+
+  const changeTotalTarifas = () => {
+    if (!currentTarifas) return;
+
+    const inputKmDiurno = document.getElementById("mobileInputKmRecorridoDiurno") as HTMLInputElement;
+    const inputHoraDiurno = document.getElementById("mobileInputHoraEsperaDiurno") as HTMLInputElement;
+    const inputKmNocturno = document.getElementById("mobileInputKmRecorridoNocturno") as HTMLInputElement;
+    const inputHoraNocturno = document.getElementById("mobileInputHoraEsperaNocturno") as HTMLInputElement;
+    const inputTotal = document.getElementById("mobileInputTotalTarifas") as HTMLInputElement;
+
+    if (!inputKmDiurno || !inputHoraDiurno || !inputKmNocturno || !inputHoraNocturno || !inputTotal) return;
+
+    const kmDiurno = Number(inputKmDiurno.value || 0);
+    const horaDiurno = Number(inputHoraDiurno.value || 0);
+    const kmNocturno = Number(inputKmNocturno.value || 0);
+    const horaNocturno = Number(inputHoraNocturno.value || 0);
+
+    let totalDiurno = kmDiurno * (currentTarifas.diurna?.kmRecorrido || 0) + 
+                       horaDiurno * (currentTarifas.diurna?.horaEspera || 0);
+    
+    if (totalDiurno > 0 && totalDiurno < (currentTarifas.diurna?.minimoPercepcion || 0)) {
+        totalDiurno = currentTarifas.diurna.minimoPercepcion;
+    }
+
+    let totalNocturno = kmNocturno * (currentTarifas.nocturna?.kmRecorrido || 0) + 
+                         horaNocturno * (currentTarifas.nocturna?.horaEspera || 0);
+
+    if (totalNocturno > 0 && totalNocturno < (currentTarifas.nocturna?.minimoPercepcion || 0)) {
+        totalNocturno = currentTarifas.nocturna.minimoPercepcion;
+    }
+
+    const total = totalDiurno + totalNocturno;
+    inputTotal.value = numToEur(total);
+  };
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const btn = target.closest("button");
+    if (!btn) return;
+
+    if (btn.classList.contains("btn-increment-mobile") || btn.classList.contains("btn-decrement-mobile")) {
+      const container = btn.closest(".flex-col");
+      const input = container?.querySelector("input") as HTMLInputElement;
+      if (input) {
+        let value = Number(input.value) || 0;
+        if (btn.classList.contains("btn-increment-mobile")) {
+          value++;
+        } else {
+          value = Math.max(0, value - 1);
+        }
+        input.value = value.toString();
+        changeTotalTarifas();
+      }
+    }
+  });
+
+  document.addEventListener("input", (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target && target.id && target.id.startsWith("mobileInput") && target.id !== "mobileInputTotalTarifas") {
+      changeTotalTarifas();
+    }
+  });
+
+  fetchTarifas();
+</script>
