@@ -17,7 +17,7 @@
           placeholder="0"
         />
         <button type="button" class="btn-decrement absolute -bottom-1 text-neutral-400 hover:text-white font-bold">-</button>
-        <span class="absolute -bottom-10 text-xs text-neutral-500 text-center w-32 text-nowrap">{item.label}</span>
+        <label for={item.id} class="absolute -bottom-10 text-xs text-neutral-500 text-center w-32 text-nowrap cursor-pointer">{item.label}</label>
       </div>
       {index < 3 && <div class="flex items-center"><span class="text-4xl font-light text-neutral-400">+</span></div>}
     </>
