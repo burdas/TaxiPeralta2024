@@ -65,8 +65,8 @@ export const prerender = true;
               id="calc-km"
               type="number"
               min="0"
-              value="10"
-              class="flex-1 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
+              value="0"
+              class="flex-1 h-12 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
             />
             <button
               type="button"
@@ -81,14 +81,14 @@ export const prerender = true;
         <div class="flex flex-col gap-4">
           <label
             class="text-[12px] leading-4 font-semibold uppercase tracking-wider text-tp-on-surface-variant"
-            >Minutos de Espera</label
+            >Hora de Espera</label
           >
           <div class="flex items-center gap-4">
             <button
               type="button"
               id="calc-wait-minus"
               class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
-              aria-label="Restar minutos de espera"
+              aria-label="Restar hora de espera"
             >
               <span class="material-symbols-outlined">remove</span>
             </button>
@@ -96,15 +96,15 @@ export const prerender = true;
               id="calc-wait"
               type="number"
               min="0"
-              step="5"
+              step="1"
               value="0"
-              class="flex-1 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
+              class="flex-1 h-12 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
             />
             <button
               type="button"
               id="calc-wait-plus"
               class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
-              aria-label="Añadir minutos de espera"
+              aria-label="Añadir hora de espera"
             >
               <span class="material-symbols-outlined">add</span>
             </button>
@@ -213,7 +213,7 @@ export const prerender = true;
     const wait = parseFloat((document.getElementById("calc-wait") as HTMLInputElement).value) || 0;
     const rate = rates[currentTarifa];
 
-    let total = km * (rate.kmRecorrido || 0) + wait * ((rate.horaEspera || 0) / 60);
+    let total = km * (rate.kmRecorrido || 0) + wait * (rate.horaEspera || 0);
 
     if (total > 0 && total < (rate.minimoPercepcion || 0)) {
       total = rate.minimoPercepcion;
@@ -227,8 +227,8 @@ export const prerender = true;
   document.getElementById("btn-nocturna")!.addEventListener("click", () => setTarifa("nocturna"));
   document.getElementById("calc-km-minus")!.addEventListener("click", () => updateVal("calc-km", -1));
   document.getElementById("calc-km-plus")!.addEventListener("click", () => updateVal("calc-km", 1));
-  document.getElementById("calc-wait-minus")!.addEventListener("click", () => updateVal("calc-wait", -5));
-  document.getElementById("calc-wait-plus")!.addEventListener("click", () => updateVal("calc-wait", 5));
+  document.getElementById("calc-wait-minus")!.addEventListener("click", () => updateVal("calc-wait", -1));
+  document.getElementById("calc-wait-plus")!.addEventListener("click", () => updateVal("calc-wait", 1));
   document.getElementById("calc-km")!.addEventListener("input", calculatePrice);
   document.getElementById("calc-wait")!.addEventListener("input", calculatePrice);
 
