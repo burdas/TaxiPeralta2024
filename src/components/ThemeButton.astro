@@ -3,12 +3,14 @@ import GetIcon from "./Icons/GetIcon.astro";
 ---
 
 <button
-  class="dark:hidden hover:bg-gray-100 dark:hover:bg-gray-100/10 p-3 rounded-md toggleBtn transition-colors duration-300 ease-in-out"
+  class="dark:hidden hover:bg-tp-surface-container-high p-3 rounded-md toggleBtn text-tp-on-surface transition-colors duration-300 ease-in-out"
+  aria-label="Cambiar a modo oscuro"
 >
   <GetIcon icon="Luna" />
 </button>
 <button
-  class="hidden dark:inline text-white hover:bg-gray-100 dark:hover:bg-gray-100/10 p-3 rounded-md toggleBtn transition-colors duration-300 ease-in-out"
+  class="hidden dark:inline hover:bg-tp-surface-container-high p-3 rounded-md toggleBtn text-tp-on-surface transition-colors duration-300 ease-in-out"
+  aria-label="Cambiar a modo claro"
 >
   <GetIcon icon="Sol" />
 </button>

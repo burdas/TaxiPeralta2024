@@ -1,39 +1,146 @@
-<p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80 mt-16">El precio siguiente es <u>orientativo</u>, no se tienen en cuenta otros costes.</p>
+---
+export const prerender = true;
+---
 
-<form class="flex flex-wrap justify-center items-center gap-16 mt-16 mb-24">
-  {[
-    { id: "inputKmRecorridoDiurno", label: "Km Recorrido (Diurno)" },
-    { id: "inputHoraEsperaDiurno", label: "Hora de espera (Diurno)" },
-    { id: "inputKmRecorridoNocturno", label: "Km Recorrido (Nocturno)" },
-    { id: "inputHoraEsperaNocturno", label: "Hora de espera (Nocturno)" }
-  ].map((item, index) => (
-    <>
-      <div class="relative flex flex-col items-center w-12 h-24">
-        <button type="button" class="btn-increment absolute -top-1 text-neutral-400 hover:text-white font-bold">+</button>
-        <input
-          id={item.id}
-          type="number"
-          class="w-full h-full text-center outline-none bg-transparent text-gray-900 dark:text-white text-4xl font-semibold"
-          placeholder="0"
-        />
-        <button type="button" class="btn-decrement absolute -bottom-1 text-neutral-400 hover:text-white font-bold">-</button>
-        <label for={item.id} class="absolute -bottom-10 text-xs text-neutral-500 text-center w-32 text-nowrap cursor-pointer">{item.label}</label>
-      </div>
-      {index < 3 && <div class="flex items-center"><span class="text-4xl font-light text-neutral-400">+</span></div>}
-    </>
-  ))}
-  
-  <div class="flex items-center gap-4">
-      <span class="text-4xl font-light text-neutral-400">=</span>
-      <input
-        id="inputTotalTarifas"
-        type="text"
-        disabled
-        class="w-48 text-center outline-none bg-transparent text-gray-900 dark:text-white text-4xl font-bold p-2"
-        value="0,00 €"
-      />
+<section
+  id="calculadora-simple"
+  class="py-section-gap px-container-padding max-w-[1200px] mx-auto scroll-mt-24"
+>
+  <div class="text-center mb-12">
+    <h2
+      class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface mb-4"
+    >
+      Calculadora de Tarifas
+    </h2>
+    <p class="text-tp-on-surface-variant max-w-2xl mx-auto">
+      Estime el coste aproximado de su trayecto seleccionando los parámetros
+      deseados.
+    </p>
   </div>
-</form>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter reveal">
+    <!-- Inputs Card -->
+    <div
+      class="bg-tp-surface-container-low border border-tp-outline-variant rounded-xl p-8 space-y-8"
+    >
+      <div class="flex flex-col gap-4">
+        <label
+          class="text-[12px] leading-4 font-semibold uppercase tracking-wider text-tp-on-surface-variant"
+          >Tipo de Tarifa</label
+        >
+        <div
+          class="grid grid-cols-2 gap-2 bg-tp-surface-container-highest p-1 rounded-lg border border-tp-outline-variant/30"
+        >
+          <button
+            type="button"
+            id="btn-diurna"
+            class="py-2 px-4 rounded-md text-sm font-bold transition-all bg-tp-primary text-tp-on-primary"
+          >
+            Diurna
+          </button>
+          <button
+            type="button"
+            id="btn-nocturna"
+            class="py-2 px-4 rounded-md text-sm font-bold transition-all text-tp-on-surface-variant hover:text-tp-on-surface"
+          >
+            Nocturna / Festivos
+          </button>
+        </div>
+      </div>
+      <div class="space-y-6">
+        <div class="flex flex-col gap-4">
+          <label
+            class="text-[12px] leading-4 font-semibold uppercase tracking-wider text-tp-on-surface-variant"
+            >Kilómetros Recorridos</label
+          >
+          <div class="flex items-center gap-4">
+            <button
+              type="button"
+              id="calc-km-minus"
+              class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
+              aria-label="Restar kilómetros"
+            >
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+            <input
+              id="calc-km"
+              type="number"
+              min="0"
+              value="10"
+              class="flex-1 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
+            />
+            <button
+              type="button"
+              id="calc-km-plus"
+              class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
+              aria-label="Añadir kilómetros"
+            >
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <label
+            class="text-[12px] leading-4 font-semibold uppercase tracking-wider text-tp-on-surface-variant"
+            >Minutos de Espera</label
+          >
+          <div class="flex items-center gap-4">
+            <button
+              type="button"
+              id="calc-wait-minus"
+              class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
+              aria-label="Restar minutos de espera"
+            >
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+            <input
+              id="calc-wait"
+              type="number"
+              min="0"
+              step="5"
+              value="0"
+              class="flex-1 bg-tp-surface-container-highest border-none rounded-lg text-center font-bold text-xl text-tp-on-surface focus:ring-2 focus:ring-tp-primary appearance-none"
+            />
+            <button
+              type="button"
+              id="calc-wait-plus"
+              class="w-12 h-12 rounded-lg bg-tp-surface-container-high flex items-center justify-center text-tp-primary hover:bg-tp-primary hover:text-tp-on-primary transition-all active:scale-95"
+              aria-label="Añadir minutos de espera"
+            >
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Result Card -->
+    <div
+      id="result-card"
+      class="bg-tp-primary text-tp-on-primary rounded-xl p-8 flex flex-col justify-center items-center text-center relative overflow-hidden"
+    >
+      <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+        <span
+          class="material-symbols-outlined text-[200px]"
+          style="font-variation-settings: 'FILL' 1"
+          >payments</span
+        >
+      </div>
+      <span
+        id="tarifa-label"
+        class="text-[12px] leading-4 font-semibold uppercase tracking-[0.2em] mb-2 opacity-80"
+        >Precio Estimado (Tarifa Diurna)</span
+      >
+      <div
+        id="total-price"
+        class="font-tp-display text-6xl font-bold mb-4 tracking-tighter"
+      >
+        7,00 €
+      </div>
+      <p class="text-sm opacity-70 max-w-[240px]">
+        Este precio es orientativo y no incluye suplementos ni peajes.
+      </p>
+    </div>
+  </div>
+</section>
 
 <style>
   input::-webkit-outer-spin-button,
@@ -45,81 +152,86 @@
     -moz-appearance: textfield;
   }
 </style>
+
 <script>
   import { numToEur } from "../utils/Format";
 
-  let currentTarifas: any = null;
+  let currentTarifa: "diurna" | "nocturna" = "diurna";
+  let rates: Record<string, Record<string, number>> = {
+    diurna: { kmRecorrido: 0.7, horaEspera: 19.38, minimoPercepcion: 3.78 },
+    nocturna: { kmRecorrido: 0.88, horaEspera: 28.83, minimoPercepcion: 5.63 },
+  };
 
   const fetchTarifas = async () => {
     try {
       const response = await fetch("/api/tarifas");
       if (response.ok) {
-        currentTarifas = await response.json();
-        changeTotalTarifas();
+        const data = await response.json();
+        rates = {
+          diurna: data.diurna,
+          nocturna: data.nocturna,
+        };
+        calculatePrice();
       }
     } catch (error) {
       console.error("Error fetching tariffs:", error);
     }
   };
 
-  const changeTotalTarifas = () => {
-    if (!currentTarifas) return;
+  const setTarifa = (type: "diurna" | "nocturna") => {
+    currentTarifa = type;
+    const btnDiurna = document.getElementById("btn-diurna")!;
+    const btnNocturna = document.getElementById("btn-nocturna")!;
+    const label = document.getElementById("tarifa-label")!;
 
-    const inputKmDiurno = document.getElementById("inputKmRecorridoDiurno") as HTMLInputElement;
-    const inputHoraDiurno = document.getElementById("inputHoraEsperaDiurno") as HTMLInputElement;
-    const inputKmNocturno = document.getElementById("inputKmRecorridoNocturno") as HTMLInputElement;
-    const inputHoraNocturno = document.getElementById("inputHoraEsperaNocturno") as HTMLInputElement;
-    const inputTotal = document.getElementById("inputTotalTarifas") as HTMLInputElement;
-
-    if (!inputKmDiurno || !inputHoraDiurno || !inputKmNocturno || !inputHoraNocturno || !inputTotal) return;
-
-    const kmDiurno = Number(inputKmDiurno.value || 0);
-    const horaDiurno = Number(inputHoraDiurno.value || 0);
-    const kmNocturno = Number(inputKmNocturno.value || 0);
-    const horaNocturno = Number(inputHoraNocturno.value || 0);
-
-    let totalDiurno = kmDiurno * (currentTarifas.diurna?.kmRecorrido || 0) + 
-                       horaDiurno * (currentTarifas.diurna?.horaEspera || 0);
-    
-    if (totalDiurno > 0 && totalDiurno < (currentTarifas.diurna?.minimoPercepcion || 0)) {
-        totalDiurno = currentTarifas.diurna.minimoPercepcion;
+    if (type === "diurna") {
+      btnDiurna.classList.add("bg-tp-primary", "text-tp-on-primary");
+      btnDiurna.classList.remove("text-tp-on-surface-variant");
+      btnNocturna.classList.remove("bg-tp-primary", "text-tp-on-primary");
+      btnNocturna.classList.add("text-tp-on-surface-variant");
+      label.textContent = "Precio Estimado (Tarifa Diurna)";
+    } else {
+      btnNocturna.classList.add("bg-tp-primary", "text-tp-on-primary");
+      btnNocturna.classList.remove("text-tp-on-surface-variant");
+      btnDiurna.classList.remove("bg-tp-primary", "text-tp-on-primary");
+      btnDiurna.classList.add("text-tp-on-surface-variant");
+      label.textContent = "Precio Estimado (Nocturna / Festivos)";
     }
-
-    let totalNocturno = kmNocturno * (currentTarifas.nocturna?.kmRecorrido || 0) + 
-                         horaNocturno * (currentTarifas.nocturna?.horaEspera || 0);
-
-    if (totalNocturno > 0 && totalNocturno < (currentTarifas.nocturna?.minimoPercepcion || 0)) {
-        totalNocturno = currentTarifas.nocturna.minimoPercepcion;
-    }
-
-    const total = totalDiurno + totalNocturno;
-    inputTotal.value = numToEur(total);
+    calculatePrice();
   };
 
-  document.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains("btn-increment") || target.classList.contains("btn-decrement")) {
-      const container = target.closest(".flex-col");
-      const input = container?.querySelector("input") as HTMLInputElement;
-      if (input) {
-        let value = Number(input.value) || 0;
-        if (target.classList.contains("btn-increment")) {
-          value++;
-        } else {
-          value = Math.max(0, value - 1);
-        }
-        input.value = value.toString();
-        changeTotalTarifas();
-      }
-    }
-  });
+  const updateVal = (id: string, step: number) => {
+    const el = document.getElementById(id) as HTMLInputElement;
+    let val = parseFloat(el.value) || 0;
+    val = Math.max(0, val + step);
+    el.value = val.toString();
+    calculatePrice();
+  };
 
-  document.addEventListener("input", (event) => {
-    const target = event.target as HTMLInputElement;
-    if (target && target.id && target.id.startsWith("input") && target.id !== "inputTotalTarifas") {
-      changeTotalTarifas();
-    }
-  });
+  const calculatePrice = () => {
+    const km = parseFloat((document.getElementById("calc-km") as HTMLInputElement).value) || 0;
+    const wait = parseFloat((document.getElementById("calc-wait") as HTMLInputElement).value) || 0;
+    const rate = rates[currentTarifa];
 
+    let total = km * (rate.kmRecorrido || 0) + wait * ((rate.horaEspera || 0) / 60);
+
+    if (total > 0 && total < (rate.minimoPercepcion || 0)) {
+      total = rate.minimoPercepcion;
+    }
+
+    const output = document.getElementById("total-price")!;
+    output.textContent = numToEur(total);
+  };
+
+  document.getElementById("btn-diurna")!.addEventListener("click", () => setTarifa("diurna"));
+  document.getElementById("btn-nocturna")!.addEventListener("click", () => setTarifa("nocturna"));
+  document.getElementById("calc-km-minus")!.addEventListener("click", () => updateVal("calc-km", -1));
+  document.getElementById("calc-km-plus")!.addEventListener("click", () => updateVal("calc-km", 1));
+  document.getElementById("calc-wait-minus")!.addEventListener("click", () => updateVal("calc-wait", -5));
+  document.getElementById("calc-wait-plus")!.addEventListener("click", () => updateVal("calc-wait", 5));
+  document.getElementById("calc-km")!.addEventListener("input", calculatePrice);
+  document.getElementById("calc-wait")!.addEventListener("input", calculatePrice);
+
+  calculatePrice();
   fetchTarifas();
 </script>

@@ -1,40 +1,112 @@
 ---
 import ContactForm from "./ContactForm.astro";
-import ContactLink from "./ContactLink.astro";
-import GetIcon from "./Icons/GetIcon.astro";
 ---
 
-<section id="Contacto" class="container min-h-[calc(70vh)] py-24">
-  <h3 class="text-4xl font-bold text-center dark:text-white">Contacto</h3>
-  <h4 class="dark:text-white font-semibold text-2xl text-center mt-8">
-    Teléfonos
-  </h4>
-  <article
-    class="grid grid-cols-1 md:grid-cols-2 gap-6 justify-between items-center justify-items-center mt-8 w-full"
-  >
-    <ContactLink href="619461076" label="619 46 10 76" type="tel">
-      <GetIcon icon="Telefono" />
-    </ContactLink>
-    <ContactLink href="948750185" label="948 75 01 85" type="tel">
-      <GetIcon icon="Telefono" />
-    </ContactLink>
-  </article>
-  <h4 class="dark:text-white font-semibold text-2xl text-center mt-8">
-    Correo electrónico
-  </h4>
-  <article
-    class="w-full grid grid-cols-1 gap-6 justify-center items-center justify-items-center mt-8"
-  >
-    <ContactLink
-      href="taxi1peralta@gmail.com"
-      label="taxi1peralta@gmail.com"
-      type="mailto"
+<section
+  id="Contacto"
+  class="py-section-gap px-container-padding max-w-[1200px] mx-auto scroll-mt-24"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 reveal">
+    <div>
+      <h2
+        class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface mb-8"
+      >
+        Contacta con nosotros
+      </h2>
+      <p class="text-tp-on-surface-variant mb-10">
+        Estamos disponibles 24/7 para reservas programadas y servicios urgentes.
+        No dude en llamarnos para solicitar presupuesto sin compromiso.
+      </p>
+      <div class="space-y-8">
+        <div class="flex items-start gap-4">
+          <div
+            class="w-12 h-12 rounded-lg bg-tp-surface-container flex items-center justify-center text-tp-primary shrink-0"
+          >
+            <span class="material-symbols-outlined">call</span>
+          </div>
+          <div>
+            <p
+              class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            >
+              Teléfono Principal
+            </p>
+            <p class="text-2xl font-bold text-tp-on-surface">
+              <a class="hover:text-tp-primary transition-colors" href="tel:619461076"
+                >+34 619 46 10 76</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-12 h-12 rounded-lg bg-tp-surface-container flex items-center justify-center text-tp-primary shrink-0"
+          >
+            <span class="material-symbols-outlined">call</span>
+          </div>
+          <div>
+            <p
+              class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            >
+              Teléfono Fijo
+            </p>
+            <p class="text-2xl font-bold text-tp-on-surface">
+              <a class="hover:text-tp-primary transition-colors" href="tel:948750185"
+                >+34 948 75 01 85</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-12 h-12 rounded-lg bg-tp-surface-container flex items-center justify-center text-tp-primary shrink-0"
+          >
+            <span class="material-symbols-outlined">mail</span>
+          </div>
+          <div>
+            <p
+              class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            >
+              Email
+            </p>
+            <p class="text-xl font-semibold text-tp-on-surface">
+              <a
+                class="hover:text-tp-primary transition-colors"
+                href="mailto:taxi1peralta@gmail.com"
+                >taxi1peralta@gmail.com</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-12 h-12 rounded-lg bg-tp-surface-container flex items-center justify-center text-tp-primary shrink-0"
+          >
+            <span class="material-symbols-outlined">location_on</span>
+          </div>
+          <div>
+            <p
+              class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            >
+              Ubicación Base
+            </p>
+            <p class="text-lg text-tp-on-surface">Peralta, Navarra</p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mt-12 h-64 w-full rounded-xl overflow-hidden border border-tp-outline-variant"
+      >
+        <img
+          alt="Mapa de Peralta"
+          class="w-full h-full object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCipk74aMVuzKyUoxhl-yHn80We7koWjuPZ0nikfr-K09W8B00R55dE8qSMNUJAEWzUKzJws6WVGuL8M7ldQd07imxdKhUGgl0ydhCuX6MD3qESW8q7qIhs7HvQKiBMDUDYI02Ujvx3UBGQdQXmbONQahec53Uo65iXiXLxd4XiN8YIoJcBo97W4oeoQU3slRZNClO3VU2yQPGpIBJfSf1unkeSVC8M4fUAbJt6GpLDEFrVWcRcxFaC6w"
+        />
+      </div>
+    </div>
+    <div
+      class="bg-tp-surface-container-low p-8 md:p-12 rounded-xl border border-tp-outline-variant h-fit"
     >
-      <GetIcon icon="Correo" />
-    </ContactLink>
-  </article>
-  <h4 class="dark:text-white font-semibold text-2xl text-center mt-16">
-    Formulario de contacto
-  </h4>
-  <ContactForm />
+      <ContactForm />
+    </div>
+  </div>
 </section>

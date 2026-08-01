@@ -1,18 +1,21 @@
-<section id="Enlaces" class="container pt-24">
-    <h3 class="text-4xl font-bold text-center dark:text-white">
-        Enlaces de interes
-    </h3>
-    <div class="flex flex-wrap justify-center items-center p-4 mt-8 gap-4">
-        {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                <div
-                        class={
-                            (i % 2 === 0 ? "w-[100px]" : "w-[200px]") +
-                            " dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full shadow-md animate-pulse2 h-12"
-                        }
-                >
-                </div>
-            ))
-        }
+<section id="Enlaces" class="py-12 border-y border-tp-outline-variant/30 scroll-mt-24">
+  <div class="max-w-[1200px] mx-auto px-container-padding">
+    <h5
+      class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant text-center uppercase tracking-widest mb-8"
+    >
+      Enlaces de Interés
+    </h5>
+    <div class="flex flex-wrap justify-center gap-4">
+      {
+        [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <div
+            class:list={[
+              "rounded-full animate-pulse2 h-10 bg-tp-surface-container-high",
+              i % 2 === 0 ? "w-[100px]" : "w-[200px]",
+            ]}
+          ></div>
+        ))
+      }
     </div>
+  </div>
 </section>

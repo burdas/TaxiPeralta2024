@@ -2,7 +2,97 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+    --color-tp-background: var(--tp-background);
+    --color-tp-surface: var(--tp-surface);
+    --color-tp-surface-bright: var(--tp-surface-bright);
+    --color-tp-surface-dim: var(--tp-surface-dim);
+    --color-tp-surface-container-lowest: var(--tp-surface-container-lowest);
+    --color-tp-surface-container-low: var(--tp-surface-container-low);
+    --color-tp-surface-container: var(--tp-surface-container);
+    --color-tp-surface-container-high: var(--tp-surface-container-high);
+    --color-tp-surface-container-highest: var(--tp-surface-container-highest);
+    --color-tp-surface-variant: var(--tp-surface-variant);
+    --color-tp-on-surface: var(--tp-on-surface);
+    --color-tp-on-surface-variant: var(--tp-on-surface-variant);
+    --color-tp-primary: var(--tp-primary);
+    --color-tp-on-primary: var(--tp-on-primary);
+    --color-tp-primary-container: var(--tp-primary-container);
+    --color-tp-on-primary-container: var(--tp-on-primary-container);
+    --color-tp-secondary: var(--tp-secondary);
+    --color-tp-on-secondary: var(--tp-on-secondary);
+    --color-tp-outline: var(--tp-outline);
+    --color-tp-outline-variant: var(--tp-outline-variant);
+    --color-tp-inverse-surface: var(--tp-inverse-surface);
+    --color-tp-inverse-on-surface: var(--tp-inverse-on-surface);
+    --color-tp-inverse-primary: var(--tp-inverse-primary);
+}
+
+:root {
+    --tp-background: #ffffff;
+    --tp-surface: #e0e3e5;
+    --tp-surface-bright: #fbfeff;
+    --tp-surface-dim: #c1c5c7;
+    --tp-surface-container-lowest: #ffffff;
+    --tp-surface-container-low: #e9ecee;
+    --tp-surface-container: #e4e7e9;
+    --tp-surface-container-high: #dee1e3;
+    --tp-surface-container-highest: #d8dcdd;
+    --tp-surface-variant: #323537;
+    --tp-on-surface: #191c1e;
+    --tp-on-surface-variant: #444748;
+    --tp-primary: #005faf;
+    --tp-on-primary: #ffffff;
+    --tp-primary-container: #a5c8ff;
+    --tp-on-primary-container: #001c3a;
+    --tp-secondary: #006495;
+    --tp-on-secondary: #ffffff;
+    --tp-outline: #73777f;
+    --tp-outline-variant: #404753;
+    --tp-inverse-surface: #2d3133;
+    --tp-inverse-on-surface: #e0e3e5;
+    --tp-inverse-primary: #a5c8ff;
+}
+
+.dark {
+    --tp-background: #101415;
+    --tp-surface: #101415;
+    --tp-surface-bright: #363a3b;
+    --tp-surface-dim: #101415;
+    --tp-surface-container-lowest: #0b0f10;
+    --tp-surface-container-low: #191c1e;
+    --tp-surface-container: #1d2022;
+    --tp-surface-container-high: #272a2c;
+    --tp-surface-container-highest: #323537;
+    --tp-surface-variant: #323537;
+    --tp-on-surface: #e0e3e5;
+    --tp-on-surface-variant: #c0c7d6;
+    --tp-primary: #a5c8ff;
+    --tp-on-primary: #00315f;
+    --tp-primary-container: #2792ff;
+    --tp-on-primary-container: #002a53;
+    --tp-secondary: #8fd8ff;
+    --tp-on-secondary: #003548;
+    --tp-outline: #8a919f;
+    --tp-outline-variant: #404753;
+    --tp-inverse-surface: #e0e3e5;
+    --tp-inverse-on-surface: #2d3133;
+    --tp-inverse-primary: #005faf;
+}
+
 @theme {
+    --font-tp-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+    --font-tp-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+    --spacing-section-gap: 48px;
+    --spacing-gutter: 16px;
+    --spacing-container-padding: 24px;
+    --spacing-base: 8px;
+    --spacing-stack-sm: 4px;
+    --spacing-stack-md: 12px;
+    --spacing-stack-lg: 24px;
+
     --animate-modalf: modalf 0.30s ease-in-out;
     --animate-open-right: open-right 0.30s ease;
     --animate-pulse2: pulse2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -233,6 +323,62 @@ button:hover {
         --chart-8: oklch(0.63 0.22 135);
         --chart-9: oklch(0.72 0.21 90);
         --chart-10: oklch(0.5 0.2 250);
+    }
+}
+
+/* ==== Taxi Peralta design system (Stitch) ==== */
+
+.font-tp-display {
+    font-family: var(--font-tp-display);
+}
+
+.font-tp-body {
+    font-family: var(--font-tp-body);
+}
+
+.glass {
+    background: color-mix(in srgb, var(--tp-surface-container-low) 70%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--tp-outline-variant) 50%, transparent);
+}
+
+.material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    user-select: none;
+}
+
+.primary-glow:hover {
+    box-shadow: 0 0 15px color-mix(in srgb, var(--tp-primary) 30%, transparent);
+}
+
+/* Scroll reveal (Stitch design) */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
     }
 }
 

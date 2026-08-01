@@ -5,50 +5,57 @@ import { Image } from "astro:assets";
 import logoImage from "../assets/logo.jpg";
 import DialogMenu from "./DialogMenu.astro";
 
-const { scrollLimit, disableTheme } = Astro.props;
+const { disableTheme } = Astro.props;
 
 ---
 <header
-  class="sticky z-50 top-0 w-full py-3 transition-color duration-300 ease-out"
-  data-scroll={scrollLimit}
+  class="sticky top-0 z-50 w-full bg-tp-background/90 backdrop-blur-md border-b border-tp-outline-variant transition-colors duration-300 ease-out"
 >
-  <nav class="flex flex-row justify-between place-items-center container">
-    <a class="inline-flex place-items-center p-2" href="./">
+  <nav
+    class="flex justify-between items-center w-full px-container-padding py-3 max-w-[1200px] mx-auto"
+  >
+    <a class="flex items-center gap-2" href="./">
       <Image
         src={logoImage}
         alt="logo de taxi peralta"
-        class="h-10 w-10 rounded-sm"
+        class="h-10 w-10 object-contain rounded-lg"
       />
-      <p class="text-xl text-nowrap font-bold dark:text-white px-3">
+      <p
+        class="font-tp-display text-[20px] leading-7 font-bold text-tp-on-surface tracking-tight hidden sm:inline"
+      >
         Taxi Peralta
       </p>
     </a>
-    <div
-      class="hidden lg:flex flex-row justify-center w-full place-items-center gap-3"
-    >
+    <div class="hidden lg:flex gap-8 items-center">
       {
         routeList.map(({ href, label }) => (
           <a
             href={href}
-            class="font-medium text-sm rounded-md py-2 px-3 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-100/10 transition-all duration-300 ease-in-out"
+            class="text-[12px] leading-4 tracking-[0.05em] font-semibold text-tp-on-surface-variant hover:text-tp-primary transition-colors duration-200"
           >
             {label}
           </a>
         ))
       }
     </div>
-    <div class="flex flex-row">
+    <div class="flex items-center gap-2">
       {!disableTheme && <ThemeButton />}
+      <a
+        href="./#Contacto"
+        class="hidden sm:inline-flex bg-tp-primary text-tp-on-primary px-6 py-2 text-[12px] leading-4 tracking-wider rounded-full font-bold uppercase transition-all active:scale-95 primary-glow"
+      >
+        Contactar
+      </a>
       <button
-        class="lg:hidden hover:bg-gray-100 dark:hover:bg-gray-100/10 p-3 rounded-md transition-colors duration-300 ease-in-out"
+        class="lg:hidden hover:bg-tp-surface-container-high p-3 rounded-md transition-colors duration-300 ease-in-out text-tp-on-surface"
         id="dialogTrigger"
+        aria-label="Abrir menú"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
           height="15"
           fill="none"
-          class="dark:text-white"
           ><path
             fill="currentColor"
             fill-rule="evenodd"
@@ -67,16 +74,4 @@ const { scrollLimit, disableTheme } = Astro.props;
     document.body.style.overflow = "hidden";
     dialog.showModal();
   });
-  const visibleOnScroll = () => {
-    const nav = document.querySelector("header")!;
-    if (window.scrollY > parseInt(nav.dataset.scroll!)) {
-      nav.classList.add("bg-white");
-      nav.classList.add("dark:bg-black");
-    } else {
-      nav.classList.remove("bg-white");
-      nav.classList.remove("dark:bg-black");
-    }
-  };
-  visibleOnScroll(); // Cuando se recarga la pagina
-  window.addEventListener("scroll", visibleOnScroll); // Cuando se hace scroll
 </script>

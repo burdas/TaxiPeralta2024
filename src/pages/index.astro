@@ -10,6 +10,7 @@ import Informacion from '../components/Informacion.astro';
 import NavBar from '../components/NavBar.astro';
 import Tarifas from '../components/Tarifas.astro';
 import TarifasSkeleton from '../components/TarifasSkeleton.astro';
+import CalculadoraTarifa from '../components/CalculadoraTarifa.astro';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -20,6 +21,37 @@ import Layout from '../layouts/Layout.astro';
 	<Tarifas server:defer>
 		<TarifasSkeleton slot="fallback" />
 	</Tarifas>
+	<CalculadoraTarifa />
+	<div class="max-w-[1200px] mx-auto px-container-padding mb-16">
+		<div
+			class="bg-tp-surface-container-high border border-tp-outline-variant/30 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 reveal"
+		>
+			<div class="flex items-center gap-6">
+				<div
+					class="w-16 h-16 rounded-full bg-tp-primary/10 flex items-center justify-center text-tp-primary shrink-0"
+				>
+					<span class="material-symbols-outlined text-4xl">calculate</span>
+				</div>
+				<div>
+					<h3
+						class="font-tp-display text-[20px] leading-7 font-semibold text-tp-on-surface"
+					>
+						¿Necesitas una ruta exacta?
+					</h3>
+					<p class="text-tp-on-surface-variant">
+						Usa nuestra calculadora avanzada con mapas para obtener el precio
+						real de puerta a puerta.
+					</p>
+				</div>
+			</div>
+			<a
+				class="bg-tp-primary text-tp-on-primary px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:brightness-110 transition-all primary-glow whitespace-nowrap"
+				href="./calculadora_viajes"
+			>
+				Calculadora Avanzada
+			</a>
+		</div>
+	</div>
 	<Galeria />
 	<Enlaces server:defer>
 		<EnlacesSkeleton slot="fallback" />
@@ -27,3 +59,18 @@ import Layout from '../layouts/Layout.astro';
 	<Contacto />
 	<Footer transparent={false} />
 </Layout>
+
+<script>
+	const observer = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add("is-visible");
+					observer.unobserve(entry.target);
+				}
+			});
+		},
+		{ threshold: 0.1 }
+	);
+	document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+</script>

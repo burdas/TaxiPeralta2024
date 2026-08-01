@@ -10,24 +10,27 @@ const { disableTheme } = Astro.props;
 
 <dialog
   id="dialogMenu"
-  class="w-full dark:bg-black m-0 max-w-full h-[100vh] max-h-[100vh] animate-open-right"
+  class="w-full bg-tp-background m-0 max-w-full h-[100vh] max-h-[100vh] animate-open-right"
 >
-  <div class="flex flex-row justify-between place-items-center container py-3">
+  <div
+    class="flex flex-row justify-between place-items-center container py-3 border-b border-tp-outline-variant"
+  >
     <a class="inline-flex place-items-center p-2" href="./">
       <Image
         src={logoImage}
         alt="logo de taxi peralta"
-        class="h-10 w-10 rounded-sm"
+        class="h-10 w-10 object-contain rounded-lg"
       />
-      <p class="text-xl text-nowrap font-bold dark:text-white px-3">
+      <p class="font-tp-display text-[20px] leading-7 font-bold text-tp-on-surface px-3">
         Taxi Peralta
       </p>
     </a>
-    <div class="flex flex-row">
+    <div class="flex flex-row items-center gap-2">
       {!disableTheme && <ThemeButton />}
       <button
-        class="lg:hidden hover:bg-gray-100 dark:hover:bg-gray-100/10 p-3 rounded-md transition-colors duration-300 ease-in-out dark:text-white"
+        class="lg:hidden hover:bg-tp-surface-container-high p-3 rounded-md transition-colors duration-300 ease-in-out text-tp-on-surface"
         id="dialogClose"
+        aria-label="Cerrar menú"
       >
       <GetIcon icon="Cruz" />
       </button>
@@ -40,12 +43,12 @@ const { disableTheme } = Astro.props;
           <a
             href={href}
             class="nav-link flex gap-2 place-items-center w-full h-full font-medium text-md py-2 px-3
-            dark:text-white hover:bg-gray-100 dark:hover:bg-gray-100/10 border-none ring-0 transition-colors duration-300"
+            text-tp-on-surface hover:bg-tp-surface-container-high border-none ring-0 transition-colors duration-300"
           >
-            <GetIcon icon={icon} /> 
+            <GetIcon icon={icon} />
             {label}
           </a>
-          {index !== routeList.length - 1 && <hr class="w-full border-t-1 border-sky-500 absolute z-50" />}
+          {index !== routeList.length - 1 && <hr class="w-full border-t-1 border-tp-outline-variant absolute z-50" />}
         </div>
       ))
     }

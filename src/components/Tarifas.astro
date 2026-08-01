@@ -1,67 +1,45 @@
 ---
 export const prerender = false;
-import CalculadoraTarifa from "./CalculadoraTarifa.astro";
-import CalculadoraTarifaMobile from "./CalculadoraTarifaMobile.astro";
-import GetIcon from "./Icons/GetIcon.astro";
 import TarifaCard from "./TarifaCard.astro";
 import { formatDate } from "@/utils/Format";
 
 import { getTarifas } from "@/services/externalApi";
 
 const tarifas = await getTarifas();
-
-const diurna = Object.entries(tarifas.diurna);
-const nocturna = Object.entries(tarifas.nocturna);
 ---
 
-<section id="Tarifas" class="container min-h-[calc(70vh)] pt-24">
-  <h3 class="text-4xl font-bold text-center dark:text-white">Tarifas</h3>
-  <p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80">
-    Tarifas de transporte interurbano publicadas por el gobierno de Navarra.
-  </p>
-  <div
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 justify-items-center"
-  >
-    {
-      diurna.map((t) => (
-        <TarifaCard nombre={t[0]} cantidad={Number(t[1])} tipo="diurna" />
-      ))
-    }
-    {
-      nocturna.map((t) => (
-        <TarifaCard nombre={t[0]} cantidad={Number(t[1])} tipo="nocturna + festivos" />
-      ))
-    }
-  </div>
-  <p class="mt-3 text-center text-sm text-neutral-700/70 dark:text-neutral-200/80">
-    Última actualización: {tarifas.date ? formatDate(new Date(tarifas.date)) : "N/A"}
-  </p>
-  <div class="hidden md:block">
-    <CalculadoraTarifa />
-  </div>
-  <div class="block md:hidden">
-    <CalculadoraTarifaMobile />
-  </div>
-  <aside
-    class="flex flex-col mt-16 gap-6 p-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
-  >
-    <h3 class="font-bold text-2xl md:text-4xl text-center text-white">
-      ¡También puedes usar la calculadora de viajes!
-    </h3>
-    <a
-      href="./calculadora_viajes"
-      class="group rounded-md border-white border-2 px-8 py-4 relative"
-    >
-      <div
-        class="absolute h-full top-0 left-0 w-0 group-hover:w-full bg-white transition-all duration-500"
-      >
-      </div>
+<section
+  id="Tarifas"
+  class="py-section-gap bg-tp-surface-container-lowest scroll-mt-24"
+>
+  <div class="max-w-[1200px] mx-auto px-container-padding">
+    <div class="text-center mb-16">
       <span
-        class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500 flex flex-row gap-3 justify-center items-center"
-        >
-        <GetIcon icon="Calculadora" />
-        Ir a la calculadora
-      </span>
-    </a>
-  </aside>
+        class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary"
+        >Precios Oficiales</span
+      >
+      <h2
+        class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface mt-4"
+      >
+        Tarifas Gobierno de Navarra
+      </h2>
+      <div class="w-20 h-1 bg-tp-primary mx-auto mt-6"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <TarifaCard tipo="diurna" tarifas={tarifas.diurna} />
+      <TarifaCard tipo="nocturna" tarifas={tarifas.nocturna} />
+    </div>
+    <p
+      class="text-center text-tp-on-surface-variant text-[12px] leading-4 font-semibold mt-12 opacity-60"
+    >
+      * Los precios pueden estar sujetos a variaciones oficiales publicadas por
+      el Gobierno de Navarra.
+    </p>
+    <p
+      class="text-center text-tp-on-surface-variant text-[12px] leading-4 font-semibold mt-3 opacity-60"
+    >
+      Última actualización:{" "}
+      {tarifas.date ? formatDate(new Date(tarifas.date)) : "N/A"}
+    </p>
+  </div>
 </section>
