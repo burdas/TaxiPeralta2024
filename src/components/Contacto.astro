@@ -1,5 +1,26 @@
 ---
 import ContactForm from "./ContactForm.astro";
+
+const GOOGLE_MAPS_STATIC_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_STATIC_API as string;
+const STATIC_MAP_BASE = `https://maps.googleapis.com/maps/api/staticmap?center=42.3389757,-1.7990957&zoom=13&scale=2&size=600x300&maptype=roadmap&format=jpg&markers=color:red%7C42.3389757,-1.7990957`;
+const STATIC_MAP_DARK_STYLES =
+  "&style=feature:all%7Celement:geometry.fill%7Ccolor:0x242f3e" +
+  "&style=feature:all%7Celement:labels.text.fill%7Ccolor:0x8a93a6" +
+  "&style=feature:all%7Celement:labels.text.stroke%7Ccolor:0x242f3e" +
+  "&style=feature:administrative%7Celement:geometry%7Ccolor:0x373e4b" +
+  "&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0x242f3e" +
+  "&style=feature:poi%7Celement:geometry.fill%7Ccolor:0x2f3a4d" +
+  "&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x8a93a6" +
+  "&style=feature:poi%7Celement:labels.text.stroke%7Ccolor:0x242f3e" +
+  "&style=feature:road%7Celement:geometry.fill%7Ccolor:0x38414e" +
+  "&style=feature:road%7Celement:geometry.stroke%7Ccolor:0x242f3e" +
+  "&style=feature:road%7Celement:labels.text.fill%7Ccolor:0xd7dde5" +
+  "&style=feature:road%7Celement:labels.text.stroke%7Ccolor:0x38414e" +
+  "&style=feature:transit%7Celement:geometry.fill%7Ccolor:0x2f3548" +
+  "&style=feature:water%7Celement:geometry.fill%7Ccolor:0x284048" +
+  "&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x8a93a6";
+const STATIC_MAP_URL_LIGHT = `${STATIC_MAP_BASE}&key=${GOOGLE_MAPS_STATIC_KEY}`;
+const STATIC_MAP_URL_DARK = `${STATIC_MAP_BASE}${STATIC_MAP_DARK_STYLES}&key=${GOOGLE_MAPS_STATIC_KEY}`;
 ---
 
 <section
@@ -74,9 +95,12 @@ import ContactForm from "./ContactForm.astro";
         class="mt-12 h-64 w-full rounded-xl overflow-hidden border border-tp-outline-variant"
       >
         <img
+          id="staticMap"
           alt="Mapa de Peralta"
           class="w-full h-full object-cover"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCipk74aMVuzKyUoxhl-yHn80We7koWjuPZ0nikfr-K09W8B00R55dE8qSMNUJAEWzUKzJws6WVGuL8M7ldQd07imxdKhUGgl0ydhCuX6MD3qESW8q7qIhs7HvQKiBMDUDYI02Ujvx3UBGQdQXmbONQahec53Uo65iXiXLxd4XiN8YIoJcBo97W4oeoQU3slRZNClO3VU2yQPGpIBJfSf1unkeSVC8M4fUAbJt6GpLDEFrVWcRcxFaC6w"
+          src={STATIC_MAP_URL_LIGHT}
+          data-light-src={STATIC_MAP_URL_LIGHT}
+          data-dark-src={STATIC_MAP_URL_DARK}
         />
       </div>
     </div>
@@ -87,3 +111,21 @@ import ContactForm from "./ContactForm.astro";
     </div>
   </div>
 </section>
+<script>
+  const staticMapImg = document.getElementById("staticMap") as HTMLImageElement;
+
+  const updateStaticMapTheme = () => {
+    staticMapImg.src = document.documentElement.classList.contains("dark")
+      ? staticMapImg.dataset.darkSrc!
+      : staticMapImg.dataset.lightSrc!;
+  };
+
+  updateStaticMapTheme();
+
+  new MutationObserver(updateStaticMapTheme).observe(
+    document.documentElement,
+    { attributes: true, attributeFilter: ["class"] }
+  );
+
+  window.addEventListener("storage", updateStaticMapTheme);
+</script>
