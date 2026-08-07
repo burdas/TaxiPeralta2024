@@ -10,60 +10,161 @@ const { disableTheme } = Astro.props;
 
 <dialog
   id="dialogMenu"
-  class="w-full bg-tp-background m-0 max-w-full h-[100vh] max-h-[100vh] animate-open-right"
+  aria-label="Menú de navegación"
+  class="fixed inset-0 m-0 h-dvh max-h-none w-full bg-tp-background p-0"
 >
   <div
-    class="flex flex-row justify-between place-items-center container py-3 border-b border-tp-outline-variant"
+    id="drawerPanel"
+    class="flex h-full w-full flex-col border-l border-tp-outline-variant bg-tp-background shadow-2xl animate-open-right"
   >
-    <a class="inline-flex place-items-center p-2" href="./">
-      <Image
-        src={logoImage}
-        alt="logo de taxi peralta"
-        class="h-10 w-10 object-contain rounded-lg"
-      />
-      <p class="font-tp-display text-[20px] leading-7 font-bold text-tp-on-surface px-3">
-        Taxi Peralta
-      </p>
-    </a>
-    <div class="flex flex-row items-center gap-2">
-      {!disableTheme && <ThemeButton />}
-      <button
-        class="lg:hidden hover:bg-tp-surface-container-high p-3 rounded-md transition-colors duration-300 ease-in-out text-tp-on-surface"
-        id="dialogClose"
-        aria-label="Cerrar menú"
-      >
-      <GetIcon icon="Cruz" />
-      </button>
+    <div
+      class="flex h-16 shrink-0 items-center justify-between border-b border-tp-outline-variant px-4"
+    >
+      <a class="inline-flex items-center gap-2 p-2" href="./">
+        <Image
+          src={logoImage}
+          alt="logo de taxi peralta"
+          class="h-10 w-10 object-contain rounded-lg"
+        />
+        <p
+          class="font-tp-display text-[20px] leading-7 font-bold text-tp-on-surface"
+        >
+          Taxi Peralta
+        </p>
+      </a>
+      <div class="flex items-center gap-1">
+        {!disableTheme && <ThemeButton />}
+        <button
+          class="hover:bg-tp-surface-container-high p-3 rounded-md transition-colors duration-300 ease-in-out text-tp-on-surface"
+          id="dialogClose"
+          aria-label="Cerrar menú"
+        >
+          <GetIcon icon="Cruz" />
+        </button>
+      </div>
     </div>
-  </div>
-  <div class="flex flex-col h-[calc(100vh-80px)]">
-    {
-      routeList.map(({ href, label, icon }, index) => (
-        <div class="relative w-full h-16">
+    <nav class="flex grow flex-col gap-1 overflow-y-auto p-4">
+      {
+        routeList.map(({ href, label, icon }) => (
           <a
             href={href}
-            class="nav-link flex gap-2 place-items-center w-full h-full font-medium text-md py-2 px-3
-            text-tp-on-surface hover:bg-tp-surface-container-high border-none ring-0 transition-colors duration-300"
+            data-label={label}
+            class={label === "Contacto"
+              ? "nav-link mt-auto flex items-center justify-center gap-2 bg-tp-primary text-tp-on-primary px-6 py-3 rounded-full font-bold uppercase tracking-widest text-[12px] leading-4 transition-all hover:brightness-110 primary-glow"
+              : "nav-link flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-[14px] leading-5 text-tp-on-surface-variant hover:bg-tp-surface-container-high hover:text-tp-primary transition-colors duration-200"
+            }
           >
             <GetIcon icon={icon} />
             {label}
           </a>
-          {index !== routeList.length - 1 && <hr class="w-full border-t-1 border-tp-outline-variant absolute z-50" />}
-        </div>
-      ))
-    }
+        ))
+      }
+    </nav>
   </div>
 </dialog>
 <script>
+  import { routeList } from "../model/navbar";
+
   const dialogMenu = document.getElementById("dialogMenu") as HTMLDialogElement;
+  const drawerPanel = document.getElementById("drawerPanel") as HTMLElement;
   const dialogClose = document.getElementById("dialogClose");
-  dialogClose!.addEventListener("click", () => {
-    dialogMenu.close();
-    document.body.style.overflow = "auto";
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+
+  const closeDialog = () => {
+    if (!dialogMenu.open) return;
+    drawerPanel.classList.add("closing");
+    window.setTimeout(() => {
+      dialogMenu.close();
+      drawerPanel.classList.remove("closing");
+      document.body.style.overflow = "auto";
+    }, 290);
+  };
+
+  dialogClose!.addEventListener("click", closeDialog);
+  navLinks.forEach((e) => e.addEventListener("click", closeDialog));
+
+  dialogMenu.addEventListener("click", (e) => {
+    if (e.target === dialogMenu) closeDialog();
   });
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(e => e.addEventListener("click", () => {
-    dialogMenu.close();
-    document.body.style.overflow = "auto";
-  }));
+
+  dialogMenu.addEventListener("cancel", (e) => {
+    e.preventDefault();
+    closeDialog();
+  });
+
+  const sectionIds = routeList
+    .map(({ href }) =>
+      href.includes("#") ? href.replace("./#", "") : null
+    )
+    .filter((id): id is string => id !== null);
+
+  let observer: IntersectionObserver | null = null;
+
+  const updateActive = (label: string) => {
+    navLinks.forEach((link) => {
+      link.classList.toggle("nav-link-active", link.dataset.label === label);
+    });
+  };
+
+  const connectObserver = () => {
+    if (observer || sectionIds.length === 0) return;
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) updateActive(entry.target.id);
+        });
+      },
+      { threshold: 0.3 }
+    );
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer!.observe(el);
+    });
+  };
+
+  const disconnectObserver = () => {
+    observer?.disconnect();
+    observer = null;
+  };
+
+  new MutationObserver(() => {
+    if (dialogMenu.open) {
+      connectObserver();
+    } else {
+      disconnectObserver();
+      navLinks.forEach((link) => link.classList.remove("nav-link-active"));
+    }
+  }).observe(dialogMenu, { attributes: true, attributeFilter: ["open"] });
 </script>
+<style>
+  #dialogMenu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #dialogMenu::backdrop {
+    background: transparent;
+  }
+
+  #drawerPanel.closing {
+    animation: open-right 0.3s ease reverse;
+  }
+
+  .nav-link-active {
+    background: var(--tp-surface-container-high);
+    color: var(--tp-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #drawerPanel,
+    #drawerPanel.closing {
+      animation: none !important;
+    }
+  }
+</style>
