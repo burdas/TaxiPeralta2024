@@ -13,7 +13,7 @@ const tarifas = await getTarifas();
   class="py-section-gap bg-tp-surface-container-lowest scroll-mt-24"
 >
   <div class="max-w-[1200px] mx-auto px-container-padding">
-    <div class="text-center mb-16">
+    <div class="text-center mb-16 reveal">
       <span
         class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary"
         >Precios Oficiales</span
@@ -26,8 +26,12 @@ const tarifas = await getTarifas();
       <div class="w-20 h-1 bg-tp-primary mx-auto mt-6"></div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <TarifaCard tipo="diurna" tarifas={tarifas.diurna} />
-      <TarifaCard tipo="nocturna" tarifas={tarifas.nocturna} />
+      <div class="reveal">
+        <TarifaCard tipo="diurna" tarifas={tarifas.diurna} />
+      </div>
+      <div class="reveal reveal-delay-1">
+        <TarifaCard tipo="nocturna" tarifas={tarifas.nocturna} />
+      </div>
     </div>
     <p
       class="text-center text-tp-on-surface-variant text-[12px] leading-4 font-semibold mt-12 opacity-60"

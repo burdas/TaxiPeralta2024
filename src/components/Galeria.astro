@@ -20,16 +20,17 @@ const spans = (i: number): string => {
   <h2 class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface text-center mb-12">
     Nuestra Flota y Entorno
   </h2>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] reveal">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
     {
       importImages.map((e, i) =>
         e().then((val) => {
           return (
             <button
               class:list={[
-                "overflow-hidden rounded-xl imgButton cursor-pointer group",
+                "reveal overflow-hidden rounded-xl imgButton cursor-pointer group",
                 spans(i),
               ]}
+              style={`transition-delay: ${(i % 8) * 80}ms`}
               data-src={val.default.src}
             >
               <Image

@@ -11,31 +11,36 @@ import heroImage from "../assets/hero.webp";
     <div
       class="absolute inset-0 bg-gradient-to-t from-tp-background via-transparent to-tp-background/50 z-10"
     ></div>
-    <div
-      class="w-full h-full bg-cover bg-center opacity-30 hero-bg"
-      style={`background-image: url('${heroImage.src}')`}
-    ></div>
+    <div class="hero-bg absolute inset-0 overflow-hidden">
+      <div
+        class="hero-bg-zoom w-full h-full bg-cover bg-center opacity-30 animate-hero-zoom"
+        style={`background-image: url('${heroImage.src}')`}
+      ></div>
+    </div>
   </div>
   <div
     class="relative z-20 text-center px-container-padding max-w-4xl"
   >
     <h2
-      class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary mb-4"
+      class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary mb-4 animate-hero-fade-up [animation-delay:0.15s]"
+      data-hero-animate
     >
       Taxi Peralta - Servicio profesional en Navarra
     </h2>
     <h1
-      class="font-tp-display text-5xl md:text-7xl leading-tight tracking-tight font-bold text-tp-on-surface mb-8"
+      class="font-tp-display text-5xl md:text-7xl leading-tight tracking-tight font-bold text-tp-on-surface mb-8 animate-hero-fade-up [animation-delay:0.35s]"
+      data-hero-animate
     >
       Toño Burdaspar
     </h1>
     <p
-      class="text-[18px] leading-7 text-tp-on-surface-variant mb-10 max-w-2xl mx-auto"
+      class="text-[18px] leading-7 text-tp-on-surface-variant mb-10 max-w-2xl mx-auto animate-hero-fade-up [animation-delay:0.55s]"
+      data-hero-animate
     >
       Excelencia en transporte personalizado para empresas y particulares.
       Puntualidad, confort y discreción en cada trayecto.
     </p>
-    <div class="flex flex-col md:flex-row gap-4 justify-center">
+    <div class="flex flex-col md:flex-row gap-4 justify-center animate-hero-fade-up [animation-delay:0.75s]" data-hero-animate>
       <a
         class="bg-tp-primary text-tp-on-primary px-10 py-4 text-[12px] leading-4 rounded-full font-bold uppercase tracking-widest hover:brightness-110 transition-all primary-glow"
         href="#Contacto"

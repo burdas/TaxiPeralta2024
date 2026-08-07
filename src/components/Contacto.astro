@@ -27,8 +27,8 @@ const STATIC_MAP_URL_DARK = `${STATIC_MAP_BASE}${STATIC_MAP_DARK_STYLES}&key=${G
   id="Contacto"
   class="py-section-gap px-container-padding max-w-[1200px] mx-auto scroll-mt-24"
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 reveal">
-    <div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+    <div class="reveal reveal-left">
       <h2
         class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface mb-8"
       >
@@ -105,7 +105,7 @@ const STATIC_MAP_URL_DARK = `${STATIC_MAP_BASE}${STATIC_MAP_DARK_STYLES}&key=${G
       </div>
     </div>
     <div
-      class="bg-tp-surface-container-low p-8 md:p-12 rounded-xl border border-tp-outline-variant h-full flex flex-col"
+      class="reveal reveal-right reveal-delay-1 bg-tp-surface-container-low p-8 md:p-12 rounded-xl border border-tp-outline-variant h-full flex flex-col"
     >
       <ContactForm />
     </div>

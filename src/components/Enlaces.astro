@@ -15,9 +15,10 @@ const enlaces = await getEnlacesInteres();
     </h5>
     <div class="flex flex-wrap justify-center gap-4">
       {
-        enlaces.map((e: IEnlace) => (
+        enlaces.map((e: IEnlace, i: number) => (
           <a
-            class="px-6 py-2 rounded-full border border-tp-outline-variant hover:border-tp-primary hover:text-tp-primary transition-all text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            class="reveal reveal-hover-lift px-6 py-2 rounded-full border border-tp-outline-variant hover:border-tp-primary hover:text-tp-primary transition-all text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            style={`transition-delay: ${(i % 8) * 60}ms`}
             href={e.url}
             target="_blank"
             rel="noopener noreferrer"

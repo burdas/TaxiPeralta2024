@@ -9,7 +9,8 @@ const { disableTheme } = Astro.props;
 
 ---
 <header
-  class="sticky top-0 z-50 w-full bg-tp-background/90 backdrop-blur-md border-b border-tp-outline-variant transition-colors duration-300 ease-out"
+  id="navBar"
+  class="sticky top-0 z-50 w-full bg-tp-background/90 backdrop-blur-md border-b border-tp-outline-variant transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out"
 >
   <nav
     class="flex justify-between items-center w-full px-container-padding py-3 max-w-[1200px] mx-auto"
@@ -74,4 +75,51 @@ const { disableTheme } = Astro.props;
     document.body.style.overflow = "hidden";
     dialog.showModal();
   });
+
+  const navBar = document.getElementById("navBar") as HTMLElement;
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  const onScroll = () => {
+    const scrollY = window.scrollY;
+    if (scrollY > lastScrollY && scrollY > 100 && !dialog.open) {
+      navBar.classList.add("nav-hidden");
+    } else {
+      navBar.classList.remove("nav-hidden");
+    }
+    navBar.classList.toggle("nav-scrolled", scrollY > 10);
+    lastScrollY = scrollY;
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        window.requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+  onScroll();
 </script>
+<style>
+  #navBar.nav-hidden {
+    transform: translateY(-100%);
+  }
+
+  #navBar.nav-scrolled {
+    box-shadow: 0 8px 30px -12px color-mix(in srgb, var(--tp-on-surface) 25%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #navBar {
+      transition: none;
+    }
+
+    #navBar.nav-hidden {
+      transform: none;
+    }
+  }
+</style>

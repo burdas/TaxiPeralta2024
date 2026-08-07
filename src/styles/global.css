@@ -98,6 +98,8 @@
     --animate-pulse2: pulse2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --animate-fade-in: fade-in 0.30s ease-in-out;
     --animate-fade-out: fadeOut 0.30s ease-in-out;
+    --animate-hero-fade-up: hero-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-hero-zoom: hero-zoom 18s ease-out both;
 
     @keyframes modalf {
         0% {
@@ -142,6 +144,26 @@
         }
         100% {
             opacity: 1
+        }
+    }
+
+    @keyframes hero-fade-up {
+        0% {
+            opacity: 0;
+            transform: translateY(32px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes hero-zoom {
+        0% {
+            transform: scale(1.08);
+        }
+        100% {
+            transform: scale(1);
         }
     }
 }
@@ -369,9 +391,53 @@ button:hover {
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
+.reveal.reveal-left {
+    transform: translateX(-32px);
+}
+
+.reveal.reveal-right {
+    transform: translateX(32px);
+}
+
+.reveal.reveal-zoom {
+    transform: scale(0.9);
+}
+
+.reveal.reveal-delay-1 {
+    transition-delay: 0.15s;
+}
+
+.reveal.reveal-delay-2 {
+    transition-delay: 0.3s;
+}
+
+.reveal.reveal-delay-3 {
+    transition-delay: 0.45s;
+}
+
 .reveal.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+}
+
+/* Card lift (hover) */
+.card-lift {
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px -18px color-mix(in srgb, var(--tp-on-surface) 35%, transparent);
+}
+
+/* Hover lift for reveal elements (fast transition after reveal completes) */
+.reveal.reveal-hover-lift.is-visible {
+    transition: opacity 0.6s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease, color 0.2s ease;
+}
+
+.reveal.reveal-hover-lift.is-visible:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px -14px color-mix(in srgb, var(--tp-primary) 45%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -379,6 +445,30 @@ button:hover {
         opacity: 1;
         transform: none;
         transition: none;
+    }
+
+    .card-lift {
+        transform: none;
+        transition: none;
+    }
+
+    .card-lift:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .reveal.reveal-hover-lift.is-visible:hover {
+        transform: none;
+        transition: none;
+        box-shadow: none;
+    }
+
+    [data-hero-animate] {
+        animation: none !important;
+    }
+
+    .hero-bg-zoom {
+        animation: none !important;
     }
 }
 

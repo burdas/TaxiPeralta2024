@@ -7,10 +7,13 @@ import { informacion } from "../model/informacion.ts";
   id="Informacion"
   class="py-section-gap px-container-padding max-w-[1200px] mx-auto scroll-mt-24"
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter reveal">
-    <InfoCard title="Información Estándar" informacion={informacion.estandar} />
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+    <InfoCard
+      title="Información Estándar"
+      informacion={informacion.estandar}
+    />
     <article
-      class="bg-tp-primary text-tp-on-primary rounded-xl p-10 flex flex-col gap-6 relative overflow-hidden group"
+      class="reveal reveal-right reveal-delay-1 card-lift bg-tp-primary text-tp-on-primary rounded-xl p-10 flex flex-col gap-6 relative overflow-hidden group"
     >
       <div class="absolute -right-10 -top-10 opacity-10 transition-transform group-hover:scale-110 pointer-events-none">
         <span class="material-symbols-outlined text-[200px]"
