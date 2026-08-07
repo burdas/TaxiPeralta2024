@@ -72,7 +72,7 @@ export default function MapDisplay() {
   return (
     <main
         id="CalculadoraDeRutas"
-        className="h-[calc(100dvh-80px)] w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
+        className="flex-1 min-h-0 w-full flex flex-col md:flex-row border-t-[1px] border-t-black/20 dark:border-t-white/20">
       <MapController
         setOrigenDestino={setOrigenDestino}
         map={map!}
