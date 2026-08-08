@@ -31,6 +31,12 @@ const URL = "https://taxiperalta.com";
     <meta name="description" content="Taxi de Peralta, Navarra (España)" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href={LOGO.src} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      rel="stylesheet"
+    />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="author" content="Burdas">
@@ -71,7 +77,7 @@ const URL = "https://taxiperalta.com";
     </script>
   </head>
   <body
-    class="dark:bg-black transition-colors duration-300 ease-out"
+    class="bg-tp-background font-tp-body transition-colors duration-300 ease-out"
   >
     <slot />
     <CookieConsentBanner />
@@ -151,6 +157,8 @@ const URL = "https://taxiperalta.com";
           return "Galería";
       case "Enlaces":
           return "Enlaces de interés";
+      case "calculadora-simple":
+          return "Calculadora";
       default:
         return section;
     }

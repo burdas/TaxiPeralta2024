@@ -1,53 +1,32 @@
 ---
 export const prerender = true;
-import CalculadoraTarifa from "./CalculadoraTarifa.astro";
-import CalculadoraTarifaMobile from "./CalculadoraTarifaMobile.astro";
-import Card from "./Card.astro";
-import GetIcon from "./Icons/GetIcon.astro";
-
-const fakeTarifas = Array.from({ length: 6 });
 ---
 
-<section id="Tarifas" class="container min-h-[calc(70vh)] pt-24">
-  <h3 class="text-4xl font-bold text-center dark:text-white">Tarifas</h3>
-  <p class="text-center text-base text-neutral-700/70 dark:text-neutral-200/80">
-    Tarifas de transporte interurbano publicadas por el gobierno de Navarra.
-  </p>
-  <div
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 justify-items-center"
-  >
-    {
-      fakeTarifas.map(() => (
-        <Card class="w-full h-40 animate-pulse2" />
-      ))
-    }
-  </div>
-  <div class="hidden md:block">
-    <CalculadoraTarifa />
-  </div>
-  <div class="block md:hidden">
-    <CalculadoraTarifaMobile />
-  </div>
-  <aside
-    class="flex flex-col mt-16 gap-6 p-4 h-56 justify-center items-center rounded-lg bg-gradient-to-r from-blue-500 to-sky-500"
-  >
-    <h3 class="font-bold text-2xl md:text-4xl text-center text-white">
-      ¡También puedes usar la calculadora de viajes!
-    </h3>
-    <a
-      href="./calculadora_viajes"
-      class="group rounded-md border-white border-2 px-8 py-4 relative"
-    >
-      <div
-        class="absolute h-full top-0 left-0 w-0 group-hover:w-full bg-white transition-all duration-500"
-      >
-      </div>
+<section
+  id="Tarifas"
+  class="py-section-gap bg-tp-surface-container-lowest scroll-mt-24"
+>
+  <div class="max-w-[1200px] mx-auto px-container-padding">
+    <div class="text-center mb-16">
       <span
-        class="relative text-white group-hover:text-sky-500 text-xl transition-all duration-500 flex flex-row gap-3 justify-center items-center"
-        >
-        <GetIcon icon="Calculadora" />
-        Ir a la calculadora
-      </span>
-    </a>
-  </aside>
+        class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary"
+        >Precios Oficiales</span
+      >
+      <h2
+        class="font-tp-display text-[32px] leading-10 font-bold text-tp-on-surface mt-4"
+      >
+        Tarifas Gobierno de Navarra
+      </h2>
+      <div class="w-20 h-1 bg-tp-primary mx-auto mt-6"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {
+        [1, 2].map(() => (
+          <div
+            class="glass p-10 rounded-xl animate-pulse2 h-[280px]"
+          ></div>
+        ))
+      }
+    </div>
+  </div>
 </section>

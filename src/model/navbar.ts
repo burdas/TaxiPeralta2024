@@ -17,11 +17,11 @@ export const routeList: RouteProps[] = [
   },
   {
     href: "./#Galeria",
-    label: "Galeria",
+    label: "Galería",
     icon: "Galeria"
   },
   {
-    href: "./calculadora_viajes",
+    href: "./#calculadora-simple",
     label: "Calcula tu viaje",
     icon: "Calculadora"
   },

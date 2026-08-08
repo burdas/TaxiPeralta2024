@@ -1,23 +1,22 @@
-export interface informacionProps {
-    estandar: string[];
-    adicional: string[];
-  }
-  
-export const informacion: informacionProps = {
-    estandar: [
-      "Mutuas.",
-      "Empresas.",
-      "Hospitales.",
-      "Transporte escolar.",
-      "Valijas, sobres, etc.",
-    ],
-    adicional: [
-      "Vehículo 4 plazas (4 + conductor).",
-      "Maletero con gran capacidad (540 ltr).",
-      "Toma de corriente de mechero en la parte delantera y trasera del vehículo.",
-      "Adaptador para enchufes para el uso del cualquier tipo de cargador.",
-      "Dispositivo power bank para cargar dispositivos.",
-      "Ionizador de aire para aumentar la calidad del aire del vehículo.",
-      "GPS con los últimos mapas.",
-    ],
-  };
+export interface InformacionProps {
+  estandar: string[];
+  vip: { titulo: string; subtitulo: string }[];
+}
+
+export const informacion: InformacionProps = {
+  estandar: [
+    "Asistencia a Mutuas y Aseguradoras",
+    "Servicios exclusivos para Empresas",
+    "Traslados a Hospitales y Centros Médicos",
+    "Transporte Escolar homologado",
+    "Mensajería: Valijas, sobres y paquetería urgente",
+  ],
+  vip: [
+    { titulo: "4 Plazas", subtitulo: "Capacidad amplia" },
+    { titulo: "Gran Maletero", subtitulo: "Para todo su equipaje" },
+    { titulo: "Conectividad", subtitulo: "USB & Corriente" },
+    { titulo: "Aire Puro", subtitulo: "Ionizador de aire" },
+    { titulo: "Power Bank", subtitulo: "Carga garantizada" },
+    { titulo: "GPS Live", subtitulo: "Rutas optimizadas" },
+  ],
+};

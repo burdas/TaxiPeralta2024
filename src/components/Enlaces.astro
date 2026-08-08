@@ -4,28 +4,29 @@ export const prerender = false;
 import { getEnlacesInteres, type IEnlace } from "@/services/externalApi";
 
 const enlaces = await getEnlacesInteres();
-
-import GetIcon from "./Icons/GetIcon.astro";
 ---
 
-<section id="Enlaces" class="container pt-24">
-  <h3 class="text-4xl font-bold text-center dark:text-white">
-    Enlaces de interes
-  </h3>
-  <div class="flex flex-wrap justify-center items-center p-4 mt-8 gap-4">
-    {
-      enlaces.map((e: IEnlace) => (
-        <a
-          class="flex flex-row items-center gap-3 dark:text-white bg-sky-100/50 dark:bg-sky-900/20 rounded-full pl-6 pr-2 py-2 shadow-md dark:hover:bg-sky-600/20 transition-all duration-300 dark:hover:scale-105 dark:hover:ring-2 hover:bg-sky-200/20 hover:scale-105 hover:ring-2 ring-sky-400/50 dark:hover:ring-sky-300/40"
-          href={e.url}
-          target="_blank"
-        >
-          <p class="flex-grow font-medium">{e.texto}</p>
-          <div class="rounded-full p-2 bg-sky-500/30 dark:bg-sky-500/80">
-            <GetIcon icon="EnlaceNewTab" />
-          </div>
-        </a>
-      ))
-    }
+<section id="Enlaces" class="py-12 border-y border-tp-outline-variant/30 scroll-mt-24">
+  <div class="max-w-[1200px] mx-auto px-container-padding">
+    <h5
+      class="text-[12px] leading-4 font-semibold text-tp-on-surface-variant text-center uppercase tracking-widest mb-8"
+    >
+      Enlaces de Interés
+    </h5>
+    <div class="flex flex-wrap justify-center gap-4">
+      {
+        enlaces.map((e: IEnlace, i: number) => (
+          <a
+            class="reveal reveal-hover-lift px-6 py-2 rounded-full border border-tp-outline-variant hover:border-tp-primary hover:text-tp-primary transition-all text-[12px] leading-4 font-semibold text-tp-on-surface-variant"
+            style={`transition-delay: ${(i % 8) * 60}ms`}
+            href={e.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {e.texto}
+          </a>
+        ))
+      }
+    </div>
   </div>
 </section>

@@ -1,40 +1,77 @@
 ---
 import { Image } from "astro:assets";
 import heroImage from "../assets/hero.webp";
-import HeroButton from "./HeroButton.astro";
 ---
 
-<main
-    id="heroSection"
-  class="container h-[calc(100dvh-80px)] grid grid-cols-1 md:grid-cols-2 gap-6 justify-center items-center px-6 overflow-visible relative md:static"
+<section
+  id="heroSection"
+  class="relative h-screen flex items-center justify-center overflow-hidden"
 >
-  <div class="absolute -z-50 bg-sky-500/80 dark:bg-sky-500 rounded-3xl mt-auto left-1/4 w-[200px] md:w-[500px] h-[400px] blur-[150px] md:blur-[200px]"></div>
-  <Image
-    src={heroImage}
-    alt="Imagen de portada"
-    style={/*"filter: drop-shadow(0px 0px 100px #0ea5e9);"*/''}
-    class="-z-20 overflow-visible opacity-20 dark:opacity-40 md:opacity-100 dark:md:opacity-100"
-  />
-  <article
-    class="flex flex-col justify-center items-center h-full absolute inset-0 md:static gap-4"
+  <div class="absolute inset-0 z-0">
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-tp-background via-transparent to-tp-background/50 z-10"
+    ></div>
+    <div class="hero-bg absolute inset-0 overflow-hidden">
+      <div
+        class="hero-bg-zoom w-full h-full bg-cover bg-center opacity-30 animate-hero-zoom"
+        style={`background-image: url('${heroImage.src}')`}
+      ></div>
+    </div>
+  </div>
+  <div
+    class="relative z-20 text-center px-container-padding max-w-4xl"
   >
-    <h1 class="text-6xl sm:text-7xl dark:text-white font-bold text-center">
-      Toño <span
-        class="bg-gradient-to-r from-sky-500 to-sky-500/90 md:to-sky-500/60 bg-clip-text text-transparent"
-        >Burdaspar</span
-      >
-    </h1>
     <h2
-      class="text-gray-700 dark:text-zinc-400 text-2xl font-mono mt-5 lg:mt-0"
+      class="text-[12px] leading-4 font-semibold tracking-[0.3em] uppercase text-tp-primary mb-4 animate-hero-fade-up [animation-delay:0.15s]"
+      data-hero-animate
     >
-      Taxi Peralta
+      Taxi Peralta - Servicio profesional en Navarra
     </h2>
-    <!-- <a
-      href="#contacto"
-      class="py-3 px-12 bg-gradient-to-r from-sky-500 to-sky-500/90 md:to-sky-500/60 text-white hover:scale-110 active:scale-95 transition-transform duration-800 font-semibold rounded-xl text-lg mt-6"
+    <h1
+      class="font-tp-display text-5xl md:text-7xl leading-tight tracking-tight font-bold text-tp-on-surface mb-8 animate-hero-fade-up [animation-delay:0.35s]"
+      data-hero-animate
     >
-      Contactar
-    </a> -->
-    <HeroButton />
-  </article>
-</main>
+      Toño Burdaspar
+    </h1>
+    <p
+      class="text-[18px] leading-7 text-tp-on-surface-variant mb-10 max-w-2xl mx-auto animate-hero-fade-up [animation-delay:0.55s]"
+      data-hero-animate
+    >
+      Excelencia en transporte personalizado para empresas y particulares.
+      Puntualidad, confort y discreción en cada trayecto.
+    </p>
+    <div class="flex flex-col md:flex-row gap-4 justify-center animate-hero-fade-up [animation-delay:0.75s]" data-hero-animate>
+      <a
+        class="bg-tp-primary text-tp-on-primary px-10 py-4 text-[12px] leading-4 rounded-full font-bold uppercase tracking-widest hover:brightness-110 transition-all primary-glow"
+        href="#Contacto"
+      >
+        Reservar ahora
+      </a>
+      <a
+        class="border border-tp-on-surface/20 hover:border-tp-primary px-10 py-4 text-[12px] leading-4 rounded-full font-bold uppercase tracking-widest text-tp-on-surface hover:text-tp-primary transition-all"
+        href="#Informacion"
+      >
+        Descubrir servicios
+      </a>
+    </div>
+  </div>
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+    <span class="material-symbols-outlined text-tp-primary text-2xl"
+      >keyboard_double_arrow_down</span
+    >
+  </div>
+</section>
+<script>
+  // Simple parallax effect for Hero
+  window.addEventListener(
+    "scroll",
+    () => {
+      const scroll = window.pageYOffset;
+      const heroImage = document.querySelector(".hero-bg") as HTMLElement | null;
+      if (heroImage) {
+        heroImage.style.transform = `translateY(${scroll * 0.4}px)`;
+      }
+    },
+    { passive: true }
+  );
+</script>
