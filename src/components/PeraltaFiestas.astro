@@ -44,6 +44,10 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
   let chupinazo = getChupinazoDate(now.getFullYear());
   if (chupinazo <= now) chupinazo = getChupinazoDate(now.getFullYear() + 1);
 
+  // TEMPORAL (PRUEBA): adelantar el chupinazo una semana.
+  // Quitar este bloque cuando finalice la prueba.
+  chupinazo.setDate(chupinazo.getDate() - 7);
+
   console.info("Chupinazo (fecha objetivo):", chupinazo.toLocaleString());
 
   setInterval(() => {
