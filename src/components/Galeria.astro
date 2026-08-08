@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import GetIcon from "./Icons/GetIcon.astro";
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/galery/*.avif"
@@ -25,74 +24,41 @@ const spans = (i: number): string => {
       importImages.map((e, i) =>
         e().then((val) => {
           return (
-            <button
+            <a
               class:list={[
-                "reveal overflow-hidden rounded-xl imgButton cursor-pointer group",
+                "reveal overflow-hidden rounded-xl imgLink cursor-zoom-in group block",
                 spans(i),
               ]}
               style={`transition-delay: ${(i % 8) * 80}ms`}
-              data-src={val.default.src}
+              href={val.default.src}
+              data-pswp-width={val.default.width}
+              data-pswp-height={val.default.height}
+              aria-label={`Imagen de la galeria ${i}`}
             >
               <Image
                 src={val.default}
                 alt={`Imagen de la galeria ${i}`}
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 animate-pulse bg-tp-surface-container-high"
               />
-            </button>
+            </a>
           );
         })
       )
     }
   </div>
-  <dialog
-    id="dialogImage"
-    class="fixed inset-0 m-auto rounded-lg shadow-lg bg-transparent animate-modalf"
-  >
-    <div class="max-w-[1400px] w-full h-full max-h-[90vh]" id="dialogDiv">
-      <img
-        id="imageExtendida"
-        alt="Imagen de la galeria extendida"
-        class="w-full h-full object-contain rounded-xl"
-      />
-      <button
-        id="imgDialogClose"
-        class="fixed cursor-pointer top-8 right-8 p-2 text-gray-200 hover:bg-gray-100/10 dark:hover:bg-gray-100/10 transition-all duration-300 ease-in-out rounded-md"
-      >
-        <GetIcon icon="Cruz" />
-      </button>
-    </div>
-  </dialog>
 </section>
 <script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
+
   document
     .querySelectorAll(".animate-pulse")
     .forEach((e) => e.classList.remove("animate-pulse"));
-  const dialogImage = document.getElementById("dialogImage") as HTMLDialogElement;
-  const imageExtendida = document.getElementById("imageExtendida") as HTMLImageElement;
-  dialogImage.addEventListener("click", () => {
-    document.body.style.overflow = "auto";
-    imageExtendida.src = "";
-    dialogImage.close();
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#Galeria",
+    children: "a.imgLink",
+    pswpModule: () => import("photoswipe"),
   });
-  const showDialog = (src: string) => {
-    document.body.style.overflow = "hidden";
-    imageExtendida.src = src ?? "";
-    dialogImage.showModal();
-  };
-  const buttons = document.querySelectorAll(".imgButton");
-  buttons.forEach((e) => {
-    const src = e.getAttribute("data-src");
-    e.addEventListener("click", () => showDialog(src!));
-  });
-  document.getElementById("imgDialogClose")!.addEventListener("click", () => {
-    document.body.style.overflow = "auto";
-    imageExtendida.src = "";
-    dialogImage.close();
-  });
+  lightbox.init();
 </script>
-<style>
-  dialog::backdrop {
-    backdrop-filter: blur(2px);
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-</style>
