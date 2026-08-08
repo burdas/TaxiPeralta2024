@@ -30,25 +30,25 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
   const minutes = document.getElementById("minutes");
   const seconds = document.getElementById("seconds");
 
-  const actualYear = new Date().getFullYear();
-  const firstDaySeptember = new Date(actualYear, 8, 1);
-  const daysToAdd = (7 - firstDaySeptember.getDay()) % 7;
+  function getChupinazoDate(year: number): Date {
+    const firstOfSeptember = new Date(year, 8, 1);
+    const daysToFirstSunday = (7 - firstOfSeptember.getDay()) % 7;
+    const firstSunday = new Date(year, 8, 1 + daysToFirstSunday);
+    const chupinazo = new Date(firstSunday);
+    chupinazo.setDate(chupinazo.getDate() - 1);
+    chupinazo.setHours(13, 0, 0, 0);
+    return chupinazo;
+  }
 
-  // Create the date for the first Sunday of September
-  const rocketDateActualYear = new Date(actualYear, 8, daysToAdd, 13);
+  const now = new Date();
+  let chupinazo = getChupinazoDate(now.getFullYear());
+  if (chupinazo <= now) chupinazo = getChupinazoDate(now.getFullYear() + 1);
 
-  const nextYear = new Date().getFullYear() + 1;
-  const firstDaySeptemberNextYear = new Date(nextYear, 8, 1);
-  const daysToAddNextYear = (7 - firstDaySeptemberNextYear.getDay()) % 7;
-
-  // Create the date for the first Sunday of September
-  const rocketDateNextYear = new Date(nextYear, 8, daysToAddNextYear, 13);
-
-  const rocketDate = rocketDateActualYear > new Date() ? rocketDateActualYear : rocketDateNextYear;
+  console.info("Chupinazo (fecha objetivo):", chupinazo.toLocaleString());
 
   setInterval(() => {
-    const now = new Date().getTime();
-    const distance = rocketDate.getTime() - now;
+    const nowMs = new Date().getTime();
+    const distance = chupinazo.getTime() - nowMs;
     const daysLeft = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hoursLeft = Math.floor(   (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutesLeft = Math.floor((   (distance % (1000 * 60 * 60)) / (1000 * 60)));
