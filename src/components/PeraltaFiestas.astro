@@ -15,32 +15,31 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
   id="FiestasDePeralta"
   class="w-full h-[calc(100dvh-144px)] flex flex-col justify-center items-center gap-6 md:gap-10 px-6"
 >
-  <div class="text-center animate-hero-fade-up">
+  <div class="text-center animate-hero-fade-up" data-hero-animate>
     <h1 class="font-tp-display text-6xl md:text-8xl leading-tight tracking-tight font-bold text-white">
       Fiestas de Peralta
     </h1>
   </div>
-  <div id="countdownContainer" class="hidden w-full max-w-sm md:max-w-none flex-col md:flex-row items-stretch md:items-center justify-center gap-3 md:gap-4">
-    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0">
+  <div id="countdownContainer" class="flex w-full max-w-sm md:max-w-none flex-col md:flex-row items-stretch md:items-center justify-center gap-3 md:gap-4">
+    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0 animate-hero-fade-up data-hero-animate [animation-delay:0.45s]">
       <span id="days" class="font-tp-display text-5xl md:text-7xl font-bold text-tp-primary tabular-nums">00</span>
       <p class="text-[11px] md:text-[11px] leading-4 font-semibold uppercase tracking-widest text-tp-on-surface-variant md:mt-2">Días</p>
     </div>
-    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0">
+    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0 animate-hero-fade-up data-hero-animate [animation-delay:0.6s]">
       <span id="hours" class="font-tp-display text-5xl md:text-7xl font-bold text-tp-primary tabular-nums">00</span>
       <p class="text-[11px] md:text-[11px] leading-4 font-semibold uppercase tracking-widest text-tp-on-surface-variant md:mt-2">Horas</p>
     </div>
-    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0">
+    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0 animate-hero-fade-up data-hero-animate [animation-delay:0.75s]">
       <span id="minutes" class="font-tp-display text-5xl md:text-7xl font-bold text-tp-primary tabular-nums">00</span>
       <p class="text-[11px] md:text-[11px] leading-4 font-semibold uppercase tracking-widest text-tp-on-surface-variant md:mt-2">Minutos</p>
     </div>
-    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0">
+    <div class="glass rounded-2xl px-5 md:px-8 py-4 md:py-6 w-full md:w-auto md:min-w-[108px] flex flex-row md:flex-col items-center justify-between md:justify-center gap-2 md:gap-0 animate-hero-fade-up data-hero-animate [animation-delay:0.9s]">
       <span id="seconds" class="font-tp-display text-5xl md:text-7xl font-bold text-tp-primary tabular-nums">00</span>
       <p class="text-[11px] md:text-[11px] leading-4 font-semibold uppercase tracking-widest text-tp-on-surface-variant md:mt-2">Segundos</p>
     </div>
   </div>
 </main>
 <script>
-  const countDownContainer = document.getElementById("countdownContainer");
   const days = document.getElementById("days");
   const hours = document.getElementById("hours");
   const minutes = document.getElementById("minutes");
@@ -66,21 +65,52 @@ import imgFiestas from "../assets/fiestas_peralta.avif";
 
   console.info("Chupinazo (fecha objetivo):", chupinazo.toLocaleString());
 
-  setInterval(() => {
-    const nowMs = new Date().getTime();
-    const distance = chupinazo.getTime() - nowMs;
-    const daysLeft = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-    const hoursLeft = Math.max(0, Math.floor(   (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-    const minutesLeft = Math.max(0, Math.floor((   (distance % (1000 * 60 * 60)) / (1000 * 60))));
-    const secondsLeft = Math.max(0, Math.floor((   (distance % (1000 * 60)) / 1000)));
-    
-    days!.innerHTML = daysLeft.toString().padStart(2, "0");
-    hours!.innerHTML = hoursLeft.toString().padStart(2, "0");
-    minutes!.innerHTML = minutesLeft.toString().padStart(2, "0");
-    seconds!.innerHTML = secondsLeft.toString().padStart(2, "0");
-    if (countDownContainer!.classList.contains("hidden")) {
-        countDownContainer!.classList.remove("hidden");
-        countDownContainer!.classList.add("flex");
-    }
-  }, 1000);
+  function getRemaining() {
+    const distance = chupinazo.getTime() - Date.now();
+    return {
+      days: Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24))),
+      hours: Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))),
+      minutes: Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))),
+      seconds: Math.max(0, Math.floor((distance % (1000 * 60)) / 1000)),
+    };
+  }
+
+  function render(remaining: { days: number; hours: number; minutes: number; seconds: number }) {
+    days!.innerHTML = remaining.days.toString().padStart(2, "0");
+    hours!.innerHTML = remaining.hours.toString().padStart(2, "0");
+    minutes!.innerHTML = remaining.minutes.toString().padStart(2, "0");
+    seconds!.innerHTML = remaining.seconds.toString().padStart(2, "0");
+  }
+
+  function animateCountUp(onDone: () => void) {
+    const target = getRemaining();
+    const duration = 1300;
+    const start = performance.now();
+    const frame = (now: number) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      render({
+        days: Math.floor(target.days * eased),
+        hours: Math.floor(target.hours * eased),
+        minutes: Math.floor(target.minutes * eased),
+        seconds: Math.floor(target.seconds * eased),
+      });
+      if (progress < 1) requestAnimationFrame(frame);
+      else onDone();
+    };
+    requestAnimationFrame(frame);
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReducedMotion) {
+    render(getRemaining());
+    setInterval(() => render(getRemaining()), 1000);
+  } else {
+    setTimeout(() => {
+      animateCountUp(() => {
+        setInterval(() => render(getRemaining()), 1000);
+      });
+    }, 550);
+  }
 </script>
