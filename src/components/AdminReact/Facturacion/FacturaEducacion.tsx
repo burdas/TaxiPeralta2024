@@ -4,7 +4,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select.tsx";
 import { AutocompleteInput } from "@/components/AdminReact/Facturacion/AutocompleteInput.tsx";
+import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
 import { showDangerToast } from "@/utils/Toast.ts";
 import { COSTE_DIARIO_DEFECTO, MESES } from "@/lib/facturacion/types.ts";
 import {
@@ -15,7 +23,10 @@ import {
 } from "@/lib/facturacion/storage.ts";
 import { formatFechaCorta, formatNumero, toFechaInput } from "@/lib/facturacion/format.ts";
 import { calcularImporteEducacion, generarHtmlFacturaEducacion } from "@/lib/facturacion/generarFactura.ts";
-import { abrirFactura, getFaviconDataUri } from "@/lib/facturacion/browser.ts";
+import { abrirFactura, getLogoDataUri } from "@/lib/facturacion/browser.ts";
+
+const NUMERIC_CLASS =
+    "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
 function parseNumero(valor: string): number {
     const n = parseFloat(valor.replace(",", "."));
@@ -107,7 +118,7 @@ export default function FacturaEducacion() {
                 saveCodigosAsignacion(nuevosCodigos);
             }
 
-            const logo = await getFaviconDataUri().catch(() => "");
+            const logo = await getLogoDataUri().catch(() => "");
             const html = generarHtmlFacturaEducacion(
                 {
                     numeroFactura: numeroFactura.trim(),
@@ -160,12 +171,7 @@ export default function FacturaEducacion() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="educacionFecha">Fecha factura</Label>
-                            <Input
-                                id="educacionFecha"
-                                type="date"
-                                value={fecha}
-                                onChange={(e) => setFecha(e.target.value)}
-                            />
+                            <DatePicker id="educacionFecha" value={fecha} onChange={setFecha} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="codigoAsignacion">Código de asignación</Label>
@@ -205,6 +211,7 @@ export default function FacturaEducacion() {
                                     setCosteDiario(e.target.value);
                                     aplicarCosteDias(dias, e.target.value);
                                 }}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
@@ -220,25 +227,23 @@ export default function FacturaEducacion() {
                                     setDias(e.target.value);
                                     aplicarCosteDias(e.target.value, costeDiario);
                                 }}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="mes">Mes</Label>
-                            <select
-                                id="mes"
-                                value={mes}
-                                onChange={(e) => setMes(e.target.value)}
-                                className="border-input dark:bg-input/30 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm"
-                            >
-                                <option value="" disabled>
-                                    Selecciona un mes
-                                </option>
-                                {MESES.map((m) => (
-                                    <option key={m} value={m}>
-                                        {m}
-                                    </option>
-                                ))}
-                            </select>
+                            <Select value={mes || undefined} onValueChange={setMes}>
+                                <SelectTrigger id="mes" className="w-full">
+                                    <SelectValue placeholder="Selecciona un mes" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {MESES.map((m) => (
+                                        <SelectItem key={m} value={m}>
+                                            {m}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                 </div>

@@ -4,8 +4,11 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { ConfirmDialog } from "@/components/AdminReact/Shared/ConfirmDialog.tsx";
 import { AutocompleteInput } from "@/components/AdminReact/Facturacion/AutocompleteInput.tsx";
+import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
 import { showDangerToast, showOkToast } from "@/utils/Toast.ts";
 import Trash from "@/components/Icons/svg/trash.svg?react";
 import {
@@ -28,7 +31,7 @@ import {
     recalcularImportes,
     validarLinea,
 } from "@/lib/facturacion/generarFactura.ts";
-import { abrirFactura, getFaviconDataUri } from "@/lib/facturacion/browser.ts";
+import { abrirFactura, getLogoDataUri } from "@/lib/facturacion/browser.ts";
 
 type LineaForm = {
     fecha: string;
@@ -38,6 +41,9 @@ type LineaForm = {
     kilometros: string;
     horas: string;
 };
+
+const NUMERIC_CLASS =
+    "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
 function parseKm(valor: string): number {
     const n = parseInt(valor, 10);
@@ -122,10 +128,6 @@ export default function FacturaGeneral() {
         setTarifas((prev) => ({ ...prev, [campo]: valor }));
     };
 
-    const actualizarTarifaLinea = (nuevaTarifa: TipoTarifa) => {
-        setTarifaLinea(nuevaTarifa);
-    };
-
     const anadirLinea = () => {
         const kilometros = parseKm(linea.kilometros);
         const horas = parseHoras(linea.horas);
@@ -189,7 +191,7 @@ export default function FacturaGeneral() {
 
         setGenerando(true);
         try {
-            const logo = await getFaviconDataUri().catch(() => "");
+            const logo = await getLogoDataUri().catch(() => "");
             const html = generarHtmlFacturaGeneral(
                 {
                     entidad: {
@@ -283,6 +285,7 @@ export default function FacturaGeneral() {
                                 step="0.01"
                                 value={tarifas.kmDia}
                                 onChange={(e) => cambiarTarifa("kmDia", parseImporte(e.target.value))}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
@@ -294,6 +297,7 @@ export default function FacturaGeneral() {
                                 step="0.01"
                                 value={tarifas.kmNoche}
                                 onChange={(e) => cambiarTarifa("kmNoche", parseImporte(e.target.value))}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
@@ -305,6 +309,7 @@ export default function FacturaGeneral() {
                                 step="0.01"
                                 value={tarifas.horaDia}
                                 onChange={(e) => cambiarTarifa("horaDia", parseImporte(e.target.value))}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
@@ -316,6 +321,7 @@ export default function FacturaGeneral() {
                                 step="0.01"
                                 value={tarifas.horaNoche}
                                 onChange={(e) => cambiarTarifa("horaNoche", parseImporte(e.target.value))}
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                     </FilaLabels>
@@ -331,11 +337,10 @@ export default function FacturaGeneral() {
                     <FilaLabels>
                         <div className="space-y-2">
                             <CampoLabel htmlFor="fechaLinea">Fecha</CampoLabel>
-                            <Input
+                            <DatePicker
                                 id="fechaLinea"
-                                type="date"
                                 value={linea.fecha}
-                                onChange={(e) => setLinea((prev) => ({ ...prev, fecha: e.target.value }))}
+                                onChange={(valor) => setLinea((prev) => ({ ...prev, fecha: valor }))}
                             />
                         </div>
                         <div className="space-y-2">
@@ -376,6 +381,7 @@ export default function FacturaGeneral() {
                                 value={linea.kilometros}
                                 onChange={(e) => setLinea((prev) => ({ ...prev, kilometros: e.target.value }))}
                                 placeholder="0"
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                         <div className="space-y-2">
@@ -389,38 +395,31 @@ export default function FacturaGeneral() {
                                 value={linea.horas}
                                 onChange={(e) => setLinea((prev) => ({ ...prev, horas: e.target.value }))}
                                 placeholder="0"
+                                className={NUMERIC_CLASS}
                             />
                         </div>
                     </FilaLabels>
                     <div className="flex flex-wrap items-end justify-between gap-4">
-                        <div className="flex items-center gap-6">
+                        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
                             <Label>Tarifa a aplicar</Label>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    id="diurna"
-                                    type="radio"
-                                    name="tarifa"
-                                    checked={tarifaLinea === TipoTarifa.Diurna}
-                                    onChange={() => actualizarTarifaLinea(TipoTarifa.Diurna)}
-                                    className="size-4 accent-primary"
-                                />
-                                <Label htmlFor="diurna" className="font-normal">
-                                    Diurna
-                                </Label>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    id="nocturna"
-                                    type="radio"
-                                    name="tarifa"
-                                    checked={tarifaLinea === TipoTarifa.Nocturna}
-                                    onChange={() => actualizarTarifaLinea(TipoTarifa.Nocturna)}
-                                    className="size-4 accent-primary"
-                                />
-                                <Label htmlFor="nocturna" className="font-normal">
-                                    Nocturna
-                                </Label>
-                            </div>
+                            <RadioGroup
+                                value={tarifaLinea}
+                                onValueChange={(valor) => setTarifaLinea(valor as TipoTarifa)}
+                                className="flex items-center gap-6"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <RadioGroupItem value={TipoTarifa.Diurna} id="tarifaDiurna" />
+                                    <Label htmlFor="tarifaDiurna" className="font-normal">
+                                        Diurna
+                                    </Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <RadioGroupItem value={TipoTarifa.Nocturna} id="tarifaNocturna" />
+                                    <Label htmlFor="tarifaNocturna" className="font-normal">
+                                        Nocturna
+                                    </Label>
+                                </div>
+                            </RadioGroup>
                         </div>
                         <Button type="button" variant="default" onClick={anadirLinea}>
                             Añadir línea
@@ -468,7 +467,7 @@ export default function FacturaGeneral() {
                                                 step={1}
                                                 value={l.kilometros}
                                                 onChange={(e) => editarLinea(i, "kilometros", parseKm(e.target.value))}
-                                                className="h-8 w-24"
+                                                className={`h-8 w-24 ${NUMERIC_CLASS}`}
                                             />
                                         </td>
                                         <td className="p-2">
@@ -479,7 +478,7 @@ export default function FacturaGeneral() {
                                                 step="0.1"
                                                 value={l.horas}
                                                 onChange={(e) => editarLinea(i, "horas", parseHoras(e.target.value))}
-                                                className="h-8 w-24"
+                                                className={`h-8 w-24 ${NUMERIC_CLASS}`}
                                             />
                                         </td>
                                         <td className="p-2 text-right whitespace-nowrap">{formatNumero(l.importe)}€</td>
@@ -528,34 +527,25 @@ export default function FacturaGeneral() {
                         </div>
                         <div className="space-y-2">
                             <CampoLabel htmlFor="fechaFactura">Fecha factura</CampoLabel>
-                            <Input
-                                id="fechaFactura"
-                                type="date"
-                                value={fecha}
-                                onChange={(e) => setFecha(e.target.value)}
-                            />
+                            <DatePicker id="fechaFactura" value={fecha} onChange={setFecha} />
                         </div>
                         <div className="space-y-2">
-                            <CampoLabel>Mostrar kilómetros en la factura</CampoLabel>
+                            <CampoLabel htmlFor="mostrarKm">Mostrar kilómetros en la factura</CampoLabel>
                             <div className="flex h-9 items-center">
-                                <input
+                                <Checkbox
                                     id="mostrarKm"
-                                    type="checkbox"
                                     checked={mostrarKilometros}
-                                    onChange={(e) => setMostrarKilometros(e.target.checked)}
-                                    className="size-4 accent-primary"
+                                    onCheckedChange={(valor) => setMostrarKilometros(valor === true)}
                                 />
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <CampoLabel>Mostrar horas en la factura</CampoLabel>
+                            <CampoLabel htmlFor="mostrarHoras">Mostrar horas en la factura</CampoLabel>
                             <div className="flex h-9 items-center">
-                                <input
+                                <Checkbox
                                     id="mostrarHoras"
-                                    type="checkbox"
                                     checked={mostrarHoras}
-                                    onChange={(e) => setMostrarHoras(e.target.checked)}
-                                    className="size-4 accent-primary"
+                                    onCheckedChange={(valor) => setMostrarHoras(valor === true)}
                                 />
                             </div>
                         </div>
