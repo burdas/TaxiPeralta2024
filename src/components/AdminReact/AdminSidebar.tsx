@@ -37,7 +37,7 @@ export default function AdminSidebar({ activePath }: Props) {
         <Sidebar collapsible="icon">
             <SidebarHeader>
                 <div className="flex items-center gap-1">
-                    <SidebarMenu className="flex-1">
+                    <SidebarMenu className="flex-1 group-data-[collapsible=icon]:hidden">
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" asChild tooltip="Ir a la web">
                                 <a href="/" onClick={handleNavigation}>
@@ -54,7 +54,7 @@ export default function AdminSidebar({ activePath }: Props) {
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
-                    <SidebarTrigger className="size-8 shrink-0" />
+                    <SidebarTrigger className="size-8 shrink-0 group-data-[collapsible=icon]:mx-auto" />
                 </div>
             </SidebarHeader>
             <SidebarContent>
