@@ -12,7 +12,6 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -59,7 +58,6 @@ export default function AdminSidebar({ activePath }: Props) {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Secciones</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {ADMIN_NAV.map(({ href, label, icon: Icon }) => (
