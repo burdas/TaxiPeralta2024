@@ -1,57 +1,45 @@
+"use client";
+
+import { ADMIN_NAV, type AdminNavItem } from "@/components/AdminReact/AdminNav.tsx";
+import AdminSidebar from "@/components/AdminReact/AdminSidebar.tsx";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.tsx";
+import { type ComponentType } from "react";
 import TarifasForm from "@/components/AdminReact/Tarifas/TarifasForm.tsx";
 import EnlacesInteres from "@/components/AdminReact/EnlacesInteres/EnlacesInteres.tsx";
-import Facturacion from "@/components/AdminReact/Facturacion/Facturacion.tsx";
-import TarifasIcon from "@/components/Icons/svg/tarifasIcon.svg?react";
-import EnlacesDeInteres from "@/components/Icons/svg/enlacesDeInteres.svg?react";
-import CalculadoraIcon from "@/components/Icons/svg/calculadora.svg?react";
-import Chart from "@/components/Icons/svg/chart.svg?react";
-import FacturaIcon from "@/components/Icons/svg/factura.svg?react";
-import {type FC, type SVGProps, useEffect, useState} from "react";
-import Sidebar from "@/components/AdminReact/Sidebar.tsx";
 import Visitas from "@/components/AdminReact/Visitas/Visitas.tsx";
 import CalculadoraRegistros from "@/components/AdminReact/Calculadora/CalculadoraRegistros.tsx";
+import Facturacion from "@/components/AdminReact/Facturacion/Facturacion.tsx";
 
-type Section = {
-    text: string;
-    icon: FC<SVGProps<SVGSVGElement>>;
+const SECTION_COMPONENTS: Record<string, ComponentType> = {
+    "/tarifas": TarifasForm,
+    "/enlaces": EnlacesInteres,
+    "/visitas": Visitas,
+    "/calculadora": CalculadoraRegistros,
+    "/facturacion": Facturacion,
 };
 
-const sections: Section[] = [
-    { text: "Tarifas", icon: TarifasIcon },
-    { text: "Enlaces de interés", icon: EnlacesDeInteres },
-    { text: "Visitas", icon: Chart},
-    { text: "Calculadora de rutas", icon: CalculadoraIcon },
-    { text: "Facturación", icon: FacturaIcon }
-]
-type ActiveSections = typeof sections[number]['text'];
+interface Props {
+    activePath: string;
+}
 
-export default function AdminLayout() {
-    const [activeSection, setActiveSection] = useState<ActiveSections>('Tarifas');
-
-    useEffect(() => {
-        const storedView = localStorage.getItem("activeSection");
-        if (storedView) {
-            setActiveSection(storedView);
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem("activeSection", activeSection);
-    }, [activeSection]);
+export default function AdminLayout({ activePath }: Props) {
+    const current: AdminNavItem = ADMIN_NAV.find((item) => item.href === activePath) ?? ADMIN_NAV[0];
+    const SectionComponent = SECTION_COMPONENTS[current.href];
 
     return (
-        <div className="min-h-[calc(100dvh-80px)] flex flex-col lg:flex-row mb-20 lg:mb-0">
-            <Sidebar sections={sections} changeSection={setActiveSection} activeSection={activeSection} />
-            <main className="flex-1 w-full container">
-                <h1 className="text-3xl md:text-5xl font-bold dark:text-white my-4">
-                    Panel de administrador
-                </h1>
-                {activeSection === "Tarifas" && <TarifasForm />}
-                {activeSection === "Enlaces de interés" && <EnlacesInteres />}
-                {activeSection === "Visitas" && <Visitas />}
-                {activeSection === "Calculadora de rutas" && <CalculadoraRegistros />}
-                {activeSection === "Facturación" && <Facturacion />}
-            </main>
-        </div>
+        <SidebarProvider>
+            <AdminSidebar activePath={current.href} />
+            <SidebarInset>
+                <div
+                    className="flex h-14 shrink-0 items-center gap-2 border-b px-4 md:hidden">
+                    <SidebarTrigger className="-ml-1" />
+                </div>
+                <div className="w-full flex-1">
+                    <div className="container pb-8">
+                        {SectionComponent ? <SectionComponent /> : null}
+                    </div>
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }
