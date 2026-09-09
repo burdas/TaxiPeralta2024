@@ -1,9 +1,11 @@
 import TarifasForm from "@/components/AdminReact/Tarifas/TarifasForm.tsx";
 import EnlacesInteres from "@/components/AdminReact/EnlacesInteres/EnlacesInteres.tsx";
+import Facturacion from "@/components/AdminReact/Facturacion/Facturacion.tsx";
 import TarifasIcon from "@/components/Icons/svg/tarifasIcon.svg?react";
 import EnlacesDeInteres from "@/components/Icons/svg/enlacesDeInteres.svg?react";
 import CalculadoraIcon from "@/components/Icons/svg/calculadora.svg?react";
 import Chart from "@/components/Icons/svg/chart.svg?react";
+import FacturaIcon from "@/components/Icons/svg/factura.svg?react";
 import {type FC, type SVGProps, useEffect, useState} from "react";
 import Sidebar from "@/components/AdminReact/Sidebar.tsx";
 import Visitas from "@/components/AdminReact/Visitas/Visitas.tsx";
@@ -18,7 +20,8 @@ const sections: Section[] = [
     { text: "Tarifas", icon: TarifasIcon },
     { text: "Enlaces de interés", icon: EnlacesDeInteres },
     { text: "Visitas", icon: Chart},
-    { text: "Calculadora de rutas", icon: CalculadoraIcon }
+    { text: "Calculadora de rutas", icon: CalculadoraIcon },
+    { text: "Facturación", icon: FacturaIcon }
 ]
 type ActiveSections = typeof sections[number]['text'];
 
@@ -47,6 +50,7 @@ export default function AdminLayout() {
                 {activeSection === "Enlaces de interés" && <EnlacesInteres />}
                 {activeSection === "Visitas" && <Visitas />}
                 {activeSection === "Calculadora de rutas" && <CalculadoraRegistros />}
+                {activeSection === "Facturación" && <Facturacion />}
             </main>
         </div>
     );
