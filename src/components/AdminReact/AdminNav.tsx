@@ -7,16 +7,35 @@ import FacturaIcon from "@/components/Icons/svg/factura.svg?react";
 
 export type AdminIcon = FC<SVGProps<SVGSVGElement>>;
 
+export type AdminNavChild = {
+    href: string;
+    label: string;
+};
+
 export type AdminNavItem = {
     href: string;
     label: string;
     icon: AdminIcon;
+    children?: AdminNavChild[];
 };
 
 export const ADMIN_NAV: AdminNavItem[] = [
-    { href: "/tarifas", label: "Tarifas", icon: TarifasIcon },
-    { href: "/enlaces", label: "Enlaces de interés", icon: EnlacesDeInteresIcon },
-    { href: "/visitas", label: "Visitas", icon: ChartIcon },
-    { href: "/calculadora", label: "Calculadora de rutas", icon: CalculadoraIcon },
-    { href: "/facturacion", label: "Facturación", icon: FacturaIcon },
+    { href: "/admin/tarifas", label: "Tarifas", icon: TarifasIcon },
+    { href: "/admin/enlaces", label: "Enlaces de interés", icon: EnlacesDeInteresIcon },
+    { href: "/admin/visitas", label: "Visitas", icon: ChartIcon },
+    { href: "/admin/calculadora", label: "Calculadora de rutas", icon: CalculadoraIcon },
+    {
+        href: "/admin/facturacion",
+        label: "Facturación",
+        icon: FacturaIcon,
+        children: [
+            { href: "/admin/facturacion/general", label: "Factura General" },
+            { href: "/admin/facturacion/educacion", label: "Factura Educación" },
+        ],
+    },
 ];
+
+export function esItemActivo(item: AdminNavItem, activePath: string): boolean {
+    if (item.href === activePath) return true;
+    return item.children?.some((hijo) => hijo.href === activePath) ?? false;
+}

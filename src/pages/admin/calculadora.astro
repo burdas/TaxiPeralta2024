@@ -1,9 +1,9 @@
 ---
-import Loader from "../components/Icons/Loader.astro";
+import Loader from "../../components/Icons/Loader.astro";
 export const prerender = false;
-import Layout from "../layouts/Layout.astro";
-import {verifySession} from '../auth/session';
-import AdminLayout from "../components/AdminReact/AdminLayout";
+import Layout from "../../layouts/Layout.astro";
+import { verifySession } from '../../auth/session';
+import AdminLayout from "../../components/AdminReact/AdminLayout";
 
 const session = Astro.cookies.get('session')?.value;
 if (!session || !verifySession(session)) {
@@ -12,7 +12,7 @@ if (!session || !verifySession(session)) {
 ---
 
 <Layout title="Calculadora de rutas - Admin">
-    <AdminLayout activePath="/calculadora" client:only="react">
+    <AdminLayout activePath="/admin/calculadora" client:only="react">
         <div slot="fallback" class="w-full min-h-svh flex justify-center items-center">
             <Loader className="size-24 animate-spin" />
         </div>

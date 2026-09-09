@@ -85,15 +85,15 @@ export const plantillaGeneral = `<!DOCTYPE html>
             }
 
                 .invoice table td, .invoice table th {
-                    padding: 15px;
+                    padding: 8px 6px;
                     background: #eee;
-                    border-bottom: 1px solid #fff
+                    border-bottom: 1px solid #fff;
+                    overflow-wrap: break-word
                 }
 
                 .invoice table th {
-                    white-space: nowrap;
                     font-weight: 400;
-                    font-size: 16px
+                    font-size: 13px
                 }
 
                 .invoice table td h3 {
@@ -105,12 +105,12 @@ export const plantillaGeneral = `<!DOCTYPE html>
 
                 .invoice table .qty, .invoice table .total, .invoice table .unit {
                     text-align: right;
-                    font-size: 1.2em
+                    font-size: 1em
                 }
 
                 .invoice table .no {
                     color: #fff;
-                    font-size: 1.6em;
+                    font-size: 1.2em;
                     background: #3989c6
                 }
 

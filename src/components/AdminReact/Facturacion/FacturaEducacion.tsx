@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/select.tsx";
 import { AutocompleteInput } from "@/components/AdminReact/Facturacion/AutocompleteInput.tsx";
 import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
+import FacturaPreview from "@/components/AdminReact/Facturacion/FacturaPreview.tsx";
 import { showDangerToast } from "@/utils/Toast.ts";
+import { cn } from "@/lib/utils.ts";
 import { COSTE_DIARIO_DEFECTO, MESES } from "@/lib/facturacion/types.ts";
 import {
     getCodigosAsignacion,
@@ -24,6 +26,7 @@ import {
 import { formatFechaCorta, formatNumero, toFechaInput } from "@/lib/facturacion/format.ts";
 import { calcularImporteEducacion, generarHtmlFacturaEducacion } from "@/lib/facturacion/generarFactura.ts";
 import { abrirFactura, getLogoDataUri } from "@/lib/facturacion/browser.ts";
+import { useLogoDataUri } from "@/components/AdminReact/Facturacion/useFacturaLogo.ts";
 
 const NUMERIC_CLASS =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
@@ -31,6 +34,36 @@ const NUMERIC_CLASS =
 function parseNumero(valor: string): number {
     const n = parseFloat(valor.replace(",", "."));
     return Number.isNaN(n) ? 0 : n;
+}
+
+function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
+    return (
+        <section className="pb-6 last:pb-0">
+            <h3 className="mb-4 text-xs font-semibold tracking-wider text-muted-foreground uppercase">{titulo}</h3>
+            {children}
+        </section>
+    );
+}
+
+function Campo({
+    label,
+    htmlFor,
+    className,
+    children,
+}: {
+    label: string;
+    htmlFor?: string;
+    className?: string;
+    children: ReactNode;
+}) {
+    return (
+        <div className={cn("space-y-1.5", className)}>
+            <Label htmlFor={htmlFor} className="text-xs font-medium text-muted-foreground">
+                {label}
+            </Label>
+            {children}
+        </div>
+    );
 }
 
 export default function FacturaEducacion() {
@@ -47,6 +80,8 @@ export default function FacturaEducacion() {
     const [iva, setIva] = useState("");
     const [total, setTotal] = useState("");
     const [generando, setGenerando] = useState(false);
+
+    const logoUri = useLogoDataUri();
 
     const aplicarCosteDias = (diasValor: string, costeValor: string) => {
         const d = Math.trunc(parseNumero(diasValor));
@@ -76,6 +111,24 @@ export default function FacturaEducacion() {
             setTotal(formatNumero(baseN + ivaN));
         }
     };
+
+    const htmlPreview = useMemo(() => {
+        const c = parseNumero(costeDiario);
+        const d = Math.trunc(parseNumero(dias));
+        return generarHtmlFacturaEducacion(
+            {
+                numeroFactura: numeroFactura.trim(),
+                fechaCorta: formatFechaCorta(fecha),
+                codigoAsignacion: codigoAsignacion.trim(),
+                mes,
+                trayecto: trayecto.trim(),
+                costeDiario: c,
+                dias: d,
+                totales: { base: parseNumero(base), iva: parseNumero(iva), total: parseNumero(total) },
+            },
+            logoUri,
+        );
+    }, [numeroFactura, fecha, codigoAsignacion, mes, trayecto, costeDiario, dias, base, iva, total, logoUri]);
 
     const generar = async () => {
         const d = Math.trunc(parseNumero(dias));
@@ -118,7 +171,7 @@ export default function FacturaEducacion() {
                 saveCodigosAsignacion(nuevosCodigos);
             }
 
-            const logo = await getLogoDataUri().catch(() => "");
+            const logo = logoUri || (await getLogoDataUri().catch(() => ""));
             const html = generarHtmlFacturaEducacion(
                 {
                     numeroFactura: numeroFactura.trim(),
@@ -142,141 +195,156 @@ export default function FacturaEducacion() {
     };
 
     return (
-        <section className="w-full pb-8">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-                <h2 className="text-2xl font-bold">Factura Educación</h2>
-                <Button
-                    type="button"
-                    disabled={generando}
-                    onClick={generar}
-                    className="bg-green-600 text-white hover:bg-green-700"
-                    size="lg"
-                >
-                    {generando ? "Generando…" : "Generar factura"}
-                </Button>
-            </div>
-
-            <div className="mt-6 space-y-6">
-                <div className="rounded-xl border p-4 md:p-6 space-y-4">
-                    <h3 className="text-lg font-semibold">General</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="educacionNumeroFactura">Número de factura</Label>
-                            <Input
-                                id="educacionNumeroFactura"
-                                value={numeroFactura}
-                                onChange={(e) => setNumeroFactura(e.target.value)}
-                                placeholder="Nº de factura"
-                            />
+        <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
+            <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
+                <div className="w-full min-w-0 shrink-0 xl:w-[480px]">
+                    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                            <h2 className="text-2xl font-bold">Factura Educación</h2>
+                            <p className="text-sm text-muted-foreground">
+                                Rellena los datos y comprueba el resultado en vivo en el folio.
+                            </p>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="educacionFecha">Fecha factura</Label>
-                            <DatePicker id="educacionFecha" value={fecha} onChange={setFecha} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="codigoAsignacion">Código de asignación</Label>
-                            <AutocompleteInput
-                                id="codigoAsignacion"
-                                value={codigoAsignacion}
-                                onValueChange={setCodigoAsignacion}
-                                opciones={codigosAsignacion}
-                                placeholder="Código de asignación"
-                            />
-                        </div>
+                        <Button
+                            type="button"
+                            disabled={generando}
+                            onClick={generar}
+                            className="bg-green-600 text-white hover:bg-green-700"
+                            size="lg"
+                        >
+                            {generando ? "Generando…" : "Generar factura"}
+                        </Button>
                     </div>
+                    <form>
+                        <div className="space-y-8">
+                        <Seccion titulo="General">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Campo label="Número de factura" htmlFor="educacionNumeroFactura">
+                                    <Input
+                                        id="educacionNumeroFactura"
+                                        size="sm"
+                                        value={numeroFactura}
+                                        onChange={(e) => setNumeroFactura(e.target.value)}
+                                        placeholder="Nº de factura"
+                                    />
+                                </Campo>
+                                <Campo label="Fecha factura" htmlFor="educacionFecha">
+                                    <DatePicker id="educacionFecha" value={fecha} onChange={setFecha} />
+                                </Campo>
+                                <Campo label="Código de asignación" htmlFor="codigoAsignacion" className="col-span-2">
+                                    <AutocompleteInput
+                                        id="codigoAsignacion"
+                                        size="sm"
+                                        value={codigoAsignacion}
+                                        onValueChange={setCodigoAsignacion}
+                                        opciones={codigosAsignacion}
+                                        placeholder="Código de asignación"
+                                    />
+                                </Campo>
+                            </div>
+                        </Seccion>
+
+                        <Seccion titulo="Datos de la factura">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Campo label="Trayecto" htmlFor="trayecto" className="col-span-2">
+                                    <AutocompleteInput
+                                        id="trayecto"
+                                        size="sm"
+                                        value={trayecto}
+                                        onValueChange={setTrayecto}
+                                        opciones={trayectos}
+                                        placeholder="Trayecto"
+                                    />
+                                </Campo>
+                                <Campo label="Coste diario" htmlFor="costeDiario">
+                                    <Input
+                                        id="costeDiario"
+                                        size="sm"
+                                        type="number"
+                                        min={0}
+                                        step="0.01"
+                                        value={costeDiario}
+                                        onChange={(e) => {
+                                            setCosteDiario(e.target.value);
+                                            aplicarCosteDias(dias, e.target.value);
+                                        }}
+                                        className={NUMERIC_CLASS}
+                                    />
+                                </Campo>
+                                <Campo label="Días" htmlFor="dias">
+                                    <Input
+                                        id="dias"
+                                        size="sm"
+                                        type="number"
+                                        min={0}
+                                        max={100000}
+                                        step={1}
+                                        value={dias}
+                                        onChange={(e) => {
+                                            setDias(e.target.value);
+                                            aplicarCosteDias(e.target.value, costeDiario);
+                                        }}
+                                        className={NUMERIC_CLASS}
+                                    />
+                                </Campo>
+                                <Campo label="Mes" htmlFor="mes" className="col-span-2">
+                                    <Select value={mes || undefined} onValueChange={setMes}>
+                                        <SelectTrigger id="mes" size="sm" className="w-full">
+                                            <SelectValue placeholder="Selecciona un mes" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {MESES.map((m) => (
+                                                <SelectItem key={m} value={m}>
+                                                    {m}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </Campo>
+                            </div>
+                        </Seccion>
+
+                        <Seccion titulo="Totales">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Campo label="BASE" htmlFor="educacionBase">
+                                    <Input
+                                        id="educacionBase"
+                                        size="sm"
+                                        value={base}
+                                        onChange={(e) => cambiarBase(e.target.value)}
+                                        placeholder="0,00"
+                                    />
+                                </Campo>
+                                <Campo label="IVA 10%" htmlFor="educacionIva">
+                                    <Input
+                                        id="educacionIva"
+                                        size="sm"
+                                        value={iva}
+                                        onChange={(e) => cambiarIva(e.target.value)}
+                                        placeholder="0,00"
+                                    />
+                                </Campo>
+                                <Campo label="TOTAL" htmlFor="educacionTotal" className="col-span-2">
+                                    <Input
+                                        id="educacionTotal"
+                                        size="sm"
+                                        value={total}
+                                        readOnly
+                                        className="bg-muted font-semibold"
+                                    />
+                                </Campo>
+                            </div>
+                            <p className="mt-3 rounded-md bg-muted/60 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
+                                Destinatario fijo: <span className="font-medium">DEPARTAMENTO DE EDUCACIÓN</span> ·
+                                Número de expediente <span className="font-medium">514TEE</span>
+                            </p>
+                        </Seccion>
+                    </div>
+                    </form>
                 </div>
 
-                <div className="rounded-xl border p-4 md:p-6 space-y-4">
-                    <h3 className="text-lg font-semibold">Datos de la factura</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="trayecto">Trayecto</Label>
-                            <AutocompleteInput
-                                id="trayecto"
-                                value={trayecto}
-                                onValueChange={setTrayecto}
-                                opciones={trayectos}
-                                placeholder="Trayecto"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="costeDiario">Coste Diario</Label>
-                            <Input
-                                id="costeDiario"
-                                type="number"
-                                min={0}
-                                step="0.01"
-                                value={costeDiario}
-                                onChange={(e) => {
-                                    setCosteDiario(e.target.value);
-                                    aplicarCosteDias(dias, e.target.value);
-                                }}
-                                className={NUMERIC_CLASS}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="dias">Días</Label>
-                            <Input
-                                id="dias"
-                                type="number"
-                                min={0}
-                                max={100000}
-                                step={1}
-                                value={dias}
-                                onChange={(e) => {
-                                    setDias(e.target.value);
-                                    aplicarCosteDias(e.target.value, costeDiario);
-                                }}
-                                className={NUMERIC_CLASS}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="mes">Mes</Label>
-                            <Select value={mes || undefined} onValueChange={setMes}>
-                                <SelectTrigger id="mes" className="w-full">
-                                    <SelectValue placeholder="Selecciona un mes" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {MESES.map((m) => (
-                                        <SelectItem key={m} value={m}>
-                                            {m}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="rounded-xl border p-4 md:p-6 space-y-4">
-                    <h3 className="text-lg font-semibold">Totales</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="educacionBase">BASE</Label>
-                            <Input
-                                id="educacionBase"
-                                value={base}
-                                onChange={(e) => cambiarBase(e.target.value)}
-                                placeholder="0,00"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="educacionIva">IVA 10%</Label>
-                            <Input
-                                id="educacionIva"
-                                value={iva}
-                                onChange={(e) => cambiarIva(e.target.value)}
-                                placeholder="0,00"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="educacionTotal">TOTAL</Label>
-                            <Input id="educacionTotal" value={total} readOnly className="bg-muted" />
-                        </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                        Destinatario fijo: DEPARTAMENTO DE EDUCACIÓN · Número de expediente 514TEE
-                    </p>
+                <div className="w-full min-w-0 xl:grow-0 xl:shrink xl:basis-[794px]">
+                    <FacturaPreview html={htmlPreview} className="w-full" />
                 </div>
             </div>
         </section>

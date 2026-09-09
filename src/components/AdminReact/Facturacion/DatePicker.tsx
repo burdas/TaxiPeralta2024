@@ -29,6 +29,7 @@ export function DatePicker({ value, onChange, id }: Props) {
                     id={id}
                     type="button"
                     variant="outline"
+                    size="sm"
                     className="w-full justify-start gap-2 text-left font-normal"
                 >
                     <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />

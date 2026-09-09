@@ -8,9 +8,10 @@ interface Props {
     placeholder?: string;
     onSelect?: (valorSeleccionado: string) => void;
     className?: string;
+    size?: "default" | "sm";
 }
 
-export function AutocompleteInput({ id, value, onValueChange, opciones, placeholder, onSelect, className }: Props) {
+export function AutocompleteInput({ id, value, onValueChange, opciones, placeholder, onSelect, className, size }: Props) {
     const listId = id ? `${id}-list` : undefined;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +32,7 @@ export function AutocompleteInput({ id, value, onValueChange, opciones, placehol
                 onChange={handleChange}
                 placeholder={placeholder}
                 className={className}
+                size={size}
                 autoComplete="off"
             />
             {listId && (
