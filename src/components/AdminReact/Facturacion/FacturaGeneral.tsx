@@ -310,16 +310,9 @@ export default function FacturaGeneral() {
                     </div>
                     <form>
                         <div className="space-y-8">
-                        <Seccion
-                            titulo="Empresa o entidad"
-                            acciones={
-                                <Button type="button" variant="outline" size="sm" onClick={guardarEntidad}>
-                                    Guardar entidad
-                                </Button>
-                            }
-                        >
-                            <div className="grid grid-cols-2 gap-4">
-                                <Campo label="Nombre" htmlFor="nombreEntidad" className="col-span-2">
+                        <Seccion titulo="Empresa o entidad">
+                            <div className="grid grid-cols-[2fr_1fr] gap-4">
+                                <Campo label="Nombre" htmlFor="nombreEntidad">
                                     <AutocompleteInput
                                         id="nombreEntidad"
                                         size="sm"
@@ -328,15 +321,6 @@ export default function FacturaGeneral() {
                                         onSelect={rellenarDesdeEntidad}
                                         opciones={nombresEntidades}
                                         placeholder="Nombre de la entidad"
-                                    />
-                                </Campo>
-                                <Campo label="Dirección" htmlFor="direccionEntidad" className="col-span-2">
-                                    <Input
-                                        id="direccionEntidad"
-                                        size="sm"
-                                        value={entidad.direccion}
-                                        onChange={(e) => setEntidad((prev) => ({ ...prev, direccion: e.target.value }))}
-                                        placeholder="Dirección de la entidad"
                                     />
                                 </Campo>
                                 <Campo label="Código" htmlFor="codigoEntidad">
@@ -348,6 +332,20 @@ export default function FacturaGeneral() {
                                         placeholder="Código"
                                     />
                                 </Campo>
+                                <Campo label="Dirección" htmlFor="direccionEntidad">
+                                    <Input
+                                        id="direccionEntidad"
+                                        size="sm"
+                                        value={entidad.direccion}
+                                        onChange={(e) => setEntidad((prev) => ({ ...prev, direccion: e.target.value }))}
+                                        placeholder="Dirección de la entidad"
+                                    />
+                                </Campo>
+                                <div className="flex items-end">
+                                    <Button type="button" variant="outline" size="sm" onClick={guardarEntidad} className="w-full">
+                                        Guardar entidad
+                                    </Button>
+                                </div>
                             </div>
                         </Seccion>
 
