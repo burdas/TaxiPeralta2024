@@ -514,11 +514,11 @@ export default function FacturaGeneral() {
                                 </Table>
                             </div>
                             <div className="ml-auto mt-3 w-full max-w-[260px] space-y-1">
-                                <div className="flex items-center justify-between gap-4 text-sm">
+                                <div className="flex items-center justify-between gap-4 px-3 py-1.5 text-sm">
                                     <span className="text-muted-foreground">BASE</span>
                                     <span className="font-semibold tabular-nums">{formatNumero(totales.base)}€</span>
                                 </div>
-                                <div className="flex items-center justify-between gap-4 text-sm">
+                                <div className="flex items-center justify-between gap-4 px-3 py-1.5 text-sm">
                                     <span className="text-muted-foreground">IVA 10%</span>
                                     <span className="font-semibold tabular-nums">{formatNumero(totales.iva)}€</span>
                                 </div>
