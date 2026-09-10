@@ -29,7 +29,7 @@ import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
 import FacturaPreview from "@/components/AdminReact/Facturacion/FacturaPreview.tsx";
 import { showDangerToast, showOkToast } from "@/utils/Toast.ts";
 import Trash from "@/components/Icons/svg/trash.svg?react";
-import { Search } from "lucide-react";
+import { Search, Download } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import {
     TipoTarifa,
@@ -51,6 +51,7 @@ import {
     validarLinea,
 } from "@/lib/facturacion/generarFactura.ts";
 import { abrirFactura, getLogoDataUri } from "@/lib/facturacion/browser.ts";
+import { generarPdf } from "@/lib/facturacion/pdf.ts";
 import { useLogoDataUri } from "@/components/AdminReact/Facturacion/useFacturaLogo.ts";
 
 type LineaForm = {
@@ -141,6 +142,7 @@ export default function FacturaGeneral() {
         horas: "",
     });
     const [generando, setGenerando] = useState(false);
+    const [descargandoPdf, setDescargandoPdf] = useState(false);
     const [modalAbierto, setModalAbierto] = useState(false);
 
     const logoUri = useLogoDataUri();
@@ -302,6 +304,52 @@ export default function FacturaGeneral() {
             showDangerToast("Error al generar la factura");
         } finally {
             setGenerando(false);
+        }
+    };
+
+    const handleDescargarPdf = async () => {
+        if (lineas.length === 0) {
+            showDangerToast("No se puede generar el PDF, no existen líneas.");
+            return;
+        }
+        if (entidad.nombre.trim() === "" && entidad.direccion.trim() === "" && entidad.codigo.trim() === "") {
+            showDangerToast("No se puede generar el PDF, no existen datos de la empresa o entidad.");
+            return;
+        }
+        if (numeroFactura.trim() === "") {
+            showDangerToast("No se puede generar el PDF, no existe el número de la factura.");
+            return;
+        }
+
+        setDescargandoPdf(true);
+        try {
+            const logo = logoUri || (await getLogoDataUri().catch(() => ""));
+            const html = generarHtmlFacturaGeneral(
+                {
+                    entidad: {
+                        nombre: entidad.nombre.trim(),
+                        direccion: entidad.direccion.trim(),
+                        codigo: entidad.codigo.trim(),
+                    },
+                    numeroFactura: numeroFactura.trim(),
+                    fechaCorta: formatFechaCorta(fecha),
+                    tarifas,
+                    mostrarOrigen,
+                    mostrarDestino,
+                    mostrarKilometros,
+                    mostrarHoras,
+                    lineas,
+                },
+                logo,
+            );
+            const nombre = `factura_${numeroFactura.trim()}.pdf`;
+            await generarPdf(html, nombre);
+            showOkToast("PDF descargado correctamente");
+        } catch (err) {
+            console.error(err);
+            showDangerToast("Error al generar el PDF");
+        } finally {
+            setDescargandoPdf(false);
         }
     };
 
@@ -531,7 +579,17 @@ export default function FacturaGeneral() {
 
                     </div>
                     </form>
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-6 flex justify-end gap-3">
+                        <Button
+                            type="button"
+                            disabled={descargandoPdf}
+                            onClick={handleDescargarPdf}
+                            variant="outline"
+                            size="lg"
+                        >
+                            <Download className="size-4" />
+                            {descargandoPdf ? "Generando…" : "Descargar PDF"}
+                        </Button>
                         <Button
                             type="button"
                             disabled={generando}

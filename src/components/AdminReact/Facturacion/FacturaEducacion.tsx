@@ -14,7 +14,8 @@ import {
 import { AutocompleteInput } from "@/components/AdminReact/Facturacion/AutocompleteInput.tsx";
 import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
 import FacturaPreview from "@/components/AdminReact/Facturacion/FacturaPreview.tsx";
-import { showDangerToast } from "@/utils/Toast.ts";
+import { showDangerToast, showOkToast } from "@/utils/Toast.ts";
+import { Download } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import { COSTE_DIARIO_DEFECTO, MESES } from "@/lib/facturacion/types.ts";
 import {
@@ -26,6 +27,7 @@ import {
 import { formatFechaCorta, formatNumero, toFechaInput } from "@/lib/facturacion/format.ts";
 import { calcularImporteEducacion, generarHtmlFacturaEducacion } from "@/lib/facturacion/generarFactura.ts";
 import { abrirFactura, getLogoDataUri } from "@/lib/facturacion/browser.ts";
+import { generarPdf } from "@/lib/facturacion/pdf.ts";
 import { useLogoDataUri } from "@/components/AdminReact/Facturacion/useFacturaLogo.ts";
 
 const NUMERIC_CLASS =
@@ -80,6 +82,7 @@ export default function FacturaEducacion() {
     const [iva, setIva] = useState("");
     const [total, setTotal] = useState("");
     const [generando, setGenerando] = useState(false);
+    const [descargandoPdf, setDescargandoPdf] = useState(false);
 
     const logoUri = useLogoDataUri();
 
@@ -194,6 +197,61 @@ export default function FacturaEducacion() {
         }
     };
 
+    const handleDescargarPdf = async () => {
+        const d = Math.trunc(parseNumero(dias));
+        const c = parseNumero(costeDiario);
+
+        if (numeroFactura.trim() === "") {
+            showDangerToast("Falta de introducir el número de la factura.");
+            return;
+        }
+        if (trayecto.trim() === "") {
+            showDangerToast("Falta de introducir el trayecto de la factura.");
+            return;
+        }
+        if (d <= 0) {
+            showDangerToast("El número de días tiene que ser mayor que cero.");
+            return;
+        }
+        if (c <= 0) {
+            showDangerToast("El coste diario tiene que ser mayor que cero.");
+            return;
+        }
+        if (mes === "") {
+            showDangerToast("Falta de introducir el mes de la factura.");
+            return;
+        }
+
+        const baseN = parseNumero(base);
+        const ivaN = parseNumero(iva);
+
+        setDescargandoPdf(true);
+        try {
+            const logo = logoUri || (await getLogoDataUri().catch(() => ""));
+            const html = generarHtmlFacturaEducacion(
+                {
+                    numeroFactura: numeroFactura.trim(),
+                    fechaCorta: formatFechaCorta(fecha),
+                    codigoAsignacion: codigoAsignacion.trim(),
+                    mes,
+                    trayecto: trayecto.trim(),
+                    costeDiario: c,
+                    dias: d,
+                    totales: { base: baseN, iva: ivaN, total: baseN + ivaN },
+                },
+                logo,
+            );
+            const nombre = `factura_educacion_${numeroFactura.trim()}.pdf`;
+            await generarPdf(html, nombre);
+            showOkToast("PDF descargado correctamente");
+        } catch (err) {
+            console.error(err);
+            showDangerToast("Error al generar el PDF");
+        } finally {
+            setDescargandoPdf(false);
+        }
+    };
+
     return (
         <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
             <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
@@ -205,15 +263,27 @@ export default function FacturaEducacion() {
                                 Rellena los datos y comprueba el resultado en vivo en el folio.
                             </p>
                         </div>
-                        <Button
-                            type="button"
-                            disabled={generando}
-                            onClick={generar}
-                            className="bg-green-600 text-white hover:bg-green-700"
-                            size="lg"
-                        >
-                            {generando ? "Generando…" : "Generar factura"}
-                        </Button>
+                        <div className="flex gap-3">
+                            <Button
+                                type="button"
+                                disabled={generando}
+                                onClick={generar}
+                                className="bg-green-600 text-white hover:bg-green-700"
+                                size="lg"
+                            >
+                                {generando ? "Generando…" : "Generar factura"}
+                            </Button>
+                            <Button
+                                type="button"
+                                disabled={descargandoPdf}
+                                onClick={handleDescargarPdf}
+                                variant="outline"
+                                size="lg"
+                            >
+                                <Download className="size-4" />
+                                {descargandoPdf ? "Generando…" : "Descargar PDF"}
+                            </Button>
+                        </div>
                     </div>
                     <form>
                         <div className="space-y-8">
