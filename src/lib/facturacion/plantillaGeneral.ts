@@ -220,8 +220,12 @@ export const plantillaGeneral = `<!DOCTYPE html>
                                 <th>#</th>
                                 <th class="text-left">FECHA</th>
                                 <th class="text-left">DESCRIPCIÓN</th>
+                                {{VER_ORIGEN}}
                                 <th class="text-left">ORIGEN</th>
+                                {{VER_ORIGEN}}
+                                {{VER_DESTINO}}
                                 <th class="text-left">DESTINO</th>
+                                {{VER_DESTINO}}
                                 <th class="text-left">TARIFA</th>
                                 {{VER_KILOMTEROS}}
                                 <th class="text-right">KILOMETROS</th>
@@ -238,8 +242,12 @@ export const plantillaGeneral = `<!DOCTYPE html>
                                 <td class="no">{{NUMERO_F}}</td>
                                 <td class="text-left">{{FECHA_F}}</td>
                                 <td class="text-left">{{DESCRIPCION_F}}</td>
+                                {{VER_ORIGEN}}
                                 <td class="text-left">{{ORIGEN_F}}</td>
+                                {{VER_ORIGEN}}
+                                {{VER_DESTINO}}
                                 <td class="text-left">{{DESTINO_F}}</td>
+                                {{VER_DESTINO}}
                                 <td class="text-left">{{TARIFA_F}}</td>
                                 {{VER_KILOMTEROS}}
                                 <td class="qty">{{KILOMETROS_F}}</td>

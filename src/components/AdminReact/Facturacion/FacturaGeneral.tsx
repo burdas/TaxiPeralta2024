@@ -125,6 +125,8 @@ export default function FacturaGeneral() {
     const [tarifas, setTarifas] = useState<TarifasFacturacion>(TARIFAS_POR_DEFECTO);
     const [numeroFactura, setNumeroFactura] = useState("");
     const [fecha, setFecha] = useState(() => toFechaInput(new Date()));
+    const [mostrarOrigen, setMostrarOrigen] = useState(true);
+    const [mostrarDestino, setMostrarDestino] = useState(true);
     const [mostrarKilometros, setMostrarKilometros] = useState(true);
     const [mostrarHoras, setMostrarHoras] = useState(true);
     const [tarifaLinea, setTarifaLinea] = useState<TipoTarifa>(TipoTarifa.Diurna);
@@ -176,13 +178,15 @@ export default function FacturaGeneral() {
                     numeroFactura: numeroFactura.trim(),
                     fechaCorta: formatFechaCorta(fecha),
                     tarifas,
+                    mostrarOrigen,
+                    mostrarDestino,
                     mostrarKilometros,
                     mostrarHoras,
                     lineas,
                 },
                 logoUri,
             ),
-        [entidad, numeroFactura, fecha, tarifas, mostrarKilometros, mostrarHoras, lineas, logoUri],
+        [entidad, numeroFactura, fecha, tarifas, mostrarOrigen, mostrarDestino, mostrarKilometros, mostrarHoras, lineas, logoUri],
     );
 
     const nombresEntidades = entidades.map((e) => e.nombre).filter((n) => n.trim() !== "");
@@ -283,6 +287,8 @@ export default function FacturaGeneral() {
                     numeroFactura: numeroFactura.trim(),
                     fechaCorta: formatFechaCorta(fecha),
                     tarifas,
+                    mostrarOrigen,
+                    mostrarDestino,
                     mostrarKilometros,
                     mostrarHoras,
                     lineas,
@@ -322,6 +328,63 @@ export default function FacturaGeneral() {
                     </div>
                     <form>
                         <div className="space-y-8">
+                        <Seccion titulo="General">
+                            <div className="grid grid-cols-2 gap-4">
+                                <Campo label="Número de factura" htmlFor="numeroFactura">
+                                    <Input
+                                        id="numeroFactura"
+                                        size="sm"
+                                        value={numeroFactura}
+                                        onChange={(e) => setNumeroFactura(e.target.value)}
+                                        placeholder="Nº de factura"
+                                    />
+                                </Campo>
+                                <Campo label="Fecha de factura" htmlFor="fechaFactura">
+                                    <DatePicker id="fechaFactura" value={fecha} onChange={setFecha} />
+                                </Campo>
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="mostrarOrigen"
+                                        checked={mostrarOrigen}
+                                        onCheckedChange={(valor) => setMostrarOrigen(valor === true)}
+                                    />
+                                    <Label htmlFor="mostrarOrigen" className="text-sm font-normal">
+                                        Mostrar origen
+                                    </Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="mostrarDestino"
+                                        checked={mostrarDestino}
+                                        onCheckedChange={(valor) => setMostrarDestino(valor === true)}
+                                    />
+                                    <Label htmlFor="mostrarDestino" className="text-sm font-normal">
+                                        Mostrar destino
+                                    </Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="mostrarKm"
+                                        checked={mostrarKilometros}
+                                        onCheckedChange={(valor) => setMostrarKilometros(valor === true)}
+                                    />
+                                    <Label htmlFor="mostrarKm" className="text-sm font-normal">
+                                        Mostrar km
+                                    </Label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Checkbox
+                                        id="mostrarHoras"
+                                        checked={mostrarHoras}
+                                        onCheckedChange={(valor) => setMostrarHoras(valor === true)}
+                                    />
+                                    <Label htmlFor="mostrarHoras" className="text-sm font-normal">
+                                        Mostrar horas
+                                    </Label>
+                                </div>
+                            </div>
+                        </Seccion>
+
                         <Seccion titulo="Empresa o entidad">
                             <div className="grid grid-cols-[2fr_1fr] gap-4">
                                 <Campo label="Nombre" htmlFor="nombreEntidad">
@@ -476,44 +539,6 @@ export default function FacturaGeneral() {
                             </div>
                         </Seccion>
 
-                        <Seccion titulo="Configuración">
-                            <div className="grid grid-cols-2 gap-4">
-                                <Campo label="Número de factura" htmlFor="numeroFactura">
-                                    <Input
-                                        id="numeroFactura"
-                                        size="sm"
-                                        value={numeroFactura}
-                                        onChange={(e) => setNumeroFactura(e.target.value)}
-                                        placeholder="Nº de factura"
-                                    />
-                                </Campo>
-                                <Campo label="Fecha de factura" htmlFor="fechaFactura">
-                                    <DatePicker id="fechaFactura" value={fecha} onChange={setFecha} />
-                                </Campo>
-                            </div>
-                            <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
-                                <div className="flex items-center gap-2">
-                                    <Checkbox
-                                        id="mostrarKm"
-                                        checked={mostrarKilometros}
-                                        onCheckedChange={(valor) => setMostrarKilometros(valor === true)}
-                                    />
-                                    <Label htmlFor="mostrarKm" className="text-sm font-normal">
-                                        Mostrar kilómetros
-                                    </Label>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Checkbox
-                                        id="mostrarHoras"
-                                        checked={mostrarHoras}
-                                        onCheckedChange={(valor) => setMostrarHoras(valor === true)}
-                                    />
-                                    <Label htmlFor="mostrarHoras" className="text-sm font-normal">
-                                        Mostrar horas
-                                    </Label>
-                                </div>
-                            </div>
-                        </Seccion>
                     </div>
                     </form>
                 </div>

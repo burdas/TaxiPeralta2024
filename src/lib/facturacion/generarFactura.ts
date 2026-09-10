@@ -106,6 +106,8 @@ export interface DatosFacturaGeneral {
     numeroFactura: string;
     fechaCorta: string;
     tarifas: TarifasFacturacion;
+    mostrarOrigen: boolean;
+    mostrarDestino: boolean;
     mostrarKilometros: boolean;
     mostrarHoras: boolean;
     lineas: DatosFactura[];
@@ -114,9 +116,11 @@ export interface DatosFacturaGeneral {
 export function generarHtmlFacturaGeneral(datos: DatosFacturaGeneral, logoUrl: string): string {
     let html = plantillaGeneral;
 
-    const columnasVisibles = (datos.mostrarKilometros ? 1 : 0) + (datos.mostrarHoras ? 1 : 0);
-    const colSpan = 4 + columnasVisibles;
+    const columnasVisibles = (datos.mostrarOrigen ? 1 : 0) + (datos.mostrarDestino ? 1 : 0) + (datos.mostrarKilometros ? 1 : 0) + (datos.mostrarHoras ? 1 : 0);
+    const colSpan = 2 + columnasVisibles;
 
+    html = aplicarMarcadorCondicional(html, "{{VER_ORIGEN}}", datos.mostrarOrigen);
+    html = aplicarMarcadorCondicional(html, "{{VER_DESTINO}}", datos.mostrarDestino);
     html = aplicarMarcadorCondicional(html, "{{VER_KILOMTEROS}}", datos.mostrarKilometros);
     html = aplicarMarcadorCondicional(html, "{{VER_HORAS}}", datos.mostrarHoras);
 
