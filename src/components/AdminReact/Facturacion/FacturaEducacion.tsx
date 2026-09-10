@@ -268,7 +268,7 @@ export default function FacturaEducacion() {
                     <form>
                         <div className="space-y-8">
                         <Seccion titulo="General">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-3 gap-4">
                                 <Campo label="Número de factura" htmlFor="educacionNumeroFactura">
                                     <Input
                                         id="educacionNumeroFactura"
@@ -281,7 +281,7 @@ export default function FacturaEducacion() {
                                 <Campo label="Fecha factura" htmlFor="educacionFecha">
                                     <DatePicker id="educacionFecha" value={fecha} onChange={setFecha} />
                                 </Campo>
-                                <Campo label="Código de asignación" htmlFor="codigoAsignacion" className="col-span-2">
+                                <Campo label="Código de asignación" htmlFor="codigoAsignacion">
                                     <AutocompleteInput
                                         id="codigoAsignacion"
                                         size="sm"
@@ -295,8 +295,8 @@ export default function FacturaEducacion() {
                         </Seccion>
 
                         <Seccion titulo="Datos de la factura">
-                            <div className="grid grid-cols-2 gap-4">
-                                <Campo label="Trayecto" htmlFor="trayecto" className="col-span-2">
+                            <div className="grid grid-cols-3 gap-4">
+                                <Campo label="Trayecto" htmlFor="trayecto" className="col-span-3">
                                     <AutocompleteInput
                                         id="trayecto"
                                         size="sm"
@@ -337,7 +337,7 @@ export default function FacturaEducacion() {
                                         className={NUMERIC_CLASS}
                                     />
                                 </Campo>
-                                <Campo label="Mes" htmlFor="mes" className="col-span-2">
+                                <Campo label="Mes" htmlFor="mes">
                                     <Select value={mes || undefined} onValueChange={setMes}>
                                         <SelectTrigger id="mes" size="sm" className="w-full">
                                             <SelectValue placeholder="Selecciona un mes" />
