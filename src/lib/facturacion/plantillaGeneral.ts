@@ -12,14 +12,24 @@ export const plantillaGeneral = `<!DOCTYPE html>
     <style>
         #invoice {
             padding: 30px;
+            height: 100vh;
+            box-sizing: border-box
         }
 
         .invoice {
-            position: relative;
             background-color: #FFF;
-            min-height: 680px;
-            padding: 15px
+            height: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            display: flex;
+            flex-direction: column
         }
+
+            .invoice > div:first-child {
+                flex: 1;
+                display: flex;
+                flex-direction: column
+            }
 
             .invoice header {
                 padding: 10px 0;
@@ -59,7 +69,8 @@ export const plantillaGeneral = `<!DOCTYPE html>
                 }
 
             .invoice main {
-                padding-bottom: 50px
+                flex: 1;
+                padding-bottom: 20px
             }
 
                 .invoice main .thanks {
@@ -152,7 +163,6 @@ export const plantillaGeneral = `<!DOCTYPE html>
                 }
 
             .invoice footer {
-                width: 100%;
                 text-align: center;
                 color: #777;
                 border-top: 1px solid #aaa;
@@ -164,22 +174,12 @@ export const plantillaGeneral = `<!DOCTYPE html>
                 font-size: 11px !important;
                 overflow: hidden !important
             }
-
-                .invoice footer {
-                    position: absolute;
-                    bottom: 10px;
-                    page-break-after: always
-                }
-
-                .invoice > div:last-child {
-                    page-break-before: always
-                }
         }
     </style>
 </head>
 <body>
     <div id="invoice">
-        <div class="invoice overflow-auto">
+        <div class="invoice">
             <div style="min-width: 600px">
                 <header>
                     <div class="row">
@@ -287,8 +287,6 @@ export const plantillaGeneral = `<!DOCTYPE html>
                     taxiperalta.com
                 </footer>
             </div>
-            <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
-            <div></div>
         </div>
     </div>
 </body>
