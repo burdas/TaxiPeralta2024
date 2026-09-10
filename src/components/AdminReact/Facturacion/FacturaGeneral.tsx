@@ -570,6 +570,7 @@ export default function FacturaGeneral() {
                                     variant="outline"
                                     pressed={tarifaLinea === TipoTarifa.Diurna}
                                     onPressedChange={() => setTarifaLinea(TipoTarifa.Diurna)}
+                                    className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary data-[state=on]:shadow-md"
                                 >
                                     Diurna
                                 </Toggle>
@@ -578,6 +579,7 @@ export default function FacturaGeneral() {
                                     variant="outline"
                                     pressed={tarifaLinea === TipoTarifa.Nocturna}
                                     onPressedChange={() => setTarifaLinea(TipoTarifa.Nocturna)}
+                                    className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary data-[state=on]:shadow-md"
                                 >
                                     Nocturna
                                 </Toggle>
