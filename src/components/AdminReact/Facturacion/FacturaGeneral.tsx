@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
+
 import {
     Table,
     TableBody,
@@ -14,6 +14,14 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+    DialogClose,
+} from "@/components/ui/dialog.tsx";
 import { ConfirmDialog } from "@/components/AdminReact/Shared/ConfirmDialog.tsx";
 import { AutocompleteInput } from "@/components/AdminReact/Facturacion/AutocompleteInput.tsx";
 import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
@@ -129,6 +137,7 @@ export default function FacturaGeneral() {
         horas: "",
     });
     const [generando, setGenerando] = useState(false);
+    const [modalAbierto, setModalAbierto] = useState(false);
 
     const logoUri = useLogoDataUri();
 
@@ -232,6 +241,7 @@ export default function FacturaGeneral() {
             kilometros: "",
             horas: "",
         });
+        setModalAbierto(false);
     };
 
     const editarLinea = (indice: number, campo: "kilometros" | "horas", valor: number) => {
@@ -288,6 +298,7 @@ export default function FacturaGeneral() {
     };
 
     return (
+        <>
         <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
             <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
                 <div className="w-full min-w-0 shrink-0 xl:w-[700px]">
@@ -349,99 +360,6 @@ export default function FacturaGeneral() {
                             </div>
                         </Seccion>
 
-                        <Seccion
-                            titulo="Nueva línea"
-                            acciones={
-                                <Button type="button" size="sm" onClick={anadirLinea}>
-                                    Añadir línea
-                                </Button>
-                            }
-                        >
-                            <div className="grid grid-cols-2 gap-4">
-                                <Campo label="Fecha" htmlFor="fechaLinea">
-                                    <DatePicker
-                                        id="fechaLinea"
-                                        value={linea.fecha}
-                                        onChange={(valor) => setLinea((prev) => ({ ...prev, fecha: valor }))}
-                                    />
-                                </Campo>
-                                <Campo label="Descripción" htmlFor="descripcionLinea">
-                                    <Input
-                                        id="descripcionLinea"
-                                        size="sm"
-                                        value={linea.descripcion}
-                                        onChange={(e) => setLinea((prev) => ({ ...prev, descripcion: e.target.value }))}
-                                        placeholder="Descripción"
-                                    />
-                                </Campo>
-                                <Campo label="Origen" htmlFor="origenLinea">
-                                    <Input
-                                        id="origenLinea"
-                                        size="sm"
-                                        value={linea.origen}
-                                        onChange={(e) => setLinea((prev) => ({ ...prev, origen: e.target.value }))}
-                                        placeholder="Origen"
-                                    />
-                                </Campo>
-                                <Campo label="Destino" htmlFor="destinoLinea">
-                                    <Input
-                                        id="destinoLinea"
-                                        size="sm"
-                                        value={linea.destino}
-                                        onChange={(e) => setLinea((prev) => ({ ...prev, destino: e.target.value }))}
-                                        placeholder="Destino"
-                                    />
-                                </Campo>
-                                <Campo label="Kilómetros" htmlFor="kmLinea">
-                                    <Input
-                                        id="kmLinea"
-                                        size="sm"
-                                        type="number"
-                                        min={0}
-                                        max={10000}
-                                        step={1}
-                                        value={linea.kilometros}
-                                        onChange={(e) => setLinea((prev) => ({ ...prev, kilometros: e.target.value }))}
-                                        placeholder="0"
-                                        className={NUMERIC_CLASS}
-                                    />
-                                </Campo>
-                                <Campo label="Horas" htmlFor="horasLinea">
-                                    <Input
-                                        id="horasLinea"
-                                        size="sm"
-                                        type="number"
-                                        min={0}
-                                        max={10000}
-                                        step="0.1"
-                                        value={linea.horas}
-                                        onChange={(e) => setLinea((prev) => ({ ...prev, horas: e.target.value }))}
-                                        placeholder="0"
-                                        className={NUMERIC_CLASS}
-                                    />
-                                </Campo>
-                            </div>
-                            <RadioGroup
-                                value={tarifaLinea}
-                                onValueChange={(valor) => setTarifaLinea(valor as TipoTarifa)}
-                                className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2"
-                            >
-                                <Label className="text-xs font-medium text-muted-foreground">Tarifa a aplicar</Label>
-                                <div className="flex items-center gap-2">
-                                    <RadioGroupItem value={TipoTarifa.Diurna} id="tarifaDiurna" />
-                                    <Label htmlFor="tarifaDiurna" className="text-sm font-normal">
-                                        Diurna
-                                    </Label>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <RadioGroupItem value={TipoTarifa.Nocturna} id="tarifaNocturna" />
-                                    <Label htmlFor="tarifaNocturna" className="text-sm font-normal">
-                                        Nocturna
-                                    </Label>
-                                </div>
-                            </RadioGroup>
-                        </Seccion>
-
                         <Seccion titulo="Líneas de la factura">
                             <div className="-mx-1 overflow-x-auto px-1">
                                 <Table className="min-w-[640px]">
@@ -475,13 +393,6 @@ export default function FacturaGeneral() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {lineas.length === 0 && (
-                                            <TableRow>
-                                                <TableCell colSpan={9} className="p-4 text-center text-muted-foreground">
-                                                    No hay líneas añadidas.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
                                         {lineas.map((l, i) => (
                                             <TableRow key={i} className="odd:bg-muted/30">
                                                 <TableCell className="px-2 py-1.5 whitespace-nowrap">{l.fecha}</TableCell>
@@ -537,6 +448,14 @@ export default function FacturaGeneral() {
                                                 </TableCell>
                                             </TableRow>
                                         ))}
+                                        <TableRow 
+                                            className="cursor-pointer border-t border-dashed border-muted-foreground/30 hover:bg-muted/50"
+                                            onClick={() => setModalAbierto(true)}
+                                        >
+                                            <TableCell colSpan={9} className="w-full py-3 text-center text-sm text-muted-foreground">
+                                                + Añadir línea
+                                            </TableCell>
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </div>
@@ -603,5 +522,93 @@ export default function FacturaGeneral() {
                 </div>
             </div>
         </section>
+
+        <Dialog open={modalAbierto} onOpenChange={setModalAbierto}>
+            <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                    <DialogTitle>Nueva línea</DialogTitle>
+                </DialogHeader>
+                <div className="grid grid-cols-2 gap-4 py-4">
+                    <Campo label="Fecha" htmlFor="fechaLineaModal">
+                        <DatePicker
+                            value={linea.fecha}
+                            onChange={(valor) => setLinea((prev) => ({ ...prev, fecha: valor }))}
+                        />
+                    </Campo>
+                    <Campo label="Descripción" htmlFor="descripcionLineaModal">
+                        <Input
+                            size="sm"
+                            value={linea.descripcion}
+                            onChange={(e) => setLinea((prev) => ({ ...prev, descripcion: e.target.value }))}
+                            placeholder="Descripción"
+                        />
+                    </Campo>
+                    <Campo label="Origen" htmlFor="origenLineaModal">
+                        <Input
+                            size="sm"
+                            value={linea.origen}
+                            onChange={(e) => setLinea((prev) => ({ ...prev, origen: e.target.value }))}
+                            placeholder="Origen"
+                        />
+                    </Campo>
+                    <Campo label="Destino" htmlFor="destinoLineaModal">
+                        <Input
+                            size="sm"
+                            value={linea.destino}
+                            onChange={(e) => setLinea((prev) => ({ ...prev, destino: e.target.value }))}
+                            placeholder="Destino"
+                        />
+                    </Campo>
+                    <Campo label="Kilómetros" htmlFor="kmLineaModal">
+                        <Input
+                            type="number"
+                            size="sm"
+                            min={0}
+                            max={10000}
+                            step={1}
+                            value={linea.kilometros}
+                            onChange={(e) => setLinea((prev) => ({ ...prev, kilometros: e.target.value }))}
+                            placeholder="0"
+                            className={NUMERIC_CLASS}
+                        />
+                    </Campo>
+                    <Campo label="Horas" htmlFor="horasLineaModal">
+                        <Input
+                            type="number"
+                            size="sm"
+                            min={0}
+                            max={10000}
+                            step="0.1"
+                            value={linea.horas}
+                            onChange={(e) => setLinea((prev) => ({ ...prev, horas: e.target.value }))}
+                            placeholder="0"
+                            className={NUMERIC_CLASS}
+                        />
+                    </Campo>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Label className="text-xs font-medium text-muted-foreground">Tarifa</Label>
+                    <select
+                        value={tarifaLinea}
+                        onChange={(e) => setTarifaLinea(e.target.value as TipoTarifa)}
+                        className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
+                    >
+                        <option value={TipoTarifa.Diurna}>Diurna</option>
+                        <option value={TipoTarifa.Nocturna}>Nocturna</option>
+                    </select>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" variant="outline">
+                            Cancelar
+                        </Button>
+                    </DialogClose>
+                    <Button type="button" onClick={anadirLinea}>
+                        Añadir línea
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+        </>
     );
 }
