@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Toggle } from "@/components/ui/toggle.tsx";
 
 import {
     Table,
@@ -524,78 +525,93 @@ export default function FacturaGeneral() {
         </section>
 
         <Dialog open={modalAbierto} onOpenChange={setModalAbierto}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[640px]">
                 <DialogHeader>
                     <DialogTitle>Nueva línea</DialogTitle>
                 </DialogHeader>
-                <div className="grid grid-cols-2 gap-4 py-4">
-                    <Campo label="Fecha" htmlFor="fechaLineaModal">
-                        <DatePicker
-                            value={linea.fecha}
-                            onChange={(valor) => setLinea((prev) => ({ ...prev, fecha: valor }))}
-                        />
-                    </Campo>
-                    <Campo label="Descripción" htmlFor="descripcionLineaModal">
-                        <Input
-                            size="sm"
-                            value={linea.descripcion}
-                            onChange={(e) => setLinea((prev) => ({ ...prev, descripcion: e.target.value }))}
-                            placeholder="Descripción"
-                        />
-                    </Campo>
-                    <Campo label="Origen" htmlFor="origenLineaModal">
-                        <Input
-                            size="sm"
-                            value={linea.origen}
-                            onChange={(e) => setLinea((prev) => ({ ...prev, origen: e.target.value }))}
-                            placeholder="Origen"
-                        />
-                    </Campo>
-                    <Campo label="Destino" htmlFor="destinoLineaModal">
-                        <Input
-                            size="sm"
-                            value={linea.destino}
-                            onChange={(e) => setLinea((prev) => ({ ...prev, destino: e.target.value }))}
-                            placeholder="Destino"
-                        />
-                    </Campo>
-                    <Campo label="Kilómetros" htmlFor="kmLineaModal">
-                        <Input
-                            type="number"
-                            size="sm"
-                            min={0}
-                            max={10000}
-                            step={1}
-                            value={linea.kilometros}
-                            onChange={(e) => setLinea((prev) => ({ ...prev, kilometros: e.target.value }))}
-                            placeholder="0"
-                            className={NUMERIC_CLASS}
-                        />
-                    </Campo>
-                    <Campo label="Horas" htmlFor="horasLineaModal">
-                        <Input
-                            type="number"
-                            size="sm"
-                            min={0}
-                            max={10000}
-                            step="0.1"
-                            value={linea.horas}
-                            onChange={(e) => setLinea((prev) => ({ ...prev, horas: e.target.value }))}
-                            placeholder="0"
-                            className={NUMERIC_CLASS}
-                        />
-                    </Campo>
-                </div>
-                <div className="flex items-center gap-4">
-                    <Label className="text-xs font-medium text-muted-foreground">Tarifa</Label>
-                    <select
-                        value={tarifaLinea}
-                        onChange={(e) => setTarifaLinea(e.target.value as TipoTarifa)}
-                        className="rounded-md border border-input bg-background px-3 py-1.5 text-sm"
-                    >
-                        <option value={TipoTarifa.Diurna}>Diurna</option>
-                        <option value={TipoTarifa.Nocturna}>Nocturna</option>
-                    </select>
+                <div className="flex flex-col gap-4 py-4">
+                    <div className="flex w-full items-center gap-3">
+                        <Campo label="Fecha" htmlFor="fechaLineaModal" className="flex-1">
+                            <DatePicker
+                                value={linea.fecha}
+                                onChange={(valor) => setLinea((prev) => ({ ...prev, fecha: valor }))}
+                            />
+                        </Campo>
+                        <Campo label="Km" htmlFor="kmLineaModal" className="flex-1">
+                            <Input
+                                type="number"
+                                size="sm"
+                                min={0}
+                                max={10000}
+                                step={1}
+                                value={linea.kilometros}
+                                onChange={(e) => setLinea((prev) => ({ ...prev, kilometros: e.target.value }))}
+                                placeholder="0"
+                                className={NUMERIC_CLASS}
+                            />
+                        </Campo>
+                        <Campo label="Horas" htmlFor="horasLineaModal" className="flex-1">
+                            <Input
+                                type="number"
+                                size="sm"
+                                min={0}
+                                max={10000}
+                                step="0.1"
+                                value={linea.horas}
+                                onChange={(e) => setLinea((prev) => ({ ...prev, horas: e.target.value }))}
+                                placeholder="0"
+                                className={NUMERIC_CLASS}
+                            />
+                        </Campo>
+                        <Campo label="Tarifa" htmlFor="tarifaLineaModal" className="flex-1">
+                            <div className="flex gap-1">
+                                <Toggle
+                                    size="sm"
+                                    variant="outline"
+                                    pressed={tarifaLinea === TipoTarifa.Diurna}
+                                    onPressedChange={() => setTarifaLinea(TipoTarifa.Diurna)}
+                                >
+                                    Diurna
+                                </Toggle>
+                                <Toggle
+                                    size="sm"
+                                    variant="outline"
+                                    pressed={tarifaLinea === TipoTarifa.Nocturna}
+                                    onPressedChange={() => setTarifaLinea(TipoTarifa.Nocturna)}
+                                >
+                                    Nocturna
+                                </Toggle>
+                            </div>
+                        </Campo>
+                    </div>
+                    <div className="flex w-full items-end gap-3">
+                        <Campo label="Descripción" htmlFor="descripcionLineaModal" className="flex-1">
+                            <Input
+                                size="sm"
+                                value={linea.descripcion}
+                                onChange={(e) => setLinea((prev) => ({ ...prev, descripcion: e.target.value }))}
+                                placeholder="Descripción"
+                            />
+                        </Campo>
+                    </div>
+                    <div className="flex w-full items-end gap-3">
+                        <Campo label="Origen" htmlFor="origenLineaModal" className="flex-1">
+                            <Input
+                                size="sm"
+                                value={linea.origen}
+                                onChange={(e) => setLinea((prev) => ({ ...prev, origen: e.target.value }))}
+                                placeholder="Origen"
+                            />
+                        </Campo>
+                        <Campo label="Destino" htmlFor="destinoLineaModal" className="flex-1">
+                            <Input
+                                size="sm"
+                                value={linea.destino}
+                                onChange={(e) => setLinea((prev) => ({ ...prev, destino: e.target.value }))}
+                                placeholder="Destino"
+                            />
+                        </Campo>
+                    </div>
                 </div>
                 <DialogFooter>
                     <DialogClose asChild>
