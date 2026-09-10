@@ -38,10 +38,13 @@ function parseNumero(valor: string): number {
     return Number.isNaN(n) ? 0 : n;
 }
 
-function Seccion({ titulo, children }: { titulo: string; children: ReactNode }) {
+function Seccion({ titulo, acciones, children }: { titulo: string; acciones?: ReactNode; children: ReactNode }) {
     return (
         <section className="pb-6 last:pb-0">
-            <h3 className="mb-4 text-xs font-semibold tracking-wider text-muted-foreground uppercase">{titulo}</h3>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">{titulo}</h3>
+                {acciones}
+            </div>
             {children}
         </section>
     );
@@ -255,35 +258,12 @@ export default function FacturaEducacion() {
     return (
         <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
             <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
-                <div className="w-full min-w-0 shrink-0 xl:w-[480px]">
-                    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                            <h2 className="text-2xl font-bold">Factura Educación</h2>
-                            <p className="text-sm text-muted-foreground">
-                                Rellena los datos y comprueba el resultado en vivo en el folio.
-                            </p>
-                        </div>
-                        <div className="flex gap-3">
-                            <Button
-                                type="button"
-                                disabled={generando}
-                                onClick={generar}
-                                className="bg-green-600 text-white hover:bg-green-700"
-                                size="lg"
-                            >
-                                {generando ? "Generando…" : "Generar factura"}
-                            </Button>
-                            <Button
-                                type="button"
-                                disabled={descargandoPdf}
-                                onClick={handleDescargarPdf}
-                                variant="outline"
-                                size="lg"
-                            >
-                                <Download className="size-4" />
-                                {descargandoPdf ? "Generando…" : "Descargar PDF"}
-                            </Button>
-                        </div>
+                <div className="w-full min-w-0 shrink-0 xl:w-[700px]">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold">Factura Educación</h2>
+                        <p className="text-sm text-muted-foreground">
+                            Rellena los datos y comprueba el resultado en vivo en el folio.
+                        </p>
                     </div>
                     <form>
                         <div className="space-y-8">
@@ -375,34 +355,19 @@ export default function FacturaEducacion() {
                         </Seccion>
 
                         <Seccion titulo="Totales">
-                            <div className="grid grid-cols-2 gap-4">
-                                <Campo label="BASE" htmlFor="educacionBase">
-                                    <Input
-                                        id="educacionBase"
-                                        size="sm"
-                                        value={base}
-                                        onChange={(e) => cambiarBase(e.target.value)}
-                                        placeholder="0,00"
-                                    />
-                                </Campo>
-                                <Campo label="IVA 10%" htmlFor="educacionIva">
-                                    <Input
-                                        id="educacionIva"
-                                        size="sm"
-                                        value={iva}
-                                        onChange={(e) => cambiarIva(e.target.value)}
-                                        placeholder="0,00"
-                                    />
-                                </Campo>
-                                <Campo label="TOTAL" htmlFor="educacionTotal" className="col-span-2">
-                                    <Input
-                                        id="educacionTotal"
-                                        size="sm"
-                                        value={total}
-                                        readOnly
-                                        className="bg-muted font-semibold"
-                                    />
-                                </Campo>
+                            <div className="ml-auto mt-3 w-full max-w-[260px] space-y-1">
+                                <div className="flex items-center justify-between gap-4 px-3 py-1.5 text-sm">
+                                    <span className="text-muted-foreground">BASE</span>
+                                    <span className="font-semibold tabular-nums">{formatNumero(parseNumero(base))}€</span>
+                                </div>
+                                <div className="flex items-center justify-between gap-4 px-3 py-1.5 text-sm">
+                                    <span className="text-muted-foreground">IVA 10%</span>
+                                    <span className="font-semibold tabular-nums">{formatNumero(parseNumero(iva))}€</span>
+                                </div>
+                                <div className="flex items-center justify-between gap-4 rounded-md bg-primary/10 px-3 py-1.5">
+                                    <span className="font-bold">TOTAL</span>
+                                    <span className="font-bold tabular-nums">{formatNumero(parseNumero(total))}€</span>
+                                </div>
                             </div>
                             <p className="mt-3 rounded-md bg-muted/60 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
                                 Destinatario fijo: <span className="font-medium">DEPARTAMENTO DE EDUCACIÓN</span> ·
@@ -411,6 +376,26 @@ export default function FacturaEducacion() {
                         </Seccion>
                     </div>
                     </form>
+                    <div className="mt-6 flex justify-end gap-3">
+                        <Button
+                            type="button"
+                            disabled={descargandoPdf}
+                            onClick={handleDescargarPdf}
+                            variant="outline"
+                            size="lg"
+                        >
+                            <Download className="size-4" />
+                            {descargandoPdf ? "Generando…" : "Descargar PDF"}
+                        </Button>
+                        <Button
+                            type="button"
+                            disabled={generando}
+                            onClick={generar}
+                            size="lg"
+                        >
+                            {generando ? "Generando…" : "Vista previa"}
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="w-full min-w-0 xl:grow-0 xl:shrink xl:basis-[794px]">
