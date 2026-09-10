@@ -29,6 +29,7 @@ import { DatePicker } from "@/components/AdminReact/Facturacion/DatePicker.tsx";
 import FacturaPreview from "@/components/AdminReact/Facturacion/FacturaPreview.tsx";
 import { showDangerToast, showOkToast } from "@/utils/Toast.ts";
 import Trash from "@/components/Icons/svg/trash.svg?react";
+import { Search } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
 import {
     TipoTarifa,
@@ -309,22 +310,11 @@ export default function FacturaGeneral() {
         <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
             <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
                 <div className="w-full min-w-0 shrink-0 xl:w-[700px]">
-                    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                            <h2 className="text-2xl font-bold">Factura General</h2>
-                            <p className="text-sm text-muted-foreground">
-                                Rellena los datos y comprueba el resultado en vivo en el folio.
-                            </p>
-                        </div>
-                        <Button
-                            type="button"
-                            disabled={generando}
-                            onClick={generar}
-                            className="bg-green-600 text-white hover:bg-green-700"
-                            size="lg"
-                        >
-                            {generando ? "Generando…" : "Generar Factura"}
-                        </Button>
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold">Factura General</h2>
+                        <p className="text-sm text-muted-foreground">
+                            Rellena los datos y comprueba el resultado en vivo en el folio.
+                        </p>
                     </div>
                     <form>
                         <div className="space-y-8">
@@ -541,6 +531,17 @@ export default function FacturaGeneral() {
 
                     </div>
                     </form>
+                    <div className="mt-6 flex justify-end">
+                        <Button
+                            type="button"
+                            disabled={generando}
+                            onClick={generar}
+                            size="lg"
+                        >
+                            <Search className="size-4" />
+                            {generando ? "Generando…" : "Vista previa"}
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="w-full min-w-0 xl:grow-0 xl:shrink xl:basis-[794px]">
