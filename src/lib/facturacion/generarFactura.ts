@@ -159,6 +159,7 @@ export interface DatosFacturaEducacion {
     numeroFactura: string;
     fechaCorta: string;
     codigoAsignacion: string;
+    numeroRuta: string;
     mes: string;
     trayecto: string;
     costeDiario: number;
@@ -173,6 +174,7 @@ export function generarHtmlFacturaEducacion(datos: DatosFacturaEducacion, logoUr
         "{{NUMERO_FACTURA}}": datos.numeroFactura,
         "{{FECHA}}": datos.fechaCorta,
         "{{CODIGO_ASIGNACION}}": datos.codigoAsignacion,
+        "{{NUMERO_RUTA}}": datos.numeroRuta,
         "{{MES_F}}": datos.mes,
         "{{TRAYECTO_F}}": datos.trayecto,
         "{{COSTEDIARIO_F}}": formatCantidad(datos.costeDiario),

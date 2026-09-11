@@ -17,7 +17,7 @@ import FacturaPreview from "@/components/AdminReact/Facturacion/FacturaPreview.t
 import { showDangerToast, showOkToast } from "@/utils/Toast.ts";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/utils.ts";
-import { COSTE_DIARIO_DEFECTO, MESES } from "@/lib/facturacion/types.ts";
+import { COSTE_DIARIO_DEFECTO, DESTINATARIO_EDUCACION, MESES } from "@/lib/facturacion/types.ts";
 import {
     getCodigosAsignacion,
     getTrayectos,
@@ -76,6 +76,7 @@ export default function FacturaEducacion() {
     const [fecha, setFecha] = useState(() => toFechaInput(new Date()));
     const [codigoAsignacion, setCodigoAsignacion] = useState("");
     const [codigosAsignacion, setCodigosAsignacion] = useState<string[]>(() => getCodigosAsignacion());
+    const [numeroRuta, setNumeroRuta] = useState(DESTINATARIO_EDUCACION.numeroRuta);
     const [trayecto, setTrayecto] = useState("");
     const [trayectos, setTrayectos] = useState<string[]>(() => getTrayectos());
     const [costeDiario, setCosteDiario] = useState(String(COSTE_DIARIO_DEFECTO));
@@ -126,6 +127,7 @@ export default function FacturaEducacion() {
                 numeroFactura: numeroFactura.trim(),
                 fechaCorta: formatFechaCorta(fecha),
                 codigoAsignacion: codigoAsignacion.trim(),
+                numeroRuta: numeroRuta.trim(),
                 mes,
                 trayecto: trayecto.trim(),
                 costeDiario: c,
@@ -134,7 +136,7 @@ export default function FacturaEducacion() {
             },
             logoUri,
         );
-    }, [numeroFactura, fecha, codigoAsignacion, mes, trayecto, costeDiario, dias, base, iva, total, logoUri]);
+    }, [numeroFactura, fecha, codigoAsignacion, numeroRuta, mes, trayecto, costeDiario, dias, base, iva, total, logoUri]);
 
     const generar = async () => {
         const d = Math.trunc(parseNumero(dias));
@@ -183,6 +185,7 @@ export default function FacturaEducacion() {
                     numeroFactura: numeroFactura.trim(),
                     fechaCorta: formatFechaCorta(fecha),
                     codigoAsignacion: codigoAsignacion.trim(),
+                    numeroRuta: numeroRuta.trim(),
                     mes,
                     trayecto: trayecto.trim(),
                     costeDiario: c,
@@ -236,6 +239,7 @@ export default function FacturaEducacion() {
                     numeroFactura: numeroFactura.trim(),
                     fechaCorta: formatFechaCorta(fecha),
                     codigoAsignacion: codigoAsignacion.trim(),
+                    numeroRuta: numeroRuta.trim(),
                     mes,
                     trayecto: trayecto.trim(),
                     costeDiario: c,
@@ -289,6 +293,15 @@ export default function FacturaEducacion() {
                                         onValueChange={setCodigoAsignacion}
                                         opciones={codigosAsignacion}
                                         placeholder="Código de asignación"
+                                    />
+                                </Campo>
+                                <Campo label="Número de ruta" htmlFor="numeroRuta">
+                                    <Input
+                                        id="numeroRuta"
+                                        size="sm"
+                                        value={numeroRuta}
+                                        onChange={(e) => setNumeroRuta(e.target.value)}
+                                        placeholder="Nº de ruta"
                                     />
                                 </Campo>
                             </div>
@@ -371,7 +384,7 @@ export default function FacturaEducacion() {
                             </div>
                             <p className="mt-3 rounded-md bg-muted/60 px-3 py-2 text-xs leading-relaxed text-muted-foreground">
                                 Destinatario fijo: <span className="font-medium">DEPARTAMENTO DE EDUCACIÓN</span> ·
-                                Número de expediente <span className="font-medium">514TEE</span>
+                                Número de ruta <span className="font-medium">{numeroRuta}</span>
                             </p>
                         </Seccion>
                     </div>

@@ -215,7 +215,7 @@ export const plantillaEducacion = `<!DOCTYPE html>
                             <h2 class="invoice-id">Número: {{NUMERO_FACTURA}}</h2>
                             <div class="date">Fecha: {{FECHA}}</div>
                             <div class="address h6" style="font-weight: bold">Código de asignación: {{CODIGO_ASIGNACION}}</div>
-                            <div class="address h6" style="font-weight: bold">Número de expediente: 514TEE</div>
+                            <div class="address h6" style="font-weight: bold">Número de ruta: {{NUMERO_RUTA}}</div>
                         </div>
                     </div>
                     <table border="0" cellspacing="0" cellpadding="0">

@@ -62,5 +62,5 @@ export const DESTINATARIO_EDUCACION = {
     negociado: "NEGOCIADO DE SERVICIOS COMPLEMENTARIOS",
     direccion: "31001 Cuesta de Santo Domingo, Pamplona",
     nif: "S-3100007-H",
-    expediente: "514TEE",
+    numeroRuta: "9382",
 };

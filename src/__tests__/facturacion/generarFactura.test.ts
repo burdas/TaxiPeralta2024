@@ -151,6 +151,7 @@ describe("generarHtmlFacturaEducacion", () => {
                 numeroFactura: "EDU-2026-01",
                 fechaCorta: "01/03/2026",
                 codigoAsignacion: "A-100",
+                numeroRuta: "9382",
                 mes: "Marzo",
                 trayecto: "Peralta - IES Valle del Ebro",
                 costeDiario: 3.33,
@@ -168,7 +169,7 @@ describe("generarHtmlFacturaEducacion", () => {
         expect(html).toContain("3,33");
         expect(html).toContain("33,30");
         expect(html).toContain("36,63");
-        expect(html).toContain("514TEE");
+        expect(html).toContain("9382");
         expect(html).toContain("DEPARTAMENTO DE EDUCACIÓN");
     });
 });
