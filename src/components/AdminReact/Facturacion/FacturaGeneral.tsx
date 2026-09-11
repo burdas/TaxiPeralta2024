@@ -355,9 +355,9 @@ export default function FacturaGeneral() {
 
     return (
         <>
-        <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 xl:px-0">
-            <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-evenly xl:gap-0">
-                <div className="w-full min-w-0 shrink-0 xl:w-[700px]">
+        <section className="w-full px-4 pt-6 pb-12 md:px-6 md:pt-8 2xl:px-0">
+            <div className="flex flex-col gap-6 2xl:flex-row 2xl:items-start 2xl:justify-evenly 2xl:gap-0">
+                <div className="w-full min-w-0 shrink-0 2xl:w-[700px]">
                     <div className="mb-6">
                         <h2 className="text-2xl font-bold">Factura General</h2>
                         <p className="text-sm text-muted-foreground">
@@ -602,7 +602,7 @@ export default function FacturaGeneral() {
                     </div>
                 </div>
 
-                <div className="w-full min-w-0 xl:grow-0 xl:shrink xl:basis-[794px]">
+                <div className="hidden w-full min-w-0 2xl:block 2xl:grow-0 2xl:shrink 2xl:basis-[794px]">
                     <FacturaPreview html={htmlPreview} className="w-full" />
                 </div>
             </div>
