@@ -32,13 +32,21 @@ import {
 
 interface Props {
     activePath: string;
+    onNavigate?: (path: string) => void;
 }
 
-function NavGrupo({ item, activePath }: { item: AdminNavItem; activePath: string }) {
+function NavGrupo({ item, activePath, onNavigate }: { item: AdminNavItem; activePath: string; onNavigate?: (path: string) => void }) {
     const { setOpenMobile } = useSidebar();
     const activo = esItemActivo(item, activePath);
     const abiertoPorDefecto = item.children?.some((hijo) => hijo.href === activePath) ?? false;
-    const handleNavigation = () => setOpenMobile(false);
+
+    const handleSubNavigation = (e: React.MouseEvent, path: string) => {
+        if (onNavigate) {
+            e.preventDefault();
+            onNavigate(path);
+        }
+        setOpenMobile(false);
+    };
 
     return (
         <Collapsible.Root
@@ -61,7 +69,7 @@ function NavGrupo({ item, activePath }: { item: AdminNavItem; activePath: string
                                 <SidebarMenuSubButton
                                     asChild
                                     isActive={hijo.href === activePath}
-                                    onClick={handleNavigation}
+                                    onClick={(e) => handleSubNavigation(e, hijo.href)}
                                 >
                                     <a href={hijo.href}>
                                         <span>{hijo.label}</span>
@@ -76,9 +84,16 @@ function NavGrupo({ item, activePath }: { item: AdminNavItem; activePath: string
     );
 }
 
-function NavEnlace({ item, activePath }: { item: AdminNavItem; activePath: string }) {
+function NavEnlace({ item, activePath, onNavigate }: { item: AdminNavItem; activePath: string; onNavigate?: (path: string) => void }) {
     const { setOpenMobile } = useSidebar();
-    const handleNavigation = () => setOpenMobile(false);
+
+    const handleNavigation = (e: React.MouseEvent) => {
+        if (onNavigate) {
+            e.preventDefault();
+            onNavigate(item.href);
+        }
+        setOpenMobile(false);
+    };
 
     return (
         <SidebarMenuItem key={item.href}>
@@ -97,13 +112,21 @@ function NavEnlace({ item, activePath }: { item: AdminNavItem; activePath: strin
     );
 }
 
-export default function AdminSidebar({ activePath }: Props) {
+export default function AdminSidebar({ activePath, onNavigate }: Props) {
     const { state, isMobile, setOpenMobile } = useSidebar();
     const logoutForm = useRef<HTMLFormElement>(null);
 
     const handleLogout = () => logoutForm.current?.requestSubmit();
     const handleNavigation = () => setOpenMobile(false);
     const colapsado = state === "collapsed" && !isMobile;
+
+    const handleCollapsedNav = (e: React.MouseEvent, path: string) => {
+        if (onNavigate) {
+            e.preventDefault();
+            onNavigate(path);
+        }
+        setOpenMobile(false);
+    };
 
     return (
         <Sidebar collapsible="icon">
@@ -142,8 +165,9 @@ export default function AdminSidebar({ activePath }: Props) {
                                                     asChild
                                                     isActive={esItemActivo(item, activePath)}
                                                     tooltip={item.label}
+                                                    onClick={(e) => handleCollapsedNav(e, item.children![0].href)}
                                                 >
-                                                    <a href={item.children[0].href}>
+                                                    <a href={item.children![0].href}>
                                                         <item.icon />
                                                         <span>{item.label}</span>
                                                     </a>
@@ -151,9 +175,9 @@ export default function AdminSidebar({ activePath }: Props) {
                                             </SidebarMenuItem>
                                         );
                                     }
-                                    return <NavGrupo key={item.href} item={item} activePath={activePath} />;
+                                    return <NavGrupo key={item.href} item={item} activePath={activePath} onNavigate={onNavigate} />;
                                 }
-                                return <NavEnlace key={item.href} item={item} activePath={activePath} />;
+                                return <NavEnlace key={item.href} item={item} activePath={activePath} onNavigate={onNavigate} />;
                             })}
                         </SidebarMenu>
                     </SidebarGroupContent>
