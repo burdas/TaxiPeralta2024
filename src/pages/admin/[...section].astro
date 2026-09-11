@@ -1,0 +1,28 @@
+---
+import Loader from "../../components/Icons/Loader.astro";
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import { verifySession } from '../../auth/session';
+import AdminApp from "../../components/AdminReact/AdminApp";
+
+const session = Astro.cookies.get('session')?.value;
+if (!session || !verifySession(session)) {
+    return Astro.redirect('/login');
+}
+
+const section = Astro.params.section;
+const validSections = ['tarifas', 'enlaces', 'visitas', 'calculadora', 'facturacion'];
+const path = section?.split('/')[0] ?? 'tarifas';
+
+if (!validSections.includes(path)) {
+    return Astro.redirect('/admin/tarifas');
+}
+---
+
+<Layout title="Admin - Taxi Peralta">
+    <AdminApp client:only="react">
+        <div slot="fallback" class="w-full min-h-svh flex justify-center items-center">
+            <Loader className="size-24 animate-spin" />
+        </div>
+    </AdminApp>
+</Layout>

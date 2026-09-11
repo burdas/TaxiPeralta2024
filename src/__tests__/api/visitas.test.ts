@@ -28,15 +28,13 @@ function createContext(cookie?: string) {
 }
 
 describe('GET /api/visitas', () => {
-    it('redirige a /unauthorized si no hay cookie', async () => {
+    it('devuelve 401 si no hay cookie', async () => {
         const response = await GET(createContext());
-        expect(response.status).toBe(307);
-        expect(response.headers.get('location')).toBe('/unauthorized');
+        expect(response.status).toBe(401);
     })
 
-    it('redirige a /unauthorized si la sesión es inválida', async () => {
+    it('devuelve 401 si la sesión es inválida', async () => {
         const response = await GET(createContext('session=invalid'));
-        expect(response.status).toBe(307);
-        expect(response.headers.get('location')).toBe('/unauthorized');
+        expect(response.status).toBe(401);
     })
 })
